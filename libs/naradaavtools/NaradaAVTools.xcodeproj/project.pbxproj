@@ -1,0 +1,395 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		79301646146AF24C00DFF80F /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 79301645146AF24C00DFF80F /* AVFoundation.framework */; };
+		793CA72712FAC30600682661 /* NaradaAudioContext.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 793CA71912FAC30600682661 /* NaradaAudioContext.hpp */; };
+		793CA72812FAC30600682661 /* NaradaAudioConverter.h in Headers */ = {isa = PBXBuildFile; fileRef = 793CA71A12FAC30600682661 /* NaradaAudioConverter.h */; };
+		793CA72912FAC30600682661 /* NaradaAudioRecorder.h in Headers */ = {isa = PBXBuildFile; fileRef = 793CA71B12FAC30600682661 /* NaradaAudioRecorder.h */; };
+		793CA72A12FAC30600682661 /* NaradaAudioResource.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 793CA71C12FAC30600682661 /* NaradaAudioResource.hpp */; };
+		793CA72B12FAC30600682661 /* NaradaAVMixer.h in Headers */ = {isa = PBXBuildFile; fileRef = 793CA71D12FAC30600682661 /* NaradaAVMixer.h */; };
+		793CA72D12FAC30600682661 /* NaradaVideoRecorder.h in Headers */ = {isa = PBXBuildFile; fileRef = 793CA71F12FAC30600682661 /* NaradaVideoRecorder.h */; };
+		793CA73512FAC36500682661 /* NaradaAVMixerDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 793CA73412FAC36500682661 /* NaradaAVMixerDelegate.h */; };
+		7944D73112F8504300CCCD8C /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7944D73012F8504300CCCD8C /* OpenAL.framework */; };
+		794F683C146BCA9B0091E6D6 /* NaradaAudioContext.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 793CA72112FAC30600682661 /* NaradaAudioContext.cpp */; };
+		794F683D146BCA9B0091E6D6 /* NaradaAudioConverter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 793CA72212FAC30600682661 /* NaradaAudioConverter.mm */; };
+		794F683E146BCA9B0091E6D6 /* NaradaAudioRecorder.mm in Sources */ = {isa = PBXBuildFile; fileRef = 793CA72312FAC30600682661 /* NaradaAudioRecorder.mm */; };
+		794F683F146BCA9B0091E6D6 /* NaradaAudioResource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 793CA72412FAC30600682661 /* NaradaAudioResource.cpp */; };
+		794F6840146BCA9B0091E6D6 /* NaradaAVMixer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 793CA72512FAC30600682661 /* NaradaAVMixer.mm */; };
+		794F6841146BCA9B0091E6D6 /* NaradaVideoRecorder.mm in Sources */ = {isa = PBXBuildFile; fileRef = 793CA72612FAC30600682661 /* NaradaVideoRecorder.mm */; };
+		794F6843146BCA9B0091E6D6 /* CAStreamBasicDescription.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CEAB7FD12F1C99B00672CD8 /* CAStreamBasicDescription.cpp */; };
+		79A8217C147AC9D900443914 /* NaradaGoogleTTS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 79A8217B147AC9D900443914 /* NaradaGoogleTTS.mm */; };
+		79A8217F147ACA4B00443914 /* NaradaGoogleTTS.h in Headers */ = {isa = PBXBuildFile; fileRef = 79A8217D147ACA4B00443914 /* NaradaGoogleTTS.h */; };
+		79A82180147ACA4B00443914 /* NaradaGoogleTTSDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 79A8217E147ACA4B00443914 /* NaradaGoogleTTSDelegate.h */; };
+		79C65CD9146C137E0010C702 /* NaradaAudioConverterDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 79C65CD8146C137E0010C702 /* NaradaAudioConverterDelegate.h */; };
+		79DBC4521619CE1E00ED1AB9 /* ExtAudioFileConvert.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8CEAB7FB12F1C99B00672CD8 /* ExtAudioFileConvert.cpp */; };
+		79DBFE361547017000551D8D /* NaradaiSpeechTTS.h in Headers */ = {isa = PBXBuildFile; fileRef = 79DBFE341547017000551D8D /* NaradaiSpeechTTS.h */; };
+		79DBFE391547019300551D8D /* NaradaiSpeechTTS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 79DBFE381547019300551D8D /* NaradaiSpeechTTS.mm */; };
+		79DBFE3D1547021200551D8D /* NaradaiSpeechTTSDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 79DBFE3C1547021200551D8D /* NaradaiSpeechTTSDelegate.h */; };
+		79DBFE401547066C00551D8D /* NaradaTTS.h in Headers */ = {isa = PBXBuildFile; fileRef = 79DBFE3E1547066C00551D8D /* NaradaTTS.h */; };
+		79DBFE431547068500551D8D /* NaradaTTS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 79DBFE421547068500551D8D /* NaradaTTS.mm */; };
+		79DBFE45154706E500551D8D /* NaradaTTSDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 79DBFE44154706E500551D8D /* NaradaTTSDelegate.h */; };
+		8CEAB80012F1C99B00672CD8 /* CAStreamBasicDescription.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CEAB7FC12F1C99B00672CD8 /* CAStreamBasicDescription.h */; };
+		8CEAB80212F1C99B00672CD8 /* CAMath.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CEAB7FE12F1C99B00672CD8 /* CAMath.h */; };
+		AACBBE4A0F95108600F1A2B1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AACBBE490F95108600F1A2B1 /* Foundation.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		79301645146AF24C00DFF80F /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		793CA71912FAC30600682661 /* NaradaAudioContext.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = NaradaAudioContext.hpp; sourceTree = "<group>"; };
+		793CA71A12FAC30600682661 /* NaradaAudioConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NaradaAudioConverter.h; sourceTree = "<group>"; };
+		793CA71B12FAC30600682661 /* NaradaAudioRecorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NaradaAudioRecorder.h; sourceTree = "<group>"; };
+		793CA71C12FAC30600682661 /* NaradaAudioResource.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = NaradaAudioResource.hpp; sourceTree = "<group>"; };
+		793CA71D12FAC30600682661 /* NaradaAVMixer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NaradaAVMixer.h; sourceTree = "<group>"; };
+		793CA71F12FAC30600682661 /* NaradaVideoRecorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NaradaVideoRecorder.h; sourceTree = "<group>"; };
+		793CA72112FAC30600682661 /* NaradaAudioContext.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NaradaAudioContext.cpp; sourceTree = "<group>"; };
+		793CA72212FAC30600682661 /* NaradaAudioConverter.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = NaradaAudioConverter.mm; sourceTree = "<group>"; };
+		793CA72312FAC30600682661 /* NaradaAudioRecorder.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = NaradaAudioRecorder.mm; sourceTree = "<group>"; };
+		793CA72412FAC30600682661 /* NaradaAudioResource.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NaradaAudioResource.cpp; sourceTree = "<group>"; };
+		793CA72512FAC30600682661 /* NaradaAVMixer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = NaradaAVMixer.mm; sourceTree = "<group>"; };
+		793CA72612FAC30600682661 /* NaradaVideoRecorder.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = NaradaVideoRecorder.mm; sourceTree = "<group>"; };
+		793CA73412FAC36500682661 /* NaradaAVMixerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NaradaAVMixerDelegate.h; path = Classes/headers/NaradaAVMixerDelegate.h; sourceTree = "<group>"; };
+		7944D73012F8504300CCCD8C /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
+		79A8217B147AC9D900443914 /* NaradaGoogleTTS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = NaradaGoogleTTS.mm; sourceTree = "<group>"; };
+		79A8217D147ACA4B00443914 /* NaradaGoogleTTS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NaradaGoogleTTS.h; sourceTree = "<group>"; };
+		79A8217E147ACA4B00443914 /* NaradaGoogleTTSDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NaradaGoogleTTSDelegate.h; path = Classes/headers/NaradaGoogleTTSDelegate.h; sourceTree = "<group>"; };
+		79C65CD8146C137E0010C702 /* NaradaAudioConverterDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NaradaAudioConverterDelegate.h; path = Classes/headers/NaradaAudioConverterDelegate.h; sourceTree = "<group>"; };
+		79DBFE341547017000551D8D /* NaradaiSpeechTTS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NaradaiSpeechTTS.h; sourceTree = "<group>"; };
+		79DBFE381547019300551D8D /* NaradaiSpeechTTS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = NaradaiSpeechTTS.mm; sourceTree = "<group>"; };
+		79DBFE3C1547021200551D8D /* NaradaiSpeechTTSDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NaradaiSpeechTTSDelegate.h; path = Classes/headers/NaradaiSpeechTTSDelegate.h; sourceTree = "<group>"; };
+		79DBFE3E1547066C00551D8D /* NaradaTTS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NaradaTTS.h; sourceTree = "<group>"; };
+		79DBFE421547068500551D8D /* NaradaTTS.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = NaradaTTS.mm; sourceTree = "<group>"; };
+		79DBFE44154706E500551D8D /* NaradaTTSDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NaradaTTSDelegate.h; path = Classes/headers/NaradaTTSDelegate.h; sourceTree = "<group>"; };
+		8CEAB7FB12F1C99B00672CD8 /* ExtAudioFileConvert.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ExtAudioFileConvert.cpp; path = converters/ExtAudioFileConvert.cpp; sourceTree = "<group>"; };
+		8CEAB7FC12F1C99B00672CD8 /* CAStreamBasicDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CAStreamBasicDescription.h; path = converters/CAStreamBasicDescription.h; sourceTree = "<group>"; };
+		8CEAB7FD12F1C99B00672CD8 /* CAStreamBasicDescription.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CAStreamBasicDescription.cpp; path = converters/CAStreamBasicDescription.cpp; sourceTree = "<group>"; };
+		8CEAB7FE12F1C99B00672CD8 /* CAMath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CAMath.h; path = converters/CAMath.h; sourceTree = "<group>"; };
+		AACBBE490F95108600F1A2B1 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		D2AAC07E0554694100DB518D /* libNaradaAVTools.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libNaradaAVTools.a; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		D2AAC07C0554694100DB518D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				79301646146AF24C00DFF80F /* AVFoundation.framework in Frameworks */,
+				AACBBE4A0F95108600F1A2B1 /* Foundation.framework in Frameworks */,
+				7944D73112F8504300CCCD8C /* OpenAL.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		034768DFFF38A50411DB9C8B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D2AAC07E0554694100DB518D /* libNaradaAVTools.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		0867D691FE84028FC02AAC07 /* NaradaAVTools */ = {
+			isa = PBXGroup;
+			children = (
+				08FB77AEFE84172EC02AAC07 /* Classes */,
+				32C88DFF0371C24200C91783 /* Other Sources */,
+				0867D69AFE84028FC02AAC07 /* Frameworks */,
+				034768DFFF38A50411DB9C8B /* Products */,
+			);
+			name = NaradaAVTools;
+			sourceTree = "<group>";
+		};
+		0867D69AFE84028FC02AAC07 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				79301645146AF24C00DFF80F /* AVFoundation.framework */,
+				AACBBE490F95108600F1A2B1 /* Foundation.framework */,
+				7944D73012F8504300CCCD8C /* OpenAL.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		08FB77AEFE84172EC02AAC07 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				793CA71812FAC30600682661 /* headers */,
+				793CA72012FAC30600682661 /* source */,
+				8CEAB7FA12F1C98B00672CD8 /* converters */,
+				8CEAB79A12F19C2800672CD8 /* protocols */,
+			);
+			name = Classes;
+			sourceTree = "<group>";
+		};
+		32C88DFF0371C24200C91783 /* Other Sources */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "Other Sources";
+			sourceTree = "<group>";
+		};
+		793CA71812FAC30600682661 /* headers */ = {
+			isa = PBXGroup;
+			children = (
+				79DBFE341547017000551D8D /* NaradaiSpeechTTS.h */,
+				79A8217D147ACA4B00443914 /* NaradaGoogleTTS.h */,
+				793CA71912FAC30600682661 /* NaradaAudioContext.hpp */,
+				793CA71A12FAC30600682661 /* NaradaAudioConverter.h */,
+				793CA71B12FAC30600682661 /* NaradaAudioRecorder.h */,
+				793CA71C12FAC30600682661 /* NaradaAudioResource.hpp */,
+				793CA71D12FAC30600682661 /* NaradaAVMixer.h */,
+				793CA71F12FAC30600682661 /* NaradaVideoRecorder.h */,
+				79DBFE3E1547066C00551D8D /* NaradaTTS.h */,
+			);
+			name = headers;
+			path = Classes/headers;
+			sourceTree = "<group>";
+		};
+		793CA72012FAC30600682661 /* source */ = {
+			isa = PBXGroup;
+			children = (
+				79DBFE421547068500551D8D /* NaradaTTS.mm */,
+				79DBFE381547019300551D8D /* NaradaiSpeechTTS.mm */,
+				79A8217B147AC9D900443914 /* NaradaGoogleTTS.mm */,
+				793CA72112FAC30600682661 /* NaradaAudioContext.cpp */,
+				793CA72212FAC30600682661 /* NaradaAudioConverter.mm */,
+				793CA72312FAC30600682661 /* NaradaAudioRecorder.mm */,
+				793CA72412FAC30600682661 /* NaradaAudioResource.cpp */,
+				793CA72512FAC30600682661 /* NaradaAVMixer.mm */,
+				793CA72612FAC30600682661 /* NaradaVideoRecorder.mm */,
+			);
+			name = source;
+			path = Classes/source;
+			sourceTree = "<group>";
+		};
+		8CEAB79A12F19C2800672CD8 /* protocols */ = {
+			isa = PBXGroup;
+			children = (
+				79A8217E147ACA4B00443914 /* NaradaGoogleTTSDelegate.h */,
+				79C65CD8146C137E0010C702 /* NaradaAudioConverterDelegate.h */,
+				793CA73412FAC36500682661 /* NaradaAVMixerDelegate.h */,
+				79DBFE3C1547021200551D8D /* NaradaiSpeechTTSDelegate.h */,
+				79DBFE44154706E500551D8D /* NaradaTTSDelegate.h */,
+			);
+			name = protocols;
+			sourceTree = "<group>";
+		};
+		8CEAB7FA12F1C98B00672CD8 /* converters */ = {
+			isa = PBXGroup;
+			children = (
+				8CEAB7FB12F1C99B00672CD8 /* ExtAudioFileConvert.cpp */,
+				8CEAB7FC12F1C99B00672CD8 /* CAStreamBasicDescription.h */,
+				8CEAB7FD12F1C99B00672CD8 /* CAStreamBasicDescription.cpp */,
+				8CEAB7FE12F1C99B00672CD8 /* CAMath.h */,
+			);
+			name = converters;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		D2AAC07A0554694100DB518D /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8CEAB80012F1C99B00672CD8 /* CAStreamBasicDescription.h in Headers */,
+				8CEAB80212F1C99B00672CD8 /* CAMath.h in Headers */,
+				793CA72712FAC30600682661 /* NaradaAudioContext.hpp in Headers */,
+				793CA72812FAC30600682661 /* NaradaAudioConverter.h in Headers */,
+				793CA72912FAC30600682661 /* NaradaAudioRecorder.h in Headers */,
+				793CA72A12FAC30600682661 /* NaradaAudioResource.hpp in Headers */,
+				793CA72B12FAC30600682661 /* NaradaAVMixer.h in Headers */,
+				793CA72D12FAC30600682661 /* NaradaVideoRecorder.h in Headers */,
+				793CA73512FAC36500682661 /* NaradaAVMixerDelegate.h in Headers */,
+				79C65CD9146C137E0010C702 /* NaradaAudioConverterDelegate.h in Headers */,
+				79A8217F147ACA4B00443914 /* NaradaGoogleTTS.h in Headers */,
+				79A82180147ACA4B00443914 /* NaradaGoogleTTSDelegate.h in Headers */,
+				79DBFE361547017000551D8D /* NaradaiSpeechTTS.h in Headers */,
+				79DBFE3D1547021200551D8D /* NaradaiSpeechTTSDelegate.h in Headers */,
+				79DBFE401547066C00551D8D /* NaradaTTS.h in Headers */,
+				79DBFE45154706E500551D8D /* NaradaTTSDelegate.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		D2AAC07D0554694100DB518D /* NaradaAVTools */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1DEB921E08733DC00010E9CD /* Build configuration list for PBXNativeTarget "NaradaAVTools" */;
+			buildPhases = (
+				D2AAC07A0554694100DB518D /* Headers */,
+				D2AAC07B0554694100DB518D /* Sources */,
+				D2AAC07C0554694100DB518D /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = NaradaAVTools;
+			productName = NaradaAVTools;
+			productReference = D2AAC07E0554694100DB518D /* libNaradaAVTools.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		0867D690FE84028FC02AAC07 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0600;
+			};
+			buildConfigurationList = 1DEB922208733DC00010E9CD /* Build configuration list for PBXProject "NaradaAVTools" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 1;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+			);
+			mainGroup = 0867D691FE84028FC02AAC07 /* NaradaAVTools */;
+			productRefGroup = 034768DFFF38A50411DB9C8B /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				D2AAC07D0554694100DB518D /* NaradaAVTools */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		D2AAC07B0554694100DB518D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				794F683D146BCA9B0091E6D6 /* NaradaAudioConverter.mm in Sources */,
+				794F683E146BCA9B0091E6D6 /* NaradaAudioRecorder.mm in Sources */,
+				794F683F146BCA9B0091E6D6 /* NaradaAudioResource.cpp in Sources */,
+				794F6840146BCA9B0091E6D6 /* NaradaAVMixer.mm in Sources */,
+				794F6841146BCA9B0091E6D6 /* NaradaVideoRecorder.mm in Sources */,
+				794F683C146BCA9B0091E6D6 /* NaradaAudioContext.cpp in Sources */,
+				79DBC4521619CE1E00ED1AB9 /* ExtAudioFileConvert.cpp in Sources */,
+				794F6843146BCA9B0091E6D6 /* CAStreamBasicDescription.cpp in Sources */,
+				79A8217C147AC9D900443914 /* NaradaGoogleTTS.mm in Sources */,
+				79DBFE391547019300551D8D /* NaradaiSpeechTTS.mm in Sources */,
+				79DBFE431547068500551D8D /* NaradaTTS.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		1DEB921F08733DC00010E9CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_OBJC_ARC = NO;
+				CLANG_WARN_OBJCPP_ARC_ABI = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Wajih Yassine (TQGVYUPNC7)";
+				COPY_PHASE_STRIP = NO;
+				DSTROOT = /tmp/NaradaAVTools.dst;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_PREFIX_HEADER = "";
+				GCC_PREPROCESSOR_DEFINITIONS = USE_TEMPORARY_DIR;
+				GCC_VERSION = "";
+				INSTALL_PATH = /usr/local/lib;
+				ONLY_ACTIVE_ARCH = NO;
+				PRODUCT_NAME = NaradaAVTools;
+				PROVISIONING_PROFILE = "331BB820-E423-4B6F-9B42-67FBDE70A9E9";
+				VALID_ARCHS = "armv7 i386 armv7s";
+			};
+			name = Debug;
+		};
+		1DEB922008733DC00010E9CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_OBJC_ARC = NO;
+				CLANG_WARN_OBJCPP_ARC_ABI = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Wajih Yassine (TQGVYUPNC7)";
+				DSTROOT = /tmp/NaradaAVTools.dst;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_PREFIX_HEADER = "";
+				GCC_PREPROCESSOR_DEFINITIONS = USE_TEMPORARY_DIR;
+				GCC_VERSION = "";
+				INSTALL_PATH = /usr/local/lib;
+				ONLY_ACTIVE_ARCH = NO;
+				PRODUCT_NAME = NaradaAVTools;
+				PROVISIONING_PROFILE = "331BB820-E423-4B6F-9B42-67FBDE70A9E9";
+				VALID_ARCHS = "armv7 i386 armv7s";
+			};
+			name = Release;
+		};
+		1DEB922308733DC00010E9CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer: Wajih Yassine (TQGVYUPNC7)";
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_VERSION = "";
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = "-ObjC";
+				PROVISIONING_PROFILE = "331BB820-E423-4B6F-9B42-67FBDE70A9E9";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALID_ARCHS = "armv6 armv7 i386";
+			};
+			name = Debug;
+		};
+		1DEB922408733DC00010E9CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer: Wajih Yassine (TQGVYUPNC7)";
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_VERSION = "";
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				OTHER_LDFLAGS = "-ObjC";
+				PROVISIONING_PROFILE = "331BB820-E423-4B6F-9B42-67FBDE70A9E9";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALID_ARCHS = "armv6 armv7 i386";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1DEB921E08733DC00010E9CD /* Build configuration list for PBXNativeTarget "NaradaAVTools" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB921F08733DC00010E9CD /* Debug */,
+				1DEB922008733DC00010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1DEB922208733DC00010E9CD /* Build configuration list for PBXProject "NaradaAVTools" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB922308733DC00010E9CD /* Debug */,
+				1DEB922408733DC00010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 0867D690FE84028FC02AAC07 /* Project object */;
+}

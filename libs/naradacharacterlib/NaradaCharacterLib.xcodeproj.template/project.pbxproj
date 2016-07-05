@@ -1,0 +1,535 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		790F493A161DCCFC00F317BB /* GLViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8C9DDB71125B77750076D914 /* GLViewController.mm */; };
+		790F493B161DCD4700F317BB /* libvscore_iphone.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 79AB146F1619A0EB00B59A7C /* libvscore_iphone.a */; };
+		790F493C161DCD4900F317BB /* libvslipsync_iphone.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 79AB14661619A0E300B59A7C /* libvslipsync_iphone.a */; };
+		7935B86D15F50C2100BC3222 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
+		79AA675E15F5117600DCFB94 /* ES1Renderer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2514C26E10084DB100A42282 /* ES1Renderer.mm */; };
+		79AA675F15F5117900DCFB94 /* ModelManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 794C8A9115A1E21500B56DBD /* ModelManager.mm */; };
+		79AA676015F5117B00DCFB94 /* EAGLView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 79E1AE0D15B820890017E0BF /* EAGLView.mm */; };
+		79AA676115F5117E00DCFB94 /* OGLViewer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 79E1AE0B15B8096F0017E0BF /* OGLViewer.mm */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		79AB14651619A0E300B59A7C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 79AB145E1619A0E300B59A7C /* vslipsync_iphone.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D2AAC07E0554694100DB518D;
+			remoteInfo = vslipsync_iphone;
+		};
+		79AB146E1619A0EB00B59A7C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 79AB14671619A0EA00B59A7C /* vscore_iphone.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D2AAC07E0554694100DB518D;
+			remoteInfo = vscore_iphone;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		79400D9A15F5F686006A80D2 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 7;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		2514C26D10084DB100A42282 /* ES1Renderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ES1Renderer.h; path = ../ES1Renderer.h; sourceTree = "<group>"; };
+		2514C26E10084DB100A42282 /* ES1Renderer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ES1Renderer.mm; path = ../ES1Renderer.mm; sourceTree = "<group>"; wrapsLines = 1; };
+		2514C27110084DB100A42282 /* ESRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ESRenderer.h; path = ../ESRenderer.h; sourceTree = "<group>"; };
+		28FD14FC0DC6FC130079059D /* EAGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EAGLView.h; path = ../EAGLView.h; sourceTree = "<group>"; };
+		28FD15070DC6FC5B0079059D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		79187FB1173A460400098A20 /* GLViewController_iPhone5.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = GLViewController_iPhone5.xib; path = Classes/GLViewController_iPhone5.xib; sourceTree = "<group>"; };
+		7921C649160C6C8B004F0C93 /* GLViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = GLViewController.xib; path = Classes/GLViewController.xib; sourceTree = "<group>"; };
+		7935B85715F5046000BC3222 /* NaradaCharacterLib.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = NaradaCharacterLib.plist; path = ../NaradaCharacterLib.plist; sourceTree = "<group>"; };
+		7935B86C15F50C2100BC3222 /* libNaradaCharacterLib.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libNaradaCharacterLib.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		793CA7AA12FAC68B00682661 /* 0Weight.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 0Weight.txt; sourceTree = "<group>"; };
+		793CA7AB12FAC68B00682661 /* 10Weight.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 10Weight.txt; sourceTree = "<group>"; };
+		793CA7AC12FAC68B00682661 /* 11Weight.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 11Weight.txt; sourceTree = "<group>"; };
+		793CA7AD12FAC68B00682661 /* 12Weight.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 12Weight.txt; sourceTree = "<group>"; };
+		793CA7AE12FAC68B00682661 /* 13Weight.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 13Weight.txt; sourceTree = "<group>"; };
+		793CA7AF12FAC68B00682661 /* 14Weight.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 14Weight.txt; sourceTree = "<group>"; };
+		793CA7B012FAC68B00682661 /* 1Weight.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 1Weight.txt; sourceTree = "<group>"; };
+		793CA7B112FAC68B00682661 /* 2Weight.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 2Weight.txt; sourceTree = "<group>"; };
+		793CA7B212FAC68B00682661 /* 3Weight.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 3Weight.txt; sourceTree = "<group>"; };
+		793CA7B312FAC68B00682661 /* 4Weight.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 4Weight.txt; sourceTree = "<group>"; };
+		793CA7B412FAC68B00682661 /* 5Weight.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 5Weight.txt; sourceTree = "<group>"; };
+		793CA7B512FAC68B00682661 /* 6Weight.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 6Weight.txt; sourceTree = "<group>"; };
+		793CA7B612FAC68B00682661 /* 7Weight.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 7Weight.txt; sourceTree = "<group>"; };
+		793CA7B712FAC68B00682661 /* 8Weight.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 8Weight.txt; sourceTree = "<group>"; };
+		793CA7B812FAC68B00682661 /* 9Weight.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 9Weight.txt; sourceTree = "<group>"; };
+		794870781636A04D00F7CE4D /* GLViewController_iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = GLViewController_iPad.xib; path = Classes/GLViewController_iPad.xib; sourceTree = "<group>"; };
+		794C8A9115A1E21500B56DBD /* ModelManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ModelManager.mm; path = ../ModelManager.mm; sourceTree = "<group>"; };
+		7950AF221614774E00FFF0D8 /* libvslipsync_iphone.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvslipsync_iphone.a; path = "../../../NARADA_VISAGE_DEVELOPMENT/xcode_workspace/vslipsync_iphone/build/Debug-iphoneos/libvslipsync_iphone.a"; sourceTree = "<group>"; };
+		796D8A5F12A5649A00482456 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
+		7983663D12474BC500173096 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
+		7983663F12474BD200173096 /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = usr/lib/libiconv.dylib; sourceTree = SDKROOT; };
+		7983664112474BDD00173096 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		798368211247804600173096 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		798B59D012B1388E00B96129 /* iAd.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iAd.framework; path = System/Library/Frameworks/iAd.framework; sourceTree = SDKROOT; };
+		798DD70E1366E22500BC3812 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		79A00452129E843700DB284F /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		79AB145E1619A0E300B59A7C /* vslipsync_iphone.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = vslipsync_iphone.xcodeproj; path = ../../../NARADA_VISAGE_DEVELOPMENT/xcode_workspace/vslipsync_iphone/vslipsync_iphone.xcodeproj; sourceTree = "<group>"; };
+		79AB14671619A0EA00B59A7C /* vscore_iphone.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = vscore_iphone.xcodeproj; path = ../../../NARADA_VISAGE_DEVELOPMENT/xcode_workspace/vscore_iphone/vscore_iphone.xcodeproj; sourceTree = "<group>"; };
+		79E1AE0A15B809610017E0BF /* OGLViewer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OGLViewer.h; path = header/OGLViewer.h; sourceTree = "<group>"; };
+		79E1AE0B15B8096F0017E0BF /* OGLViewer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OGLViewer.mm; path = source/OGLViewer.mm; sourceTree = "<group>"; };
+		79E1AE0D15B820890017E0BF /* EAGLView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = EAGLView.mm; path = ../EAGLView.mm; sourceTree = "<group>"; };
+		79E1AE0F15B866510017E0BF /* PathsAndConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PathsAndConstants.h; path = ../PathsAndConstants.h; sourceTree = "<group>"; };
+		79E1AE1115B868910017E0BF /* ModelManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ModelManager.h; path = ../ModelManager.h; sourceTree = "<group>"; };
+		8B2FCDF7144316D800381420 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
+		8C112DFD1294448200B93517 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		8C1E6CAA1254CCEC00192B9E /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
+		8C8807DF129532C800FADF61 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
+		8C8FF657129FE0BB0065A26B /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
+		8C9DDB70125B77750076D914 /* GLViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GLViewController.h; path = ../GLViewController.h; sourceTree = "<group>"; };
+		8C9DDB71125B77750076D914 /* GLViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = GLViewController.mm; path = ../GLViewController.mm; sourceTree = "<group>"; };
+		8CB2752712884B78008DE9B7 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		7935B86915F50C2100BC3222 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7935B86D15F50C2100BC3222 /* Foundation.framework in Frameworks */,
+				790F493B161DCD4700F317BB /* libvscore_iphone.a in Frameworks */,
+				790F493C161DCD4900F317BB /* libvslipsync_iphone.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		080E96DDFE201D6D7F000001 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				7935B85715F5046000BC3222 /* NaradaCharacterLib.plist */,
+				798368EE1247A93700173096 /* simpleViewer */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
+		19C28FACFE9D520D11CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				7935B86C15F50C2100BC3222 /* libNaradaCharacterLib.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
+			isa = PBXGroup;
+			children = (
+				79AB14671619A0EA00B59A7C /* vscore_iphone.xcodeproj */,
+				79AB145E1619A0E300B59A7C /* vslipsync_iphone.xcodeproj */,
+				7950AF221614774E00FFF0D8 /* libvslipsync_iphone.a */,
+				080E96DDFE201D6D7F000001 /* Classes */,
+				29B97317FDCFA39411CA2CEA /* Resources */,
+				29B97323FDCFA39411CA2CEA /* Frameworks */,
+				19C28FACFE9D520D11CA2CBB /* Products */,
+			);
+			name = CustomTemplate;
+			sourceTree = "<group>";
+		};
+		29B97317FDCFA39411CA2CEA /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				7921C649160C6C8B004F0C93 /* GLViewController.xib */,
+				794870781636A04D00F7CE4D /* GLViewController_iPad.xib */,
+				79187FB1173A460400098A20 /* GLViewController_iPhone5.xib */,
+				793CA7A912FAC68B00682661 /* NN */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				8B2FCDF7144316D800381420 /* OpenGLES.framework */,
+				798DD70E1366E22500BC3812 /* CoreMedia.framework */,
+				8CB2752712884B78008DE9B7 /* AudioToolbox.framework */,
+				8C1E6CAA1254CCEC00192B9E /* OpenAL.framework */,
+				8C112DFD1294448200B93517 /* AVFoundation.framework */,
+				28FD15070DC6FC5B0079059D /* QuartzCore.framework */,
+				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
+				1D30AB110D05D00D00671497 /* Foundation.framework */,
+				798368211247804600173096 /* CoreGraphics.framework */,
+				8C8807DF129532C800FADF61 /* CoreVideo.framework */,
+				79A00452129E843700DB284F /* CoreMedia.framework */,
+				796D8A5F12A5649A00482456 /* MessageUI.framework */,
+				798B59D012B1388E00B96129 /* iAd.framework */,
+				7983663D12474BC500173096 /* libxml2.dylib */,
+				7983663F12474BD200173096 /* libiconv.dylib */,
+				7983664112474BDD00173096 /* libz.dylib */,
+				8C8FF657129FE0BB0065A26B /* MediaPlayer.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		793CA7A912FAC68B00682661 /* NN */ = {
+			isa = PBXGroup;
+			children = (
+				793CA7AA12FAC68B00682661 /* 0Weight.txt */,
+				793CA7AB12FAC68B00682661 /* 10Weight.txt */,
+				793CA7AC12FAC68B00682661 /* 11Weight.txt */,
+				793CA7AD12FAC68B00682661 /* 12Weight.txt */,
+				793CA7AE12FAC68B00682661 /* 13Weight.txt */,
+				793CA7AF12FAC68B00682661 /* 14Weight.txt */,
+				793CA7B012FAC68B00682661 /* 1Weight.txt */,
+				793CA7B112FAC68B00682661 /* 2Weight.txt */,
+				793CA7B212FAC68B00682661 /* 3Weight.txt */,
+				793CA7B312FAC68B00682661 /* 4Weight.txt */,
+				793CA7B412FAC68B00682661 /* 5Weight.txt */,
+				793CA7B512FAC68B00682661 /* 6Weight.txt */,
+				793CA7B612FAC68B00682661 /* 7Weight.txt */,
+				793CA7B712FAC68B00682661 /* 8Weight.txt */,
+				793CA7B812FAC68B00682661 /* 9Weight.txt */,
+			);
+			name = NN;
+			path = Resources/NN;
+			sourceTree = "<group>";
+		};
+		798368EE1247A93700173096 /* simpleViewer */ = {
+			isa = PBXGroup;
+			children = (
+				8C9DDB70125B77750076D914 /* GLViewController.h */,
+				8C9DDB71125B77750076D914 /* GLViewController.mm */,
+				79E1AE0F15B866510017E0BF /* PathsAndConstants.h */,
+				2514C27110084DB100A42282 /* ESRenderer.h */,
+				2514C26D10084DB100A42282 /* ES1Renderer.h */,
+				28FD14FC0DC6FC130079059D /* EAGLView.h */,
+				79E1AE1115B868910017E0BF /* ModelManager.h */,
+				79E1AE0A15B809610017E0BF /* OGLViewer.h */,
+				2514C26E10084DB100A42282 /* ES1Renderer.mm */,
+				794C8A9115A1E21500B56DBD /* ModelManager.mm */,
+				79E1AE0D15B820890017E0BF /* EAGLView.mm */,
+				79E1AE0B15B8096F0017E0BF /* OGLViewer.mm */,
+			);
+			path = simpleViewer;
+			sourceTree = "<group>";
+		};
+		79AB145F1619A0E300B59A7C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				79AB14661619A0E300B59A7C /* libvslipsync_iphone.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		79AB14681619A0EA00B59A7C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				79AB146F1619A0EB00B59A7C /* libvscore_iphone.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		7935B86A15F50C2100BC3222 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		7935B86B15F50C2100BC3222 /* NaradaCharacterLib */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7935B87415F50C2100BC3222 /* Build configuration list for PBXNativeTarget "NaradaCharacterLib" */;
+			buildPhases = (
+				7935B86815F50C2100BC3222 /* Sources */,
+				7935B86915F50C2100BC3222 /* Frameworks */,
+				7935B86A15F50C2100BC3222 /* Headers */,
+				79400D9A15F5F686006A80D2 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = NaradaCharacterLib;
+			productName = NaradaCharacterLib;
+			productReference = 7935B86C15F50C2100BC3222 /* libNaradaCharacterLib.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		29B97313FDCFA39411CA2CEA /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0420;
+			};
+			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "NaradaCharacterLib" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 1;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+				es,
+				en,
+			);
+			mainGroup = 29B97314FDCFA39411CA2CEA /* CustomTemplate */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 79AB14681619A0EA00B59A7C /* Products */;
+					ProjectRef = 79AB14671619A0EA00B59A7C /* vscore_iphone.xcodeproj */;
+				},
+				{
+					ProductGroup = 79AB145F1619A0E300B59A7C /* Products */;
+					ProjectRef = 79AB145E1619A0E300B59A7C /* vslipsync_iphone.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				7935B86B15F50C2100BC3222 /* NaradaCharacterLib */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		79AB14661619A0E300B59A7C /* libvslipsync_iphone.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libvslipsync_iphone.a;
+			remoteRef = 79AB14651619A0E300B59A7C /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		79AB146F1619A0EB00B59A7C /* libvscore_iphone.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libvscore_iphone.a;
+			remoteRef = 79AB146E1619A0EB00B59A7C /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXSourcesBuildPhase section */
+		7935B86815F50C2100BC3222 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				79AA675E15F5117600DCFB94 /* ES1Renderer.mm in Sources */,
+				790F493A161DCCFC00F317BB /* GLViewController.mm in Sources */,
+				79AA675F15F5117900DCFB94 /* ModelManager.mm in Sources */,
+				79AA676115F5117E00DCFB94 /* OGLViewer.mm in Sources */,
+				79AA676015F5117B00DCFB94 /* EAGLView.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		7935B87515F50C2100BC3222 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_ARC = NO;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Enrique Oriol (T42GXW4JET)";
+				COPY_PHASE_STRIP = NO;
+				DSTROOT = /tmp/NaradaCharacterLib.dst;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_PREFIX_HEADER = "";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					DEBUG,
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = NaradaCharacterLib.plist;
+				INSTALL_PATH = /Applications;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../../NARADA_VISAGE_DEVELOPMENT/xcode_workspace/vslipsync_iphone/build/Debug-iphoneos\"",
+				);
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "FE34070A-1B2E-4C2B-B6B5-51A3C65289DD";
+				SEPARATE_STRIP = NO;
+				SKIP_INSTALL = NO;
+				STRIP_STYLE = debugging;
+				VALID_ARCHS = "armv7 armv7s i386";
+			};
+			name = Debug;
+		};
+		7935B87615F50C2100BC3222 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_ARC = NO;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Enrique Oriol (T42GXW4JET)";
+				COPY_PHASE_STRIP = YES;
+				DSTROOT = /tmp/NaradaCharacterLib.dst;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_PREFIX_HEADER = "";
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = NaradaCharacterLib.plist;
+				INSTALL_PATH = /Applications;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../../NARADA_VISAGE_DEVELOPMENT/xcode_workspace/vslipsync_iphone/build/Debug-iphoneos\"",
+				);
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "FE34070A-1B2E-4C2B-B6B5-51A3C65289DD";
+				SEPARATE_STRIP = NO;
+				SKIP_INSTALL = NO;
+				STRIP_STYLE = debugging;
+				VALIDATE_PRODUCT = YES;
+				VALID_ARCHS = "armv7 armv7s i386";
+			};
+			name = Release;
+		};
+		C01FCF4F08A954540054247B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Enrique Oriol (T42GXW4JET)";
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					USE_LIPSYNC,
+					IPHONE_DEV,
+					IPHONE,
+					VISAGE_STATIC,
+					DEBUG,
+				);
+				GCC_THUMB_SUPPORT = NO;
+				GCC_TREAT_NONCONFORMANT_CODE_ERRORS_AS_WARNINGS = YES;
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(VSLipsync)/**",
+					"$(VSCore)/**",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				"LIBRARY_SEARCH_PATHS[sdk=iphoneos*][arch=*]" = (
+					"$(inherited)",
+					"$(SRCROOT)/../../../NARADA_VISAGE_DEVELOPMENT/xcode_workspace/vscore_iphone/build/Debug-iphoneos",
+					"\"$(SRCROOT)/../../../NARADA_VISAGE_DEVELOPMENT/xcode_workspace/vslipsync_iphone/build/Debug-iphoneos",
+				);
+				"LIBRARY_SEARCH_PATHS[sdk=iphonesimulator*][arch=*]" = (
+					"$(inherited)",
+					"$(SRCROOT)/../../../NARADA_VISAGE_DEVELOPMENT/xcode_workspace/vscore_iphone/build/Debug-iphonesimulator",
+					"$(SRCROOT)/../../../NARADA_VISAGE_DEVELOPMENT/xcode_workspace/vslipsync_iphone/build/Debug-iphonesimulator",
+					"$(SRCROOT)/../../../Narada_lib_iphone/NaradaFacebookUploader/build/Debug-iphonesimulator",
+					"$(SRCROOT)/../../../Narada_lib_iphone/NaradaYouTube/build/Debug-iphonesimulator",
+					"$(SRCROOT)/../../../Narada_lib_iphone/NaradaAVTools/build/Debug-iphonesimulator",
+				);
+				OTHER_LDFLAGS = "-ObjC";
+				PROVISIONING_PROFILE = "FE34070A-1B2E-4C2B-B6B5-51A3C65289DD";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALID_ARCHS = armv7;
+			};
+			name = Debug;
+		};
+		C01FCF5008A954540054247B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Enrique Oriol (T42GXW4JET)";
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					USE_LIPSYNC,
+					LIBXML_STATIC,
+					VISAGE_STATIC,
+					IPHONE,
+					IPHONE_DEV,
+				);
+				GCC_THUMB_SUPPORT = NO;
+				GCC_TREAT_NONCONFORMANT_CODE_ERRORS_AS_WARNINGS = YES;
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				GCC_WARN_ABOUT_RETURN_TYPE = NO;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(VSLipsync)/**",
+					"$(VSCore)/**",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				"LIBRARY_SEARCH_PATHS[sdk=iphoneos*][arch=*]" = (
+					"$(inherited)",
+					"$(SRCROOT)/../../../NARADA_VISAGE_DEVELOPMENT/xcode_workspace/vscore_iphone/build/Release-iphoneos",
+					"\"$(SRCROOT)/../../../NARADA_VISAGE_DEVELOPMENT/xcode_workspace/vslipsync_iphone/build/Release-iphoneos",
+				);
+				"LIBRARY_SEARCH_PATHS[sdk=iphonesimulator*][arch=*]" = (
+					"$(inherited)",
+					"$(SRCROOT)/../../../NARADA_VISAGE_DEVELOPMENT/xcode_workspace/vscore_iphone/build/Release-iphonesimulator",
+					"$(SRCROOT)/../../../NARADA_VISAGE_DEVELOPMENT/xcode_workspace/vslipsync_iphone/build/Release-iphonesimulator",
+					"$(SRCROOT)/../../../Narada_lib_iphone/NaradaFacebookUploader/build/Release-iphonesimulator",
+					"$(SRCROOT)/../../../Narada_lib_iphone/NaradaYouTube/build/Release-iphonesimulator",
+					"$(SRCROOT)/../../../Narada_lib_iphone/NaradaAVTools/build/Release-iphonesimulator",
+				);
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "Avi Cule";
+				PROVISIONING_PROFILE = "FE34070A-1B2E-4C2B-B6B5-51A3C65289DD";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				USER_HEADER_SEARCH_PATHS = "";
+				VALID_ARCHS = armv7;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		7935B87415F50C2100BC3222 /* Build configuration list for PBXNativeTarget "NaradaCharacterLib" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7935B87515F50C2100BC3222 /* Debug */,
+				7935B87615F50C2100BC3222 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "NaradaCharacterLib" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C01FCF4F08A954540054247B /* Debug */,
+				C01FCF5008A954540054247B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 29B97313FDCFA39411CA2CEA /* Project object */;
+}

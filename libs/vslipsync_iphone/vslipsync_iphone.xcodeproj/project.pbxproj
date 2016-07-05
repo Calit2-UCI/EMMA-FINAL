@@ -1,0 +1,449 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		79325A421600E3AF000D8B1F /* SilentStreamLipSync.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 79325A411600E3AF000D8B1F /* SilentStreamLipSync.hpp */; };
+		79325A451600E3BA000D8B1F /* SilentStreamLipSync.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 79325A441600E3BA000D8B1F /* SilentStreamLipSync.cpp */; };
+		79940FBC129FAD7A00529F63 /* AudioStreamLipSync.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 79940FA6129FAD7A00529F63 /* AudioStreamLipSync.hpp */; };
+		79940FBD129FAD7A00529F63 /* CVisemes.h in Headers */ = {isa = PBXBuildFile; fileRef = 79940FA7129FAD7A00529F63 /* CVisemes.h */; };
+		79940FBE129FAD7A00529F63 /* LipSync.h in Headers */ = {isa = PBXBuildFile; fileRef = 79940FA8129FAD7A00529F63 /* LipSync.h */; };
+		79940FBF129FAD7A00529F63 /* memalloc.h in Headers */ = {isa = PBXBuildFile; fileRef = 79940FAA129FAD7A00529F63 /* memalloc.h */; };
+		79940FC0129FAD7A00529F63 /* mfcc.h in Headers */ = {isa = PBXBuildFile; fileRef = 79940FAB129FAD7A00529F63 /* mfcc.h */; };
+		79940FC1129FAD7A00529F63 /* WavIo.h in Headers */ = {isa = PBXBuildFile; fileRef = 79940FAC129FAD7A00529F63 /* WavIo.h */; };
+		79940FC3129FAD7A00529F63 /* NeuralNetwork.h in Headers */ = {isa = PBXBuildFile; fileRef = 79940FAE129FAD7A00529F63 /* NeuralNetwork.h */; };
+		79940FC4129FAD7A00529F63 /* wavePlay.h in Headers */ = {isa = PBXBuildFile; fileRef = 79940FAF129FAD7A00529F63 /* wavePlay.h */; };
+		79940FC5129FAD7A00529F63 /* AudioStreamLipSync.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 79940FB1129FAD7A00529F63 /* AudioStreamLipSync.cpp */; };
+		79940FC6129FAD7A00529F63 /* cvisemes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 79940FB2129FAD7A00529F63 /* cvisemes.cpp */; };
+		79940FC7129FAD7A00529F63 /* LipSync.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 79940FB3129FAD7A00529F63 /* LipSync.cpp */; };
+		79940FC8129FAD7A00529F63 /* fftsg_h.c in Sources */ = {isa = PBXBuildFile; fileRef = 79940FB5129FAD7A00529F63 /* fftsg_h.c */; };
+		79940FC9129FAD7A00529F63 /* memalloc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 79940FB6129FAD7A00529F63 /* memalloc.cpp */; };
+		79940FCA129FAD7A00529F63 /* mfcc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 79940FB7129FAD7A00529F63 /* mfcc.cpp */; };
+		79940FCB129FAD7A00529F63 /* WavIo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 79940FB8129FAD7A00529F63 /* WavIo.cpp */; };
+		79940FCD129FAD7A00529F63 /* NeuralNetwork.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 79940FBA129FAD7A00529F63 /* NeuralNetwork.cpp */; settings = {COMPILER_FLAGS = "-x objective-c++"; }; };
+		79940FCE129FAD7A00529F63 /* waveplay.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 79940FBB129FAD7A00529F63 /* waveplay.cpp */; };
+		8C3FC80012A557AD005E201A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C3FC7FF12A557AD005E201A /* Foundation.framework */; };
+		AA747D9F0F9514B9006C5449 /* vslipsync_iphone_Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = AA747D9E0F9514B9006C5449 /* vslipsync_iphone_Prefix.pch */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		314B3F8319EC888F00C39450 /* libvscore_iphone.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvscore_iphone.a; path = "../vscore_iphone/build/Debug-iphoneos/libvscore_iphone.a"; sourceTree = "<group>"; };
+		79325A411600E3AF000D8B1F /* SilentStreamLipSync.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = SilentStreamLipSync.hpp; sourceTree = "<group>"; };
+		79325A441600E3BA000D8B1F /* SilentStreamLipSync.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SilentStreamLipSync.cpp; sourceTree = "<group>"; };
+		79940FA6129FAD7A00529F63 /* AudioStreamLipSync.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AudioStreamLipSync.hpp; sourceTree = "<group>"; };
+		79940FA7129FAD7A00529F63 /* CVisemes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CVisemes.h; sourceTree = "<group>"; };
+		79940FA8129FAD7A00529F63 /* LipSync.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LipSync.h; sourceTree = "<group>"; };
+		79940FAA129FAD7A00529F63 /* memalloc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = memalloc.h; sourceTree = "<group>"; };
+		79940FAB129FAD7A00529F63 /* mfcc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mfcc.h; sourceTree = "<group>"; };
+		79940FAC129FAD7A00529F63 /* WavIo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WavIo.h; sourceTree = "<group>"; };
+		79940FAE129FAD7A00529F63 /* NeuralNetwork.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NeuralNetwork.h; sourceTree = "<group>"; };
+		79940FAF129FAD7A00529F63 /* wavePlay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wavePlay.h; sourceTree = "<group>"; };
+		79940FB1129FAD7A00529F63 /* AudioStreamLipSync.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AudioStreamLipSync.cpp; sourceTree = "<group>"; };
+		79940FB2129FAD7A00529F63 /* cvisemes.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = cvisemes.cpp; sourceTree = "<group>"; };
+		79940FB3129FAD7A00529F63 /* LipSync.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LipSync.cpp; sourceTree = "<group>"; };
+		79940FB5129FAD7A00529F63 /* fftsg_h.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fftsg_h.c; sourceTree = "<group>"; };
+		79940FB6129FAD7A00529F63 /* memalloc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = memalloc.cpp; sourceTree = "<group>"; };
+		79940FB7129FAD7A00529F63 /* mfcc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mfcc.cpp; sourceTree = "<group>"; };
+		79940FB8129FAD7A00529F63 /* WavIo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WavIo.cpp; sourceTree = "<group>"; };
+		79940FBA129FAD7A00529F63 /* NeuralNetwork.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NeuralNetwork.cpp; sourceTree = "<group>"; };
+		79940FBB129FAD7A00529F63 /* waveplay.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = waveplay.cpp; sourceTree = "<group>"; };
+		79940FD0129FADDA00529F63 /* 0Weight.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 0Weight.txt; sourceTree = "<group>"; };
+		79940FD1129FADDA00529F63 /* 10Weight.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 10Weight.txt; sourceTree = "<group>"; };
+		79940FD2129FADDA00529F63 /* 11Weight.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 11Weight.txt; sourceTree = "<group>"; };
+		79940FD3129FADDA00529F63 /* 12Weight.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 12Weight.txt; sourceTree = "<group>"; };
+		79940FD4129FADDA00529F63 /* 13Weight.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 13Weight.txt; sourceTree = "<group>"; };
+		79940FD5129FADDA00529F63 /* 14Weight.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 14Weight.txt; sourceTree = "<group>"; };
+		79940FD6129FADDA00529F63 /* 1Weight.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 1Weight.txt; sourceTree = "<group>"; };
+		79940FD7129FADDA00529F63 /* 2Weight.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 2Weight.txt; sourceTree = "<group>"; };
+		79940FD8129FADDA00529F63 /* 3Weight.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 3Weight.txt; sourceTree = "<group>"; };
+		79940FD9129FADDA00529F63 /* 4Weight.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 4Weight.txt; sourceTree = "<group>"; };
+		79940FDA129FADDA00529F63 /* 5Weight.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 5Weight.txt; sourceTree = "<group>"; };
+		79940FDB129FADDA00529F63 /* 6Weight.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 6Weight.txt; sourceTree = "<group>"; };
+		79940FDC129FADDA00529F63 /* 7Weight.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 7Weight.txt; sourceTree = "<group>"; };
+		79940FDD129FADDA00529F63 /* 8Weight.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 8Weight.txt; sourceTree = "<group>"; };
+		79940FDE129FADDA00529F63 /* 9Weight.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 9Weight.txt; sourceTree = "<group>"; };
+		8C3FC7FF12A557AD005E201A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		AA747D9E0F9514B9006C5449 /* vslipsync_iphone_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vslipsync_iphone_Prefix.pch; sourceTree = SOURCE_ROOT; };
+		D2AAC07E0554694100DB518D /* libvslipsync_iphone.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libvslipsync_iphone.a; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		D2AAC07C0554694100DB518D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8C3FC80012A557AD005E201A /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		034768DFFF38A50411DB9C8B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D2AAC07E0554694100DB518D /* libvslipsync_iphone.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		0867D691FE84028FC02AAC07 /* vslipsync_iphone */ = {
+			isa = PBXGroup;
+			children = (
+				79940FCF129FADDA00529F63 /* Weights_se_tienen_q_poner_en_resources */,
+				08FB77AEFE84172EC02AAC07 /* Classes */,
+				32C88DFF0371C24200C91783 /* Other Sources */,
+				0867D69AFE84028FC02AAC07 /* Frameworks */,
+				034768DFFF38A50411DB9C8B /* Products */,
+			);
+			name = vslipsync_iphone;
+			sourceTree = "<group>";
+		};
+		0867D69AFE84028FC02AAC07 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				314B3F8319EC888F00C39450 /* libvscore_iphone.a */,
+				8C3FC7FF12A557AD005E201A /* Foundation.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		08FB77AEFE84172EC02AAC07 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				79940FA5129FAD7A00529F63 /* header */,
+				79940FB0129FAD7A00529F63 /* source */,
+			);
+			name = Classes;
+			sourceTree = "<group>";
+		};
+		32C88DFF0371C24200C91783 /* Other Sources */ = {
+			isa = PBXGroup;
+			children = (
+				AA747D9E0F9514B9006C5449 /* vslipsync_iphone_Prefix.pch */,
+			);
+			name = "Other Sources";
+			sourceTree = "<group>";
+		};
+		79940FA5129FAD7A00529F63 /* header */ = {
+			isa = PBXGroup;
+			children = (
+				79325A411600E3AF000D8B1F /* SilentStreamLipSync.hpp */,
+				79940FA6129FAD7A00529F63 /* AudioStreamLipSync.hpp */,
+				79940FA7129FAD7A00529F63 /* CVisemes.h */,
+				79940FA8129FAD7A00529F63 /* LipSync.h */,
+				79940FA9129FAD7A00529F63 /* MFCC */,
+				79940FAE129FAD7A00529F63 /* NeuralNetwork.h */,
+				79940FAF129FAD7A00529F63 /* wavePlay.h */,
+			);
+			name = header;
+			path = ../vslipsync/header;
+			sourceTree = SOURCE_ROOT;
+		};
+		79940FA9129FAD7A00529F63 /* MFCC */ = {
+			isa = PBXGroup;
+			children = (
+				79940FAA129FAD7A00529F63 /* memalloc.h */,
+				79940FAB129FAD7A00529F63 /* mfcc.h */,
+				79940FAC129FAD7A00529F63 /* WavIo.h */,
+			);
+			path = MFCC;
+			sourceTree = "<group>";
+		};
+		79940FB0129FAD7A00529F63 /* source */ = {
+			isa = PBXGroup;
+			children = (
+				79325A441600E3BA000D8B1F /* SilentStreamLipSync.cpp */,
+				79940FB1129FAD7A00529F63 /* AudioStreamLipSync.cpp */,
+				79940FB2129FAD7A00529F63 /* cvisemes.cpp */,
+				79940FB3129FAD7A00529F63 /* LipSync.cpp */,
+				79940FB4129FAD7A00529F63 /* MFCC */,
+				79940FBA129FAD7A00529F63 /* NeuralNetwork.cpp */,
+				79940FBB129FAD7A00529F63 /* waveplay.cpp */,
+			);
+			name = source;
+			path = ../vslipsync/source;
+			sourceTree = SOURCE_ROOT;
+		};
+		79940FB4129FAD7A00529F63 /* MFCC */ = {
+			isa = PBXGroup;
+			children = (
+				79940FB5129FAD7A00529F63 /* fftsg_h.c */,
+				79940FB6129FAD7A00529F63 /* memalloc.cpp */,
+				79940FB7129FAD7A00529F63 /* mfcc.cpp */,
+				79940FB8129FAD7A00529F63 /* WavIo.cpp */,
+			);
+			path = MFCC;
+			sourceTree = "<group>";
+		};
+		79940FCF129FADDA00529F63 /* Weights_se_tienen_q_poner_en_resources */ = {
+			isa = PBXGroup;
+			children = (
+				79940FD0129FADDA00529F63 /* 0Weight.txt */,
+				79940FD1129FADDA00529F63 /* 10Weight.txt */,
+				79940FD2129FADDA00529F63 /* 11Weight.txt */,
+				79940FD3129FADDA00529F63 /* 12Weight.txt */,
+				79940FD4129FADDA00529F63 /* 13Weight.txt */,
+				79940FD5129FADDA00529F63 /* 14Weight.txt */,
+				79940FD6129FADDA00529F63 /* 1Weight.txt */,
+				79940FD7129FADDA00529F63 /* 2Weight.txt */,
+				79940FD8129FADDA00529F63 /* 3Weight.txt */,
+				79940FD9129FADDA00529F63 /* 4Weight.txt */,
+				79940FDA129FADDA00529F63 /* 5Weight.txt */,
+				79940FDB129FADDA00529F63 /* 6Weight.txt */,
+				79940FDC129FADDA00529F63 /* 7Weight.txt */,
+				79940FDD129FADDA00529F63 /* 8Weight.txt */,
+				79940FDE129FADDA00529F63 /* 9Weight.txt */,
+			);
+			name = Weights_se_tienen_q_poner_en_resources;
+			path = ../../eclipse_workspace/vslipsync/Weights;
+			sourceTree = SOURCE_ROOT;
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		D2AAC07A0554694100DB518D /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AA747D9F0F9514B9006C5449 /* vslipsync_iphone_Prefix.pch in Headers */,
+				79940FBC129FAD7A00529F63 /* AudioStreamLipSync.hpp in Headers */,
+				79940FBD129FAD7A00529F63 /* CVisemes.h in Headers */,
+				79940FBE129FAD7A00529F63 /* LipSync.h in Headers */,
+				79940FBF129FAD7A00529F63 /* memalloc.h in Headers */,
+				79940FC0129FAD7A00529F63 /* mfcc.h in Headers */,
+				79940FC1129FAD7A00529F63 /* WavIo.h in Headers */,
+				79940FC3129FAD7A00529F63 /* NeuralNetwork.h in Headers */,
+				79940FC4129FAD7A00529F63 /* wavePlay.h in Headers */,
+				79325A421600E3AF000D8B1F /* SilentStreamLipSync.hpp in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		D2AAC07D0554694100DB518D /* vslipsync_iphone */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1DEB921E08733DC00010E9CD /* Build configuration list for PBXNativeTarget "vslipsync_iphone" */;
+			buildPhases = (
+				D2AAC07A0554694100DB518D /* Headers */,
+				D2AAC07B0554694100DB518D /* Sources */,
+				D2AAC07C0554694100DB518D /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = vslipsync_iphone;
+			productName = vslipsync_iphone;
+			productReference = D2AAC07E0554694100DB518D /* libvslipsync_iphone.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		0867D690FE84028FC02AAC07 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0510;
+			};
+			buildConfigurationList = 1DEB922208733DC00010E9CD /* Build configuration list for PBXProject "vslipsync_iphone" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 1;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+			);
+			mainGroup = 0867D691FE84028FC02AAC07 /* vslipsync_iphone */;
+			productRefGroup = 034768DFFF38A50411DB9C8B /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				D2AAC07D0554694100DB518D /* vslipsync_iphone */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		D2AAC07B0554694100DB518D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				79940FC5129FAD7A00529F63 /* AudioStreamLipSync.cpp in Sources */,
+				79940FC6129FAD7A00529F63 /* cvisemes.cpp in Sources */,
+				79940FC7129FAD7A00529F63 /* LipSync.cpp in Sources */,
+				79940FC8129FAD7A00529F63 /* fftsg_h.c in Sources */,
+				79940FC9129FAD7A00529F63 /* memalloc.cpp in Sources */,
+				79940FCA129FAD7A00529F63 /* mfcc.cpp in Sources */,
+				79940FCB129FAD7A00529F63 /* WavIo.cpp in Sources */,
+				79940FCD129FAD7A00529F63 /* NeuralNetwork.cpp in Sources */,
+				79940FCE129FAD7A00529F63 /* waveplay.cpp in Sources */,
+				79325A451600E3BA000D8B1F /* SilentStreamLipSync.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		1DEB921F08733DC00010E9CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Wajih Yassine (TQGVYUPNC7)";
+				COPY_PHASE_STRIP = NO;
+				DSTROOT = /tmp/vslipsync_iphone.dst;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_PREFIX_HEADER = vslipsync_iphone_Prefix.pch;
+				GCC_THUMB_SUPPORT = NO;
+				GCC_VERSION = "";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"../**",
+				);
+				INSTALL_PATH = /usr/local/lib;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				LIBRARY_SEARCH_PATHS = (
+					"/Users/Sgago/UCIAssistant/libs/vscore_iphone/build/Debug-iphoneos",
+					"../**",
+				);
+				OTHER_LDFLAGS = "";
+				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
+				PRODUCT_NAME = vslipsync_iphone;
+				PROVISIONING_PROFILE = "331BB820-E423-4B6F-9B42-67FBDE70A9E9";
+				SDKROOT = iphoneos;
+				VALID_ARCHS = "armv7 armv7s i386";
+			};
+			name = Debug;
+		};
+		1DEB922008733DC00010E9CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Wajih Yassine (TQGVYUPNC7)";
+				DSTROOT = /tmp/vslipsync_iphone.dst;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_PREFIX_HEADER = vslipsync_iphone_Prefix.pch;
+				GCC_VERSION = "";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"../**",
+				);
+				INSTALL_PATH = /usr/local/lib;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				LIBRARY_SEARCH_PATHS = (
+					"/Users/Sgago/UCIAssistant/libs/vscore_iphone/build/Debug-iphoneos",
+					"../**",
+				);
+				OTHER_LDFLAGS = "";
+				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
+				PRODUCT_NAME = vslipsync_iphone;
+				PROVISIONING_PROFILE = "331BB820-E423-4B6F-9B42-67FBDE70A9E9";
+				SDKROOT = iphoneos;
+				VALID_ARCHS = "armv7 armv7s i386";
+			};
+			name = Release;
+		};
+		1DEB922308733DC00010E9CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer: Wajih Yassine (TQGVYUPNC7)";
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					USE_LIPSYNC,
+					DEBUG,
+					_CRT_SECURE_NO_WARNINGS,
+					VISAGE_STATIC,
+					IPHONE,
+					IPHONE_DEV,
+				);
+				GCC_THUMB_SUPPORT = NO;
+				GCC_TREAT_NONCONFORMANT_CODE_ERRORS_AS_WARNINGS = YES;
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(VSLipsync)/header/MFCC",
+					"$(VSLipsync)/header",
+					"$(VSCore)/header",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = "-ObjC";
+				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
+				PROVISIONING_PROFILE = "331BB820-E423-4B6F-9B42-67FBDE70A9E9";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALID_ARCHS = "armv7 armv7s";
+			};
+			name = Debug;
+		};
+		1DEB922408733DC00010E9CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer: Wajih Yassine (TQGVYUPNC7)";
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					USE_LIPSYNC,
+					_CRT_SECURE_NO_WARNINGS,
+					VISAGE_STATIC,
+					IPHONE,
+					IPHONE_DEV,
+				);
+				GCC_THUMB_SUPPORT = NO;
+				GCC_TREAT_NONCONFORMANT_CODE_ERRORS_AS_WARNINGS = YES;
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(VSLipsync)/header/MFCC",
+					"$(VSLipsync)/header",
+					"$(VSCore)/header",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = "-ObjC";
+				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
+				PROVISIONING_PROFILE = "331BB820-E423-4B6F-9B42-67FBDE70A9E9";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALID_ARCHS = "armv7 armv7s";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1DEB921E08733DC00010E9CD /* Build configuration list for PBXNativeTarget "vslipsync_iphone" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB921F08733DC00010E9CD /* Debug */,
+				1DEB922008733DC00010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1DEB922208733DC00010E9CD /* Build configuration list for PBXProject "vslipsync_iphone" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB922308733DC00010E9CD /* Debug */,
+				1DEB922408733DC00010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 0867D690FE84028FC02AAC07 /* Project object */;
+}

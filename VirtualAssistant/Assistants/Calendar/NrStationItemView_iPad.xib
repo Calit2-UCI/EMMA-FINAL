@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="NrCalendarMainViewController"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="CCT-wq-IpA" userLabel="Nr Station Item View" customClass="NrStationItemView">
+            <rect key="frame" x="0.0" y="0.0" width="208" height="183"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" text="Station" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4lM-cO-VbF">
+                    <rect key="frame" x="2" y="0.0" width="208" height="43"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="26"/>
+                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" fixedFrame="YES" image="station.png" translatesAutoresizingMaskIntoConstraints="NO" id="65y-QL-rBq">
+                    <rect key="frame" x="1" y="40" width="210" height="143"/>
+                </imageView>
+            </subviews>
+            <color key="backgroundColor" white="0.0" alpha="0.40000000000000002" colorSpace="calibratedWhite"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <action selector="stationItemViewClicked:" destination="-2" eventType="touchUpInside" id="5Xm-0P-Qrw"/>
+                <outlet property="dayName" destination="4lM-cO-VbF" id="3xo-kz-gkS"/>
+                <outlet property="imgView" destination="65y-QL-rBq" id="l4i-o2-Jcw"/>
+            </connections>
+            <point key="canvasLocation" x="60" y="-363.5"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="station.png" width="256" height="256"/>
+    </resources>
+</document>

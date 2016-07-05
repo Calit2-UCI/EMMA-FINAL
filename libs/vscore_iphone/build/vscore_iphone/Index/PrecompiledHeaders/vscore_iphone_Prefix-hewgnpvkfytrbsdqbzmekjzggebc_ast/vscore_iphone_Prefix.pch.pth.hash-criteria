@@ -1,0 +1,34 @@
+Contents of /Users/narada/Work/NARADA_VISAGE_DEVELOPMENT/xcode_workspace/vscore_iphone/vscore_iphone_Prefix.pch
+3.0 (tags/Apple/clang-211.9) (based on LLVM 3.0svn)
+arm-apple-darwin11.0.0
+-x
+c++
+-arch
+armv7
+-fmessage-length=0
+-fdiagnostics-print-source-range-info
+-fdiagnostics-show-category=id
+-fdiagnostics-parseable-fixits
+-fpascal-strings
+-O0
+-DDEBUG
+-DIPHONE
+-DVISAGE_STATIC
+-DIPHONE_DEV
+-isysroot
+/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk
+-gdwarf-2
+-miphoneos-version-min=3.2
+-iquote
+-iquote
+-I/Users/narada/Work/NARADA_VISAGE_DEVELOPMENT/xcode_workspace/vscore_iphone/build/vscore_iphone/Build/Products/Debug-iphoneos/include
+-I/Users/narada/Work/NARADA_VISAGE_DEVELOPMENT/xcode_workspace/vscore_iphone/../../eclipse_workspace/dependencies/glues/include
+-I/Users/narada/Work/NARADA_VISAGE_DEVELOPMENT/xcode_workspace/vscore_iphone/../../eclipse_workspace/vscore/header
+-I/Users/narada/Work/NARADA_VISAGE_DEVELOPMENT/xcode_workspace/vscore_iphone/../../eclipse_workspace/dependencies/libxml2/include
+-I/Users/narada/Work/NARADA_VISAGE_DEVELOPMENT/xcode_workspace/vscore_iphone/../../eclipse_workspace/dependencies/zlib/include
+-F/Users/narada/Work/NARADA_VISAGE_DEVELOPMENT/xcode_workspace/vscore_iphone/build/vscore_iphone/Build/Products/Debug-iphoneos
+-ferror-limit=10
+-working-directory=/Users/narada/Work/NARADA_VISAGE_DEVELOPMENT/xcode_workspace/vscore_iphone
+-Xclang
+-detailed-preprocessing-record
+SDK_PRODUCT_BUILD_VERSION=9A334

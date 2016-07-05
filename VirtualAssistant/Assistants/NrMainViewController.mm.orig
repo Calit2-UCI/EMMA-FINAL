@@ -1,0 +1,369 @@
+//
+//  NrMainViewController.m
+//  VirtualAssistant
+//
+//  Created by Enrique on 10/8/12.
+//  Copyright (c) 2012 Narada Robotics S.L. All rights reserved.
+//
+
+#import "NrMainViewController.h"
+
+#import "NaradaiSpeechTTS.h"
+#import "NrAppDelegate.h"
+#import "NrViewController.h"
+#import "EAGLView.h"
+
+#import "NSFileManager+Regular.h"
+
+@interface NrMainViewController ()
+
+@end
+
+@implementation NrMainViewController
+
+@synthesize navController;
+@synthesize coverView;
+@synthesize assistantView;
+@synthesize detailView;
+@synthesize shareButton;
+@synthesize daysView;
+@synthesize glController;
+@synthesize activityIndicator;
+@synthesize pointingBar;
+@synthesize pendingTTS;
+@synthesize filesToSpeak;
+@synthesize selectedItem;
+@synthesize contentsView;
+@synthesize currentMode;
+@synthesize weatherMng;
+@synthesize bottomCityNameLabel;
+@synthesize bottomCityNameButton;
+@synthesize moreInfoButton;
+@synthesize eventsTableView;
+@synthesize switchMoreInfoView;
+@synthesize detailWeatherView;
+@synthesize requestOnlyFiles;
+
+//Detail view for Weather
+@synthesize detailDayNameLabel, detailPredictionLabel, detailMinTempLabel, detailMaxTempLabel, detailWindSpeedLabel, detailHumidityLabel, detailFeelsLikeTempLabel, detailWeatherImg;
+
+int nextIndex;
+BOOL speaking;
+
+CGFloat pointingBarYMargin = 2;
+
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self) {
+//        self.navController = [[UINavigationController alloc] initWithRootViewController:self];
+        
+        NrAppDelegate *delegate = [UIApplication sharedApplication].delegate;
+        NrViewController *viewController = delegate.viewController;
+        self.glController = viewController.glController;
+        
+        [self setNotificationListeners];
+        
+        self.initY = [self.glController.modelManager modelPositionY];
+        
+        self.pendingTTS = [NSMutableArray array];
+        
+        self.selectedItem = -1;
+        
+        self.weatherMng = [[NaradaWeatherManager alloc] initWithDelegate:self];
+        
+        self.requestOnlyFiles = NO;
+    }
+    return self;
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+	// Do any additional setup after loading the view.
+    
+    [self createCover];
+    [self setGestureRecognizerListeners];
+    self.assistantView.backgroundColor = [UIColor clearColor];
+    
+//    [self performSelector:@selector(sayInitAudio) withObject:nil afterDelay:2];
+//    [self sayInitAudio];
+//    [self performSelector:@selector(sayInitAudio) withObject:nil afterDelay:2.0];
+}
+
+- (void)sayInitAudio
+{
+    NSUserDefaults * prefs = [NSUserDefaults standardUserDefaults];
+    BOOL appNoInit = [prefs boolForKey:@"AppInitKey"];
+    if (!appNoInit) {
+        [prefs setBool:YES forKey:@"AppInitKey"];
+        [prefs synchronize];
+        
+        self.filesToSpeak = [NSMutableArray arrayWithObjects:
+                             @"welcome-assistant.wav",
+                             @"notification-disclaimer.wav",
+                             nil];
+        
+        for (NSString * file in self.filesToSpeak) {
+            NSAssert1([[NSFileManager defaultManager] fileExistsAtPath:[[NSFileManager documentsPath] stringByAppendingPathComponent:file]], @"File does not exist, %@", file);
+        }
+        
+        if ([self.filesToSpeak count] > 0) {
+//            [self.glController.modelManager repeatAudioWithAbsoluteAudioPath:[self.filesToSpeak objectAtIndex:0] temporary:YES];
+            [self.glController.modelManager playTemporaryAction:[self.filesToSpeak objectAtIndex:0] withPath:[NSFileManager documentsPath] andDelay:0];
+            [self.filesToSpeak removeObjectAtIndex:0];
+        }
+    }
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    [self.glController.glView stopAnimation];
+}
+
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+- (void)loadPointingBarFromFrame:(CGRect)itemFrame
+{
+    CGFloat itemWidth = itemFrame.size.width;
+    CGFloat itemHeight = 5;
+    
+    //    self.pointingBar = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width, self.daysView.frame.origin.y + self.daysView.frame.size.height + pointingBarYMargin, itemWidth, itemHeight)];
+    self.pointingBar = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width, self.daysView.frame.origin.y + self.daysView.frame.size.height + pointingBarYMargin, itemWidth * 0.5, itemHeight)];
+    
+    self.pointingBar.backgroundColor = [UIColor colorWithRed:224.0f/255.0f green:161.0f/255.0f blue:34.0f/255.0f alpha:255.0f/255.0f];
+    
+    self.pointingBar.alpha = 0.0f;
+    
+    //    [self.view addSubview:self.pointingBar];
+    [self.contentsView addSubview:self.pointingBar];
+}
+
+- (void)movePointingBarToFrame:(CGRect)baseframe
+{
+    CGRect finalFrame = CGRectMake(baseframe.origin.x + (baseframe.size.width - self.pointingBar.frame.size.width)/2,
+                                   baseframe.origin.y + baseframe.size.height + pointingBarYMargin,
+                                   self.pointingBar.frame.size.width,
+                                   self.pointingBar.frame.size.height);
+    
+    if (self.pointingBar.alpha == 0.0f) {
+        self.pointingBar.frame = finalFrame;
+        [UIView animateWithDuration:0.3 animations:^{
+            self.pointingBar.alpha = 1.0f;
+        }];
+    }
+    else {
+        [UIView animateWithDuration:0.3 animations:^{
+            self.pointingBar.frame = finalFrame;
+        }];
+    }
+}
+
+#pragma mark -
+#pragma mark Notification Setup Methods
+
+- (void)setNotificationListeners
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleFinishedSpeaking:) name:notificationFinishedSpeaking object:nil];
+}
+
+#pragma mark -
+#pragma mark Gesture Recognizer Handlers
+
+- (void)setGestureRecognizerListeners
+{
+    UISwipeGestureRecognizer *swipeLeft = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipeLeftFrom:)];
+    swipeLeft.direction = UISwipeGestureRecognizerDirectionLeft;
+    
+    UISwipeGestureRecognizer *swipeRight = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipeRightFrom:)];
+    swipeRight.direction = UISwipeGestureRecognizerDirectionRight;
+    
+    [self.view addGestureRecognizer:swipeLeft];
+    [self.view addGestureRecognizer:swipeRight];
+}
+
+#pragma mark -
+#pragma mark TTS delegate methods
+
+- (void)speakSentences:(NSArray *)sentences withMaxLength:(NSInteger)maxLength toFileName:(NSString *)fileName inLanguage:(NSString *)lang
+{
+    NSArray *choppedEvents = [NaradaTTS chopSentences:sentences withMaxLength:100];
+    
+    int count = 0;
+    nextIndex = count;
+    
+    for (NSString *event in choppedEvents) {
+        NSLog(@"Event title: %@", event);
+        
+        NaradaTTS *gTTS = [[NaradaiSpeechTTS alloc] initWithID:count textToSpeak:event fileName:fileName language:lang isFemale:YES andDelegate:self];
+        
+        NSLog(@"Created TTS #%d", count);
+        
+        if (count == [choppedEvents count]) {
+            gTTS.last = YES;
+        }
+        [gTTS requestTTS];
+        count ++;
+    }
+}
+
+- (BOOL)canSpeak
+{
+    return !speaking;
+}
+
+- (void)NaradaTTSDidFinish:(NaradaTTS *)ngtts
+{
+    NSLog(@"TTS #%d did finish", ngtts.ttsID);
+    
+    if ([self canSpeak] && ngtts.ttsID == nextIndex)
+    {
+        ngtts.last ? nextIndex = 0 : nextIndex ++;
+        speaking = YES;
+        
+        NSLog(@"Speaking TTS #%d", ngtts.ttsID);
+        NSLog(@"Text to speak is %@", ngtts.text);
+        
+        //Speak
+        NSString *wavFilePath = [self addHeaderToWavFile:ngtts.pcmAudioPath];
+        
+        if (requestOnlyFiles) {
+            if (ngtts.last) {
+                [[NSNotificationCenter defaultCenter] postNotificationName:notificationFilesReceived object:nil userInfo:nil];
+            }
+            return;
+        }
+        
+        [self.glController.modelManager repeatAudioWithAbsoluteAudioPath:wavFilePath temporary:YES];
+        
+//        [self makeTableVisible];
+        [self handleWillBeginSpeaking];
+        
+        return;
+    }
+    
+    NSLog(@"Appending TTS #%d", ngtts.ttsID);
+    [self.pendingTTS addObject:ngtts];
+    
+    NSLog(@"Size of PendingTTS is %d", [self.pendingTTS count]);
+    
+    NSAssert(self.pendingTTS, @"PendingTTS is nil");
+}
+
+- (void)NaradaTTSDidFailWithError:(NSError *)error
+{
+    //TODO: handle possible errors (i.e. network error)
+    NSLog(@"Error occurred while doing TTS, error: %@", [error localizedDescription]);
+}
+
+- (NSString *)addHeaderToWavFile:(NSString *)pcmFilePath
+{
+    NSString *wavFilePath = [pcmFilePath stringByReplacingOccurrencesOfString:@".pcm" withString:@".wav"];
+    
+    NSFileManager *fm = [NSFileManager defaultManager];
+    NSData *data = [fm contentsAtPath:pcmFilePath];
+    
+    const void *bytes = [data bytes];
+    int dataSize = [data length];
+    
+    NaradaAudioResource *audioResource = new NaradaAudioResource();
+    
+    audioResource->addFromCapture((void*)bytes, dataSize/2, AL_FORMAT_MONO16, 16000, 0);
+    audioResource->writeToWAV((char *)[wavFilePath UTF8String]);
+    
+    delete audioResource;
+    
+    NSError *error;
+    if (![fm removeItemAtPath:pcmFilePath error:&error]) {
+        NSLog(@"Error removing PCM path: %@", [error localizedDescription]);
+    }
+    
+    return wavFilePath;
+}
+
+- (void)handleFinishedSpeaking:(NSNotification *)notification
+{
+    NSLog(@"Model did finish Speaking");
+    NSLog(@"Next index is %d", nextIndex);
+    speaking = NO;
+    NSLog(@"Pending TTS is %d", [self.pendingTTS count]);
+    
+    if ([self.pendingTTS count]) {
+        
+        for (NaradaTTS *ngtts in self.pendingTTS)
+        {
+            if (ngtts.ttsID == nextIndex ) {
+                NSLog(@"TTS #%d present", ngtts.ttsID);
+                NSLog(@"Text to speak is %@", ngtts.text);
+                
+                ngtts.last ? nextIndex = 0 : nextIndex ++;
+                speaking = YES;
+                
+                [self.pendingTTS removeObject:ngtts];
+                
+                [self addHeaderToWavFile:ngtts.pcmAudioPath];
+                
+                NSString *fileName = [NSString stringWithFormat:@"%@%d.wav", ngtts.fileName, ngtts.ttsID];
+                NSString *nextAudioPath = [[NSFileManager documentsPath] stringByAppendingPathComponent:fileName];
+                [self.glController.modelManager repeatAudioWithAbsoluteAudioPath:nextAudioPath temporary:YES];
+                
+                return;
+            }
+        }
+    }
+    else if ([self.filesToSpeak count]) {
+//        [self.glController.modelManager repeatAudioWithAbsoluteAudioPath:[self.filesToSpeak objectAtIndex:0] temporary:YES];
+        [self.glController.modelManager playTemporaryAction:[self.filesToSpeak objectAtIndex:0] withPath:[NSFileManager documentsPath] andDelay:0];
+        
+        if ([self.filesToSpeak count])
+            [self.filesToSpeak removeObjectAtIndex:0];
+    }
+    else {
+        NSLog(@"Finished speaking all");
+        [self handleDidFinishSpeaking];
+    }
+    
+    [self uncover];
+}
+
+- (void)shutUpModel
+{
+    [self.glController.glView stopAnimation];
+}
+
+
+
+#pragma mark -
+#pragma mark Methods for the Coverview
+
+- (void)createCover
+{
+    coverView = [[UIView alloc] initWithFrame:self.view.frame];
+    coverView.backgroundColor = [UIColor clearColor];
+    coverView.hidden = YES;
+    [self.view addSubview:coverView];
+}
+
+- (BOOL)isCovered
+{
+    return !self.coverView.hidden;
+}
+
+- (void)cover
+{
+    NSAssert(self.coverView != nil, @"Cover: coverView is nil, so aborting program");
+    self.coverView.hidden = NO;
+}
+
+- (void)uncover
+{
+    NSAssert(self.coverView != nil, @"Uncover: coverView is nil, so aborting program");
+    self.coverView.hidden = YES;
+}
+
+@end

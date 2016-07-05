@@ -1,0 +1,108 @@
+//
+//  NrCalendarMainViewController.h
+//  VirtualAssistant
+//
+//  Created by Enrique on 9/28/12.
+//  Copyright (c) 2012 Narada Robotics S.L. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+#import "NrMainViewController.h"
+#import "GLViewController.h"
+#import "NrMainItemView.h"
+#import "NrCalendarItemView.h"
+#import "NrWeatherItemView.h"
+#import "NaradaCalendarManager.h"
+#import "MBProgressHUD.h"
+#import "NaradaFacebookTools.h"
+
+#define kLocationNameKey @"kLocationNameKey"
+#define kLocationCityCodeKey @"kCityCodeKey"
+#define kLocationZipCodeKey @"kZipCodeKey"
+#define kLocationCountryKey @"kCountryKey"
+#define kLocationStateKey @"kStateKey"
+#define kOpenInfoView @"kOpenInfoView"
+
+#define notificationWakeFromLocalNotification @"notificationWakeFromLocalNotification"
+
+
+@interface NrCalendarMainViewController : NrMainViewController <
+UITableViewDataSource,
+UITableViewDelegate,
+NaradaCalendarManagerDelegate,
+NaradaFacebookToolsDelegate
+>
+
+
+// UI elements
+
+@property (nonatomic, strong) NSMutableArray *weekEventsList;
+@property (nonatomic, strong) NSString *selectedDayName;
+
+@property (nonatomic, strong) UIScrollView *scroll;
+
+@property (nonatomic, strong) MBProgressHUD * hud;
+
+@property (nonatomic, strong) NSMutableArray *itemList;
+
+@property (nonatomic, strong) NSDictionary * weatherIcons;
+
+@property (nonatomic, strong) NaradaFacebookTools * facebookTools;
+
+
+- (IBAction)speakEventsButtonClicked:(id)sender;
+- (IBAction)configButtonClicked:(id)sender;
+- (IBAction)mainItemViewClicked:(id)sender;
+- (IBAction)calendarItemViewClicked:(id)sender;
+- (IBAction)weatherItemViewClicked:(id)sender;
+- (IBAction)backButtonClicked:(id)sender;
+- (IBAction)changeCityClicked:(id)sender;
+- (IBAction)moreInfoButtonClicked:(id)sender;
+- (IBAction)facebookShareClicked:(id)sender;
+
+- (void)loadDetailView;
+- (void)loadMainPointingBar;
+- (void)loadCalPointingBar;
+- (void)loadWeatherPointingBar;
+- (void)movePointingBarToItem:(NrMainItemView *)item;
+- (void)loadScrollMainItem;
+- (void)loadScrollCalItem;
+- (void)loadScrollWeatherItem;
+- (void)loadCalendarEvents;
+- (void)loadWeatherIcons;
+- (void)fillDayItem:(NrCalendarItemView *)item withEventData:(NSArray *)events;
+- (void)fillDayItem:(NrWeatherItemView *)item withWeatherData:(NrWeatherForecast *)forecast;
+- (void)fillDayItemWithMainData:(NrMainItemView *)item;
+- (void)speakEventsOfDayNamed:(NSString *)dayName;
+- (void)speakWeatherOfDayNamed:(NSString *)dayName;
+- (void)speakHoroscope;
+- (void)speakRestaurants;
+- (void)speakPubs;
+- (void)speakFlights;
+- (void)speakHotels;
+- (void)speakCarRental;
+- (void)speakFilesArray;
+
+- (void)showWeatherDetails;
+- (void)hideWeatherDetails;
+
+- (void)showWeatherButtons;
+- (void)hideWeatherButtons;
+
+
+
+- (void)presentCityAlertViewWithVoice:(BOOL)voice;
+
+- (void)changeItemsTo:(NSInteger)itemID;
+- (void)changeItemsToCalendar;
+- (void)changeItemsToWeather;
+- (void)changeItemsToMain;
+
+- (NSString *)addHeaderToWavFile:(NSString *)pcmFilePath;
+
+- (NSString *)forecastToHumanReadable:(NrWeatherForecast *)forecast;
+
+- (void)setNotificationListeners;
+
+@end

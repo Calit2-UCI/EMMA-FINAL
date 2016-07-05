@@ -1,0 +1,313 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		79A9CF271743C09500486854 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 79A9CF261743C09500486854 /* Foundation.framework */; };
+		79A9CF2C1743C09500486854 /* NaradaDownloader.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 79A9CF2B1743C09500486854 /* NaradaDownloader.h */; };
+		79A9CF2E1743C09500486854 /* NaradaDownloader.mm in Sources */ = {isa = PBXBuildFile; fileRef = 79A9CF2D1743C09500486854 /* NaradaDownloader.mm */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		79A9CF211743C09500486854 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/${PRODUCT_NAME}";
+			dstSubfolderSpec = 16;
+			files = (
+				79A9CF2C1743C09500486854 /* NaradaDownloader.h in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		79A9CF231743C09500486854 /* libNaradaDownloader.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libNaradaDownloader.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		79A9CF261743C09500486854 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		79A9CF2A1743C09500486854 /* NaradaDownloader-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NaradaDownloader-Prefix.pch"; sourceTree = "<group>"; };
+		79A9CF2B1743C09500486854 /* NaradaDownloader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NaradaDownloader.h; sourceTree = "<group>"; };
+		79A9CF2D1743C09500486854 /* NaradaDownloader.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = NaradaDownloader.mm; sourceTree = "<group>"; };
+		79A9CF351743C09600486854 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
+		79A9CF371743C09600486854 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
+		79A9CF3F1743C09600486854 /* NaradaDownloaderTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "NaradaDownloaderTests-Info.plist"; sourceTree = "<group>"; };
+		79A9CF411743C09600486854 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		79A9CF431743C09600486854 /* NaradaDownloaderTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NaradaDownloaderTests.h; sourceTree = "<group>"; };
+		79A9CF441743C09600486854 /* NaradaDownloaderTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NaradaDownloaderTests.m; sourceTree = "<group>"; };
+		79A9CF581743C14900486854 /* NaradaDownloaderDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NaradaDownloaderDelegate.h; sourceTree = "<group>"; };
+		C36D544219DDAB9000B66628 /* libNaradaCharacterLib.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libNaradaCharacterLib.a; path = "../../Library/Developer/Xcode/DerivedData/RIVA-gzregwxzmmejvsczocpdqjdzised/Build/Products/Debug-iphoneos/libNaradaCharacterLib.a"; sourceTree = "<group>"; };
+		C36D544419DDAB9500B66628 /* libNaradaAVTools.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libNaradaAVTools.a; path = "../../Library/Developer/Xcode/DerivedData/RIVA-gzregwxzmmejvsczocpdqjdzised/Build/Products/Debug-iphoneos/libNaradaAVTools.a"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		79A9CF201743C09500486854 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				79A9CF271743C09500486854 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		79A9CF1A1743C09500486854 = {
+			isa = PBXGroup;
+			children = (
+				79A9CF281743C09500486854 /* NaradaDownloader */,
+				79A9CF3D1743C09600486854 /* NaradaDownloaderTests */,
+				79A9CF251743C09500486854 /* Frameworks */,
+				79A9CF241743C09500486854 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		79A9CF241743C09500486854 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				79A9CF231743C09500486854 /* libNaradaDownloader.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		79A9CF251743C09500486854 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C36D544419DDAB9500B66628 /* libNaradaAVTools.a */,
+				C36D544219DDAB9000B66628 /* libNaradaCharacterLib.a */,
+				79A9CF261743C09500486854 /* Foundation.framework */,
+				79A9CF351743C09600486854 /* SenTestingKit.framework */,
+				79A9CF371743C09600486854 /* UIKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		79A9CF281743C09500486854 /* NaradaDownloader */ = {
+			isa = PBXGroup;
+			children = (
+				79A9CF571743C12900486854 /* protocol */,
+				79A9CF2B1743C09500486854 /* NaradaDownloader.h */,
+				79A9CF2D1743C09500486854 /* NaradaDownloader.mm */,
+				79A9CF291743C09500486854 /* Supporting Files */,
+			);
+			path = NaradaDownloader;
+			sourceTree = "<group>";
+		};
+		79A9CF291743C09500486854 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				79A9CF2A1743C09500486854 /* NaradaDownloader-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		79A9CF3D1743C09600486854 /* NaradaDownloaderTests */ = {
+			isa = PBXGroup;
+			children = (
+				79A9CF431743C09600486854 /* NaradaDownloaderTests.h */,
+				79A9CF441743C09600486854 /* NaradaDownloaderTests.m */,
+				79A9CF3E1743C09600486854 /* Supporting Files */,
+			);
+			path = NaradaDownloaderTests;
+			sourceTree = "<group>";
+		};
+		79A9CF3E1743C09600486854 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				79A9CF3F1743C09600486854 /* NaradaDownloaderTests-Info.plist */,
+				79A9CF401743C09600486854 /* InfoPlist.strings */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		79A9CF571743C12900486854 /* protocol */ = {
+			isa = PBXGroup;
+			children = (
+				79A9CF581743C14900486854 /* NaradaDownloaderDelegate.h */,
+			);
+			name = protocol;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		79A9CF221743C09500486854 /* NaradaDownloader */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 79A9CF481743C09600486854 /* Build configuration list for PBXNativeTarget "NaradaDownloader" */;
+			buildPhases = (
+				79A9CF1F1743C09500486854 /* Sources */,
+				79A9CF201743C09500486854 /* Frameworks */,
+				79A9CF211743C09500486854 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = NaradaDownloader;
+			productName = NaradaDownloader;
+			productReference = 79A9CF231743C09500486854 /* libNaradaDownloader.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		79A9CF1B1743C09500486854 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0460;
+				ORGANIZATIONNAME = "Narada Robotics S.L.";
+			};
+			buildConfigurationList = 79A9CF1E1743C09500486854 /* Build configuration list for PBXProject "NaradaDownloader" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 79A9CF1A1743C09500486854;
+			productRefGroup = 79A9CF241743C09500486854 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				79A9CF221743C09500486854 /* NaradaDownloader */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		79A9CF1F1743C09500486854 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				79A9CF2E1743C09500486854 /* NaradaDownloader.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		79A9CF401743C09600486854 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				79A9CF411743C09600486854 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		79A9CF461743C09600486854 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		79A9CF471743C09600486854 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		79A9CF491743C09600486854 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DSTROOT = /tmp/NaradaDownloader.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "NaradaDownloader/NaradaDownloader-Prefix.pch";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/RIVA-gzregwxzmmejvsczocpdqjdzised/Build/Products/Debug-iphoneos",
+				);
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		79A9CF4A1743C09600486854 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DSTROOT = /tmp/NaradaDownloader.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "NaradaDownloader/NaradaDownloader-Prefix.pch";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/RIVA-gzregwxzmmejvsczocpdqjdzised/Build/Products/Debug-iphoneos",
+				);
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		79A9CF1E1743C09500486854 /* Build configuration list for PBXProject "NaradaDownloader" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				79A9CF461743C09600486854 /* Debug */,
+				79A9CF471743C09600486854 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		79A9CF481743C09600486854 /* Build configuration list for PBXNativeTarget "NaradaDownloader" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				79A9CF491743C09600486854 /* Debug */,
+				79A9CF4A1743C09600486854 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 79A9CF1B1743C09500486854 /* Project object */;
+}

@@ -1,0 +1,30 @@
+Contents of /Users/narada/Work/NARADA_VISAGE_DEVELOPMENT/xcode_workspace/vslipsync_iphone/vslipsync_iphone_Prefix.pch
+4.2.1 (Based on Apple Inc. build 5658) (LLVM build 2377.00)
+arm-apple-darwin10
+-x
+c
+-arch
+armv6
+-fmessage-length=0
+-pipe
+-std=c99
+-fpascal-strings
+-O0
+-DDEBUG
+-D_CRT_SECURE_NO_WARNINGS
+-DVISAGE_STATIC
+-DIPHONE
+-DIPHONE_DEV
+-isysroot
+/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk
+-gdwarf-2
+-mno-thumb
+-miphoneos-version-min=3.2
+-iquote
+-iquote
+-I/Users/narada/Work/NARADA_VISAGE_DEVELOPMENT/xcode_workspace/vslipsync_iphone/build/vslipsync_iphone/Build/Products/Debug-iphoneos/include
+-I/Users/narada/Work/NARADA_VISAGE_DEVELOPMENT/xcode_workspace/vslipsync_iphone/../../eclipse_workspace/vslipsync/header/MFCC
+-I/Users/narada/Work/NARADA_VISAGE_DEVELOPMENT/xcode_workspace/vslipsync_iphone/../../eclipse_workspace/vslipsync/header
+-I/Users/narada/Work/NARADA_VISAGE_DEVELOPMENT/xcode_workspace/vslipsync_iphone/../../eclipse_workspace/vscore/header
+-F/Users/narada/Work/NARADA_VISAGE_DEVELOPMENT/xcode_workspace/vslipsync_iphone/build/vslipsync_iphone/Build/Products/Debug-iphoneos
+SDK_PRODUCT_BUILD_VERSION=9A334

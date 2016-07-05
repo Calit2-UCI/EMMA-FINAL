@@ -1,0 +1,334 @@
+/* 
+  Localizable.strings
+  VirtualAssistant
+
+  Created by Enrique on 9/28/12.
+  Copyright (c) 2012 Narada Robotics S.L. All rights reserved.
+*/
+
+"LANG_TTS" = "en";
+"LOCALIZATION_DIR" = "en.lproj";
+
+"ERROR" = "Error";
+"ACCEPT" = "Accept";
+"CANCEL" = "Cancel";
+"DECLINE" = "Decline";
+"BACK" = "Back";
+"REMIND_LATER" = "Remind me later";
+
+//DEFINITIONS
+"CALENDAR" = "Calendar";
+"WEATHER" = "Weather";
+"HOROSCOPE" = "Horoscope";
+"RESTAURANTS" = "Restaurants";
+"PUBS" = "Pubs";
+"FLIGHTS" = "Flights";
+"HOTELS" = "Hotels";
+"CAR_RENTAL" = "Car Rental";
+
+"MAINCALENDAR_TITLE" = "Calendar";
+"MAINCALENDAR_BACKBUTTON_TITLE" = "Back";
+"MAINCALENDAR_CONFIGBUTTON_TITLE" = "Config";
+"EVENTS" = "Events";
+"LOCATION_TABLEVIEW_TITLE" = "Locations";
+
+//Templates and texts the assistant to say
+"NO_EVENTS_SCHEDULED" = "There are no events scheduled for [SELECTED_DAY].";
+"NO_WEATHER_SCHEDULED" = "There is no weather forcasted for [SELECTED_DAY].";
+"AND THATs ALL" = "And that's all for today.";
+"EVENT_DESC_TEMPLATE" = "At [HOUR] you have [EVENT]";
+"EVENT_TIME_DESC" = "[INIT_TIME] - [FINAL_TIME]";
+"GET_FULL_EVENTS" = "This version only allows you to know the events scheduled for today. If you want to have the full features, you can get the full version now.";
+"GET_FULL_WEATHER" = "This version only allows you to know the weather for today. If you want full features, you can get the full version now.";
+
+"GET_FULL_HOROSCOPE" = "This version doesn't have implemented this feature yet. Would you want me to read the everyday horoscope? If you have already unlocked the full version, you'll have it for free as a future app update, so get today the full version, and stay tuned for updates!";
+"GET_FULL_RESTAURANTS" = "This version doesn't have implemented this feature yet. Would you want me to read the restaurants you have around you? If you have already unlocked the full version, you'll have it for free as a future app update, so get the full version, and stay tuned!";
+"GET_FULL_PUBS" = "This feature is not implemented yet. Would you want me to tell you the pubs and bars around you? If you have already unlocked the full version, you'll get it as a free app update, so get the full version today, and stay tuned!";
+"GET_FULL_FLIGHTS" = "This feature is not ready yet. Would you want me to tell you the latest info about your preferred flights? If you have already unlocked the full version, you'll get it as a free app update, so get the full version today, and stay tuned!";
+"GET_FULL_CAR_RENTAL" = "This feature is not ready yet. Would you want me to tell you the latest info about car rental options and prices? If you have already unlocked the full version, you'll get it as a free app update, so get the full version today, and stay tuned!";
+"GET_FULL_HOTELS" = "This feature is not ready yet. Would you want me to tell you the latest info about hotels and book reservations? If you have already unlocked the full version, you'll get it as a free app update, so get the full version today, and stay tuned!";
+"VOTE_FOR_THIS_OPTION" = "Vote for this option now!";
+
+"WELCOME_TEXT" = "Hello, and welcome to your new Virtual Assistant, me. I can help you getting the calendar events set in your eye calendar, review the weather forecast, and more.";
+"NOTIFICATION_GUIDE" = "Do you see this clock button in the bottom? Click it to schedule me, to tell you the events and weather forecast of today, and wake me up with the newest notifications!";
+"ENTER_CITY" = "To review the weather forecast, I need to know your location";
+
+//Weather
+"ENTER_LOCATION" = "Enter a location";
+"LOCATION_CONFIRM_TITLE" = "Did you mean... ?";
+
+//Errors
+"ERROR_WEATHER_LOC_MSG" = "There was an error on the Internet Connection. Please, check your connection";
+"ERROR_WEATHER_FOR_MSG" = "There was an error on the Internet Connection. Please, check your connection";
+"CONVERSION_ERROR" = "Ha habido un error en la conversión de el audio. Pruébalo de nuevo más tarde";
+"ERROR_INTERNET_MSG" = "There is no Internet Connection. Please, check your connection";
+
+//Notifications
+"NOTIF_DESC_SINGLE" = "Tell events on [WEEKDAY]";
+"NOTIF_DESC_DAILY" = "Tell events (Daily)";
+"NOTIF_DESC_WEEKLY" = "Tell events every [WEEKDAY]";
+"NOTIFICATIONS" = "Notifications";
+"ALREADY_INSERTED" = "This notification is already set or passed";
+
+// Push notifications
+"UPDATE_AVAILABLE_TITLE" = "Update Available";
+"UPDATE_AVAILABLE_MSG" = "There is an update available in the App Store. Do you wish to download it?";
+"UPDATE" = "Update";
+"LOCAL_NOTIFICATION_UPDATE" = "Update Available";
+
+//IAP
+"UNLOCK_FULL_VERSION_TITLE" = "Unlock full version";
+"UNLOCK_FULL_VERSION_DESC" = "Do you wish to unlock the full version of Virtual Assistant?";
+"LOADING_IAP" = "Loading in app purchases...";
+"BUY_IAP" = "Buy";
+"UNLOCKING APP" = "Unlocking full app";
+"ERROR_IAP_MSG" = "Could not retrieve products this time. Please, try again later";
+
+//Views
+"NOTIFSCHEDULERVIEW_TITLE" = "Configuration";
+"PENDING_NOTIFICATION_TITLE" = "Pending Notification";
+"PENDING_NOTIFICATION_MSG" = "You have a pending notification. Do you want to hear it now?";
+
+//Weekdays
+"SUNDAY" = "Sunday";
+"MONDAY" = "Monday";
+"TUESDAY" = "Tuesday";
+"WEDNESDAY" = "Wednesday";
+"THURSDAY" = "Thursday";
+"FRIDAY" = "Friday";
+"SATURDAY" = "Saturday";
+
+// Calendar Authorization Disclaimer
+"AUTHORIZATION_DISCLAIMER_TITLE" = "Permission needed";
+"AUTHORIZATION_DISCLAIMER_DESC" = "This device has rejected the permission to access the calendar. To use this feature, you need to accept the permission. Please, go to Settings > Privacy > Calendars and enable the permission for VAssitant";
+"AUTHORIZATION_DISCLAIMER_BUTTON" = "Accept";
+
+
+//Forecast templates
+"FORECAST_TEMPLATE_1_EN" = "This is the forecast for [DAYNAME], in [CITYNAME]: [LONG-PRED]";
+"FORECAST_TEMPLATE_1_UNRELIABLE" = "This is the forecast for [DAYNAME], in [CITYNAME]: [SHORT-PRED]. Temperatures around [MAX-TEMP] and [MIN-TEMP] degrees celsius";
+"FORECAST_TEMPLATE_1" = "This is the forecast for [DAYNAME], in [CITYNAME]: [SHORT-PRED], with a mean temperature around [TEMPERATURE]. The winds will blow [WIND-DIRECTION], at [WIND-SPEED] kilometers per hour. Being the humidity of [HUMIDITY] percent, the feels-like temperature is expected to be [FEELS-TEMP]";
+
+// Wind directions
+"NORTH" = "north";
+"NORTHNORTHEAST" = "north, north east";
+"NORTHEAST" = "north east";
+"EASTNORTHEAST" = "east, north east";
+"EAST" = "east";
+"EASTSOUTHEAST" = "east, south east";
+"SOUTHEAST" = "south east";
+"SOUTHSOUTHEAST" = "south, south east";
+"SOUTH" = "south";
+"SOUTHSOUTHWEST" = "south, south west";
+"SOUTHWEST" = "south west";
+"WESTSOUTHWEST" = "west, south west";
+"WEST" = "west";
+"WESTNORTHWEST" = "west, north west";
+"NORTHWEST" = "north west";
+"NORTHNORTHWEST" = "north, north west";
+"OTHER" = "other";
+
+//Detail prediction templates
+"MAX_TEMP_TEMPLATE" = "Max Temp: [TEMP] deg.C";
+"MIN_TEMP_TEMPLATE" = "Min Temp: [TEMP] deg.C";
+"WINDS_DIR_TEMPLATE" = "Winds: [WIND_DIR]";
+"HUMIDITY_TEMPLATE" = "Humidty: [HUMIDITY]%";
+"FEELS_LIKE_TEMP" = "Feels-like temp: [TEMP]deg.C";
+
+// Facebook message
+"FACEBOOK_MSG" = "I found MyVirtualAssistant on iPhone, and it is very cool! You can schedule her to tell you the events you have stored on your iCalendar, and tell you the weather for today! It is a free app available now in the App Store. I definately recommend it!";
+"ALERTVIEW_FACEBOOK_ASK_TITLE" = "Facebook Post";
+"ALERTVIEW_FACEBOOK_ASK_DESC" = "Do you wish to share this app in your facebook wall?";
+"ALERTVIEW_FACEBOOK_CONFIRMATION_TITLE" = "Facebook Post";
+"ALERTVIEW_FACEBOOK_CONFIRMATION_DESC" = "The message has been posted successfully";
+
+//Vote
+"VOTE_TITLE" = "Vote";
+"VOTE_MSG_HOROSCOPE"    = "Do you want the assistant to read the horoscope as a feature in further updates?";
+"VOTE_MSG_RESTAURANTS"  = "Do you want the assistant to read the restaurants around you as a feature in further updates?";
+"VOTE_MSG_PUBS"         = "Do you want the assistant to read the pubs and bars around you as a feature in further updates?";
+"VOTE_MSG_FLIGHTS"      = "Do you want the assistant to read the flights as a feature in further updates?";
+"VOTE_MSG_HOTELS"       = "Do you want the assistant to read the hotels as a feature in further updates?";
+"VOTE_MSG_CARRENTAL"    = "Do you want the assistant to read the offers in car rental services as a feature in further updates?";
+
+
+//Weather "conditions
+
+"cond999.gif" = "Unknown";
+"cond000.gif" = "Clear";
+"cond001.gif" = "Cloudy";
+"cond002.gif" = "Partly Cloudy";
+"cond003.gif" = "Partly Cloudy";
+"cond004.gif" = "Partly Sunny";
+"cond005.gif" = "Rain";
+"cond006.gif" = "Thunderstorms";
+"cond007.gif" = "Sunny";
+"cond008.gif" = "Snow";
+"cond009.gif" = "Flurries";
+"cond010.gif" = "Unknown";
+"cond011.gif" = "Chance of Snow";
+"cond012.gif" = "Snow";
+"cond013.gif" = "Cloudy";
+"cond014.gif" = "Rain";
+"cond015.gif" = "Chance of Rain";
+"cond016.gif" = "Partly Cloudy";
+"cond017.gif" = "Fair";
+"cond018.gif" = "Thunderstorms";
+"cond019.gif" = "Chance of Flurry";
+"cond020.gif" = "Chance of Rain";
+"cond021.gif" = "Chance of Sleet";
+"cond022.gif" = "Chance of Storms";
+"cond023.gif" = "Hazy";
+"cond024.gif" = "Mostly Cloudy";
+"cond025.gif" = "Sleet";
+"cond026.gif" = "Mostly Sunny";
+"cond027.gif" = "Chance of Flurry";
+"cond028.gif" = "Chance of Sleet";
+"cond029.gif" = "Chance of Snow";
+"cond030.gif" = "Chance of Storms";
+"cond031.gif" = "Clear";
+"cond032.gif" = "Flurries";
+"cond033.gif" = "Hazy";
+"cond034.gif" = "Mostly Cloudy";
+"cond035.gif" = "Fair";
+"cond036.gif" = "Sleet";
+"cond037.gif" = "Unknown";
+"cond038.gif" = "Chance of Rain Showers";
+"cond039.gif" = "Chance of Snow Showers";
+"cond040.gif" = "Snow Showers";
+"cond041.gif" = "Rain Showers";
+"cond042.gif" = "Chance of Rain Showers";
+"cond043.gif" = "Chance of Snow Showers";
+"cond044.gif" = "Snow Showers";
+"cond045.gif" = "Rain Showers";
+"cond046.gif" = "Freezing Rain";
+"cond047.gif" = "Freezing Rain";
+"cond048.gif" = "Chance Freezing Rain";
+"cond049.gif" = "Chance Freezing Rain";
+"cond050.gif" = "Windy";
+"cond051.gif" = "Fog";
+"cond052.gif" = "Scattered Showers";
+"cond053.gif" = "Scattered Thunderstorms";
+"cond054.gif" = "Light Snow";
+"cond055.gif" = "Chance of Light Snow";
+"cond056.gif" = "Frozen Mix";
+"cond057.gif" = "Chance of Frozen Mix";
+"cond058.gif" = "Drizzle";
+"cond059.gif" = "Chance of Drizzle";
+"cond060.gif" = "Freezing Drizzle";
+"cond061.gif" = "Chance of Freezing Drizzle";
+"cond062.gif" = "Heavy Snow";
+"cond063.gif" = "Heavy Rain";
+"cond064.gif" = "Hot and Humid";
+"cond065.gif" = "Very Hot";
+"cond066.gif" = "Increasing Clouds";
+"cond067.gif" = "Clearing";
+"cond068.gif" = "Mostly Cloudy";
+"cond069.gif" = "Very Cold";
+"cond070.gif" = "Mostly Clear";
+"cond071.gif" = "Increasing Clouds";
+"cond072.gif" = "Clearing";
+"cond073.gif" = "Mostly Cloudy";
+"cond074.gif" = "Very Cold";
+"cond075.gif" = "Warm and Humid";
+"cond076.gif" = "Nowcast";
+"cond077.gif" = "Headline";
+"cond078.gif" = "30% Chance of Snow";
+"cond079.gif" = "40% Chance of Snow";
+"cond080.gif" = "50% Chance of Snow";
+"cond081.gif" = "30% Chance of Rain";
+"cond082.gif" = "40% Chance of Rain";
+"cond083.gif" = "50% Chance of Rain";
+"cond084.gif" = "30% Chance of Flurry";
+"cond085.gif" = "40% Chance of Flurry";
+"cond086.gif" = "50% Chance of Flurry";
+"cond087.gif" = "30% Chance of Rain";
+"cond088.gif" = "40% Chance of Rain";
+"cond089.gif" = "50% Chance of Rain";
+"cond090.gif" = "30% Chance of Sleet";
+"cond091.gif" = "40% Chance of Sleet";
+"cond092.gif" = "50% Chance of Sleet";
+"cond093.gif" = "30% Chance of Storms";
+"cond094.gif" = "40% Chance of Storms";
+"cond095.gif" = "50% Chance of Storms";
+"cond096.gif" = "30% Chance of Flurry";
+"cond097.gif" = "40% Chance of Flurry";
+"cond098.gif" = "50% Chance of Flurry";
+"cond099.gif" = "30% Chance of Sleet";
+"cond100.gif" = "40% Chance of Sleet";
+"cond101.gif" = "50% Chance of Sleet";
+"cond102.gif" = "30% Chance of Snow";
+"cond103.gif" = "40% Chance of Snow";
+"cond104.gif" = "50% Chance of Snow";
+"cond105.gif" = "30% Chance of Storms";
+"cond106.gif" = "40% Chance of Storms";
+"cond107.gif" = "50% Chance of Storms";
+"cond108.gif" = "30% Chance Rain Shower";
+"cond109.gif" = "40% Chance Rain Shower";
+"cond110.gif" = "50% Chance Rain Shower";
+"cond111.gif" = "30% Chance Snow Shower";
+"cond112.gif" = "40% Chance Snow Shower";
+"cond113.gif" = "50% Chance Snow Shower";
+"cond114.gif" = "30% Chance Rain Shower";
+"cond115.gif" = "40% Chance Rain Shower";
+"cond116.gif" = "50% Chance Rain Shower";
+"cond117.gif" = "30% Chance Snow Shower";
+"cond118.gif" = "40% Chance Snow Shower";
+"cond119.gif" = "50% Chance Snow Shower";
+"cond120.gif" = "30% Chance Freezing Rain";
+"cond121.gif" = "40% Chance Freezing Rain";
+"cond122.gif" = "50% Chance Freezing Rain";
+"cond123.gif" = "30% Chance Freezing Rain";
+"cond124.gif" = "40% Chance Freezing Rain";
+"cond125.gif" = "50% Chance Freezing Rain";
+"cond126.gif" = "30% Chance of Light Snow";
+"cond127.gif" = "40% Chance of Light Snow";
+"cond128.gif" = "50% Chance of Light Snow";
+"cond129.gif" = "30% Chance of Frozen Mix";
+"cond130.gif" = "40% Chance of Frozen Mix";
+"cond131.gif" = "50% Chance of Frozen Mix";
+"cond132.gif" = "30% Chance of Drizzle";
+"cond133.gif" = "40% Chance of Drizzle";
+"cond134.gif" = "50% Chance of Drizzle";
+"cond135.gif" = "30% Chance Freezing Drizzle";
+"cond136.gif" = "40% Chance Freezing Drizzle";
+"cond137.gif" = "50% Chance Freezing Drizzle";
+"cond138.gif" = "Chance of Snow";
+"cond139.gif" = "Chance of Rain";
+"cond140.gif" = "Chance of Flurry";
+"cond141.gif" = "Chance of Rain";
+"cond142.gif" = "Chance of Sleet";
+"cond143.gif" = "Chance of Storms";
+"cond144.gif" = "Chance of Flurry";
+"cond145.gif" = "Chance of Sleet";
+"cond146.gif" = "Chance of Snow";
+"cond147.gif" = "Chance of Storms";
+"cond148.gif" = "Chance Rain Shower";
+"cond149.gif" = "Chance Snow Shower";
+"cond150.gif" = "Chance Rain Shower";
+"cond151.gif" = "Chance Snow Shower";
+"cond152.gif" = "Chance Freezing Rain";
+"cond153.gif" = "Chance Freezing Rain";
+"cond154.gif" = "Chance of Light Snow";
+"cond155.gif" = "Chance of Frozen Mix";
+"cond156.gif" = "Chance of Drizzle";
+"cond157.gif" = "Chance Freezing Drizzle";
+"cond158.gif" = "windy";
+"cond159.gif" = "Foggy";
+"cond160.gif" = "Light Snow";
+"cond161.gif" = "Frozen Mix";
+"cond162.gif" = "Drizzle";
+"cond163.gif" = "Heavy Rain";
+"cond164.gif" = "Chance of Frozen Mix";
+"cond165.gif" = "Chance of Drizzle";
+"cond166.gif" = "Chance of Frozen Drizzle";
+"cond167.gif" = "30% Chance Drizzle";
+"cond168.gif" = "30% Chance Frozen Drizzle";
+"cond169.gif" = "30% Chance Frozen Mix";
+"cond170.gif" = "40% Chance Drizzle";
+"cond171.gif" = "40% Chance Fozen Drizzle";
+"cond172.gif" = "40% Chance Frozen Mix";
+"cond173.gif" = "40% Chance Drizzle";
+"cond174.gif" = "40% Chance Frozen Drizzle";
+"cond175.gif" = "40% Chance Frozen Mix";
+"cond176.gif" = "Chance of Light Snow";

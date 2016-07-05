@@ -1,0 +1,2034 @@
+//
+//  NrCalendarMainViewController.m
+//  VirtualAssistant
+//
+//  Created by Enrique on 9/28/12.
+//  Copyright (c) 2012 Narada Robotics S.L. All rights reserved.
+//
+
+#import "NrCalendarMainViewController.h"
+
+#import "NrNotifSchedulerViewController.h"
+#import "NrEventCell.h"
+#import "EventKit/EventKit.h"
+#import "NSFileManager+Regular.h"
+#import "NrAppDelegate.h"
+#import "NrLocationsTableViewController.h"
+#import "Reachability.h"
+#import "NrVAssistantIAPHelper.h"
+#import "NrAppDelegate.h"
+
+@interface NrCalendarMainViewController ()
+
+- (void)makeTableVisible;
+- (BOOL)canSpeak;
+
+- (void)removeAudios;
+
+@end
+
+@implementation NrCalendarMainViewController
+
+@synthesize weekEventsList;
+@synthesize selectedDayName;
+@synthesize hud;
+@synthesize itemList;
+@synthesize scroll;
+@synthesize weatherIcons;
+@synthesize backButton;
+@synthesize facebookTools;
+
+BOOL appLocked = NO;
+UIAlertView *cityAlertView, *buyAlertView, *facebookAlert;
+BOOL presentBuyingOptionsAfterSpeaking = NO;
+NSString *facebookAppId = @"180024962079347";
+BOOL postImmediately = NO;
+BOOL fromLoadProfile = NO;
+
+
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self) {
+        //Es queden
+//        UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"MAINCALENDAR_BACKBUTTON_TITLE", nil) style:UIBarButtonItemStyleBordered target:self action:@selector(backControllerClicked)];
+//        
+//        self.navigationItem.leftBarButtonItem = backButton;
+//        self.navController.navigationBar.tintColor = [UIColor colorWithRed:224.0f/255.0f green:161.0f/255.0f blue:34.0f/255.0f alpha:255.0f/255.0f];
+//        
+//        UIBarButtonItem *configButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"MAINCALENDAR_CONFIGBUTTON_TITLE", nil) style:UIBarButtonItemStyleBordered target:self action:@selector(configButtonClicked)];
+//        self.navigationItem.rightBarButtonItem = configButton;
+//        self.title = NSLocalizedString(@"MAINCALENDAR_TITLE", nil);
+        
+        self.currentMode = NR_MAIN;
+        
+        [self removeAudios];
+        [self removeWeatherAudios];
+        
+        [self copyAudiosToReadablePath];
+    }
+    return self;
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+	// Do any additional setup after loading the view.
+    
+    [self loadDetailView];
+//    [self loadScrollCalItem];
+    [self loadCityButton];
+    [self loadScrollMainItem];
+    [self loadMainPointingBar];
+    
+    [self loadWeatherIcons];
+    
+    [self setNotificationListenerToWake];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    self.assistantView.alpha = 0.0f;
+    
+    self.daysView.alpha = 0.0f;
+    self.activityIndicator.hidden = YES;
+    
+    if (self.currentMode == NR_MAIN) {
+        self.backButton.alpha = 0.0f;
+    }
+    
+    self.switchMoreInfoView.hidden = YES;
+    
+    [self setIAPNotificationListeners];
+}
+
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    [self.glController changeSuperview:self.assistantView doStartAnimation:YES];
+    
+    [UIView animateWithDuration:0.3 animations:^{
+        self.assistantView.alpha = 1.0f;
+        self.daysView.alpha = 1.0f;
+    } completion:^(BOOL finished) {
+        NSLog(@"Assistant view shown");
+        [self didWakeFromLocalNotification:nil];
+    }];
+    
+    [self performSelector:@selector(sayInitAudio) withObject:nil afterDelay:2.0];
+}
+
+- (void)didWakeFromLocalNotification:(NSNotification *)notification
+{
+    NrAppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    if (appDelegate.wokenNotificationType == EVENT_NOTIFICATION) {
+        self.selectedItem = 0;
+        self.activityIndicator.hidden = NO;
+        [self.activityIndicator startAnimating];
+        self.selectedDayName = [NaradaCalendarManager weekToNSString:[NaradaCalendarManager dateToWeekday:[NSDate date]]];
+        //            [self speakEventsOfDayNamed:self.selectedDayName];
+        [self speakEventsWeatherForToday];
+        
+        appDelegate.wokenNotificationType = NO_NOTIFICATION;
+    }
+}
+
+#pragma mark -
+#pragma mark Conversion MP3 to WAV methods & handlers
+
+- (void)requestConvesionMP3ToWavSource:(NSString *)mp3source andDestination:(NSString *)wavdestination
+{
+    NSString * pcmDestination = [wavdestination stringByReplacingOccurrencesOfString:@".wav" withString:@".pcm"];
+    NaradaAudioConverter *converter = [[NaradaAudioConverter alloc] initWithSourcePath:mp3source andDestinationPath:pcmDestination andSampleRate:16000 andDelegate:self];
+    
+    [converter convertMP3toPCMWithAV];
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+}
+
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+- (NSString *)copyAudiosToReadablePath
+{
+    NSString *readablePath = [NSFileManager documentsPath];
+    
+    NSArray *filesNames = [NSArray arrayWithObjects:
+                           @"events-unlock",
+                           @"horoscope-unlock",
+                           @"notification-disclaimer",
+                           @"restaurants-unlock",
+                           @"weather-unlock",
+                           @"welcome-assistant",
+                           @"enter-location",
+                           @"car-unlock",
+                           @"flights-unlock",
+                           @"hotels-unlock",
+                           @"not-implemented1",
+                           @"not-implemented2",
+                           @"not-implemented3",
+                           @"pubs-unlock",
+                           @"vote-unlock",
+                           @"future-app-update",
+                           nil];
+    
+    NSArray *fileExtensions = [NSArray arrayWithObjects:
+                               @"wav", @"FBA",
+                               nil];
+    
+    
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSError *error;
+    
+    for (NSString *filename in filesNames)
+    {
+        for (NSString *extension in fileExtensions) {
+            NSString *fullfilepath = [readablePath stringByAppendingPathComponent:[filename stringByAppendingPathExtension:extension]];
+            
+            NSLog(@"Absolute File Path %@", fullfilepath);
+            
+            BOOL exists = [fileManager fileExistsAtPath:fullfilepath];
+            
+            if (!exists) {
+                
+                NSString *defaultPath = [[NSBundle mainBundle] pathForResource:filename ofType:extension];
+                
+                NSLog(@"Readable Path %@", readablePath);
+                NSLog(@"Default Path %@", defaultPath);
+                
+                BOOL success = [fileManager copyItemAtPath:defaultPath toPath:fullfilepath error:&error];
+                
+                if (!success)
+                    NSAssert1(0, @"Failed to create writable file with message '%@'.", [error localizedDescription]);
+            }
+        }
+    }
+    
+    return readablePath;
+}
+
+
+#pragma mark -
+#pragma mark CalendarItemView Methods
+
+- (void)loadDetailView
+{
+    self.eventsTableView = [[UITableView alloc] initWithFrame:self.detailView.frame style:UITableViewStylePlain];
+    NSLog(@"Detail View frame: %@", NSStringFromCGRect(self.detailView.frame));
+    NSLog(@"Table frame: %@", NSStringFromCGRect(self.eventsTableView.frame));
+    self.eventsTableView.delegate = self;
+    self.eventsTableView.dataSource = self;
+    
+    self.eventsTableView.backgroundView = nil;
+    self.eventsTableView.backgroundColor = [UIColor clearColor];
+    self.detailView.backgroundColor = [UIColor clearColor];
+    
+    [self.detailView addSubview:self.eventsTableView];
+    
+    self.detailView.alpha = 0.0f;
+}
+
+- (void)loadDetailViewWeatherForecast:(NrWeatherForecast *)forecast forDayName:(NSString *)dayName;
+{
+    self.detailDayNameLabel.text = [NrCalendarMainViewController weekdayToString:forecast.weekday];
+    self.detailWeatherImg.image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:[self.weatherIcons objectForKey:forecast.predictionIcon] ofType:@"png"]];
+    self.detailPredictionLabel.text = forecast.shortPrediction;
+    
+    NSString *templateStr;
+    
+    templateStr = NSLocalizedString(@"MAX_TEMP_TEMPLATE", nil);
+    self.detailMaxTempLabel.text = [templateStr stringByReplacingOccurrencesOfString:@"[TEMP]" withString:[NSString stringWithFormat:@"%d", forecast.highTemp]];
+    
+    templateStr = NSLocalizedString(@"MIN_TEMP_TEMPLATE", nil);
+    self.detailMinTempLabel.text = [templateStr stringByReplacingOccurrencesOfString:@"[TEMP]" withString:[NSString stringWithFormat:@"%d", forecast.lowTemp]];
+    
+    
+    //OPTIONAL INFO
+    if (forecast.windSpeedDesc != 0 && forecast.humidDesc != 0 && forecast.feelsTempDesc != 0)
+    {
+        templateStr = NSLocalizedString(@"WINDS_DIR_TEMPLATE", nil);
+        self.detailWindSpeedLabel.text = [templateStr stringByReplacingOccurrencesOfString:@"[WIND_DIR]" withString:[NrCalendarMainViewController windDirectionToString:forecast.windDirDesc]];
+        
+        templateStr = NSLocalizedString(@"HUMIDITY_TEMPLATE", nil);
+        self.detailHumidityLabel.text = [templateStr stringByReplacingOccurrencesOfString:@"[HUMIDITY]" withString:[NSString stringWithFormat:@"%d", forecast.humidDesc]];
+        
+        templateStr = NSLocalizedString(@"FEELS_LIKE_TEMP", nil);
+        self.detailHumidityLabel.text = [templateStr stringByReplacingOccurrencesOfString:@"[TEMP]" withString:[NSString stringWithFormat:@"%d", forecast.feelsTempDesc]];
+    }
+    else
+    {
+        self.detailWindSpeedLabel.text = @"";
+        self.detailHumidityLabel.text = @"";
+        self.detailFeelsLikeTempLabel.text = @"";
+    }
+    
+    [self.detailView addSubview:self.detailWeatherView];
+    self.detailView.alpha = 0.0f;
+}
+
+- (void)loadCityButton
+{
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    if ([prefs objectForKey:kLocationNameKey]) {
+        NrWeatherLocation *loc = [[NrWeatherLocation alloc] init];
+        loc = [[NrWeatherLocation alloc] init];
+        loc.cityName = [prefs objectForKey:kLocationNameKey];
+        loc.stateName = [prefs objectForKey:kLocationStateKey];
+        loc.cityCode = [prefs objectForKey:kLocationCityCodeKey];
+        loc.zipCode = [prefs objectForKey:kLocationZipCodeKey];
+        loc.countryName = [prefs objectForKey:kLocationCountryKey];
+        self.weatherMng.locationManager.confirmedLocation = loc;
+        
+        self.bottomCityNameButton.alpha = 1.0f;
+        self.bottomCityNameLabel.alpha = 1.0f;
+        
+        self.bottomCityNameLabel.text = loc.cityName;
+    }
+    else {
+        self.bottomCityNameButton.alpha = 0.0f;
+        self.bottomCityNameLabel.alpha = 0.0f;
+    }
+}
+
+- (void)loadMainPointingBar
+{
+    NrCalendarItemView *item = [[[NSBundle mainBundle] loadNibNamed:@"NrMainItemView_iPhone" owner:self options:nil] objectAtIndex:0];
+    [self loadPointingBarFromFrame:item.frame];
+}
+
+- (void)loadCalPointingBar
+{
+    NrCalendarItemView *item = [[[NSBundle mainBundle] loadNibNamed:@"NrCalendarItemView_iPhone" owner:self options:nil] objectAtIndex:0];
+    [self loadPointingBarFromFrame:item.frame];
+}
+
+- (void)loadWeatherPointingBar
+{
+    NrCalendarItemView *item = [[[NSBundle mainBundle] loadNibNamed:@"NrWeatherItemView_iPhone" owner:self options:nil] objectAtIndex:0];
+    [self loadPointingBarFromFrame:item.frame];
+}
+
+- (void)movePointingBarToItem:(NrMainItemView *)item
+{
+    [self movePointingBarToFrame:item.frame];
+}
+
+- (void)loadScrollMainItem
+{
+    self.scroll = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.daysView.frame.size.width, self.daysView.frame.size.height)];
+//    scroll.pagingEnabled = YES;
+    
+    NSInteger numberOfItems = 8;
+    
+    NrMainItemView *sampleLittleView = [[NrMainItemView alloc] initWithID:0];
+    self.contentsView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, sampleLittleView.frame.size.width * numberOfItems, self.daysView.frame.size.height)];
+    
+//    self.daysView.backgroundColor = [UIColor clearColor];
+//    self.contentsView.backgroundColor = [UIColor redColor];
+    
+    self.itemList = [NSMutableArray array];
+    
+    for (int i = 0; i < numberOfItems; i++) {
+        NrMainItemView *littleView = [[NrMainItemView alloc] initWithID:i];
+        
+//        if (i%2 == 0) {
+            littleView.backgroundColor = [UIColor clearColor];
+//        }
+        
+        littleView.frame = CGRectMake(littleView.frame.size.width * i, 0, littleView.frame.size.width, littleView.frame.size.height);
+        
+        [self.contentsView addSubview:littleView];
+        
+        [self fillDayItemWithMainData:littleView];
+        
+        [self.itemList addObject:littleView];
+    }
+    
+    scroll.contentSize = self.contentsView.frame.size;
+    [scroll addSubview:self.contentsView];
+    
+    NSLog(@"Content Size: %@", NSStringFromCGSize(scroll.contentSize));
+    NSLog(@"days view Size: %@", NSStringFromCGSize(scroll.frame.size));
+    [self.daysView addSubview:scroll];
+}
+
+
+- (void)loadScrollCalItem
+{
+    self.scroll = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.daysView.frame.size.width, self.daysView.frame.size.height)];
+//    scroll.pagingEnabled = YES;
+    
+    NSInteger numberOfItems = 7;
+    
+    [self loadCalendarEvents];
+    
+    
+    NrCalendarItemView *sampleLittleView = [[NrCalendarItemView alloc] initWithID:0];
+    self.contentsView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, sampleLittleView.frame.size.width * numberOfItems, self.daysView.frame.size.height)];
+    
+//    self.daysView.backgroundColor = [UIColor clearColor];
+//    self.contentsView.backgroundColor = [UIColor redColor];
+    
+    self.itemList = [NSMutableArray array];
+    
+    for (int i = 0; i < numberOfItems; i++) {
+        NrCalendarItemView *littleView = [[NrCalendarItemView alloc] initWithID:i];
+        
+        if (i%2 == 0) {
+            littleView.backgroundColor = [UIColor clearColor];
+        }
+    
+        littleView.frame = CGRectMake(littleView.frame.size.width * i, 0, littleView.frame.size.width, littleView.frame.size.height);
+        
+        [self.contentsView addSubview:littleView];
+        
+        [self fillDayItem:littleView WithEventData:[self.weekEventsList objectAtIndex:i]];
+        
+        [self.itemList addObject:littleView];
+    }
+    
+    scroll.contentSize = self.contentsView.frame.size;
+    [scroll addSubview:self.contentsView];
+    
+    NSLog(@"Content Size: %@", NSStringFromCGSize(scroll.contentSize));
+    NSLog(@"Awesome view Size: %@", NSStringFromCGSize(scroll.frame.size));
+    [self.daysView addSubview:scroll];
+}
+
+- (void)loadScrollWeatherItem
+{
+    self.scroll = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.daysView.frame.size.width, self.daysView.frame.size.height)];
+    //    scroll.pagingEnabled = YES;
+    
+    NSInteger numberOfItems = 7;
+    
+    // The weather should be loaded
+    NSAssert([self.weatherMng.forecastManager.weekForecasts count] > 0, @"There is no forecast!!");
+    
+    
+    NrWeatherItemView *sampleLittleView = [[NrWeatherItemView alloc] initWithID:0];
+    self.contentsView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, sampleLittleView.frame.size.width * numberOfItems, self.daysView.frame.size.height)];
+    
+    //    self.daysView.backgroundColor = [UIColor clearColor];
+    //    self.contentsView.backgroundColor = [UIColor redColor];
+    
+    self.itemList = [NSMutableArray array];
+    
+    for (int i = 0; i < numberOfItems; i++) {
+        NrWeatherItemView *littleView = [[NrWeatherItemView alloc] initWithID:i];
+        
+        if (i%2 == 0) {
+            littleView.backgroundColor = [UIColor clearColor];
+        }
+        
+        littleView.frame = CGRectMake(littleView.frame.size.width * i, 0, littleView.frame.size.width, littleView.frame.size.height);
+        
+        [self.contentsView addSubview:littleView];
+        
+        [self fillDayItem:littleView withWeatherData:[self.weatherMng.forecastManager.weekForecasts objectAtIndex:i]];
+        
+        [self.itemList addObject:littleView];
+    }
+    
+    scroll.contentSize = self.contentsView.frame.size;
+    [scroll addSubview:self.contentsView];
+    
+    NSLog(@"Content Size: %@", NSStringFromCGSize(scroll.contentSize));
+    NSLog(@"Awesome view Size: %@", NSStringFromCGSize(scroll.frame.size));
+    [self.daysView addSubview:scroll];
+}
+
+
+- (void)loadCalendarEvents
+{
+    self.weekEventsList = [NSMutableArray array];
+    
+    NaradaCalendarManager *calMng = [[NaradaCalendarManager alloc] init];
+    
+    weekday today_wkd = [NaradaCalendarManager dateToWeekday:[NSDate date]];
+    
+    for (int i = 1; i < 8 ; i++) {
+        weekday wkd = (weekday)(((int)today_wkd - 2 + i)%7 + 1);
+        NSArray *query = [calMng queryEventsFor:wkd andFlag:NO_FLAG];
+        NSLog(@"Loading Events of day %d: Events: %@", (int)wkd, query);
+        if (!query) {
+            query = [NSArray array];
+        }
+        [self.weekEventsList addObject:query];
+    }
+}
+
+- (void)fillDayItem:(NrCalendarItemView *)item WithEventData:(NSArray *)events
+{
+    item.eventCounter.text = [NSString stringWithFormat:@"%d %@", events.count, NSLocalizedString(@"EVENTS", nil)];
+    
+    weekday todayWeekday = (weekday)((int)[NaradaCalendarManager dateToWeekday:[NSDate date]] +1);
+    weekday itemWeekday = (weekday)(((int)todayWeekday - 2 + item.itemID)%7 + 1);
+    
+    if (events.count == 0) {
+        item.imgView.image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"palmeras" ofType:@"png"]];
+    }
+    else {
+        item.imgView.image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"working" ofType:@"png"]];
+    }
+    
+    NSDate *today = [NSDate date];
+    NSDateComponents *dateComponents = [[NSDateComponents alloc] init];
+    dateComponents.day = item.itemID;
+    
+    NSCalendar *cal = [NSCalendar currentCalendar];
+    NSDate *itemDay = [cal dateByAddingComponents:dateComponents toDate:today options:0];
+    
+//    NSLog(@"itemDay: %@", itemDay);
+    
+    NSString *formatString = [NSDateFormatter dateFormatFromTemplate:@"dMMM" options:0 locale:[NSLocale currentLocale]];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:formatString];
+    
+    NSString *dateString = [formatter stringFromDate:itemDay];
+    NSLog(@"date string: %@", dateString);
+    
+    item.dateLabel.text = dateString;
+    
+    item.dayName.text = [NaradaCalendarManager weekToNSString:itemWeekday];
+}
+
+- (void)fillDayItem:(NrWeatherItemView *)item withWeatherData:(NrWeatherForecast *)dayForecast
+{
+    item.shortPrediction.text = [NSString stringWithFormat:@"%@", dayForecast.shortPrediction];
+    
+    weekday todayWeekday = (weekday)((int)[NaradaCalendarManager dateToWeekday:[NSDate date]] +1);
+    weekday itemWeekday = (weekday)(((int)todayWeekday - 2 + item.itemID)%7 + 1);
+    
+    item.imgView.image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:[self.weatherIcons objectForKey:dayForecast.predictionIcon] ofType:@"png"]];
+    
+    NSLog(@"Img is: %@", [self.weatherIcons objectForKey:dayForecast.predictionIcon]);
+    
+    NSDate *today = [NSDate date];
+    NSDateComponents *dateComponents = [[NSDateComponents alloc] init];
+    dateComponents.day = item.itemID;
+    
+    NSCalendar *cal = [NSCalendar currentCalendar];
+    NSDate *itemDay = [cal dateByAddingComponents:dateComponents toDate:today options:0];
+    
+    //    NSLog(@"itemDay: %@", itemDay);
+    
+    NSString *formatString = [NSDateFormatter dateFormatFromTemplate:@"dMMM" options:0 locale:[NSLocale currentLocale]];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:formatString];
+    
+    NSString *dateString = [formatter stringFromDate:itemDay];
+    NSLog(@"date string: %@", dateString);
+    
+    item.dateLabel.text = dateString;
+    
+    item.dayName.text = [NaradaCalendarManager weekToNSString:itemWeekday];
+}
+
+- (void)fillDayItemWithMainData:(NrMainItemView *)item
+{
+    //Here we'll present the main data (i.e. Calendar, Weather, etc.)
+    switch (item.itemID) {
+        case 0:
+            item.dayName.text = @"Calendar",
+            item.imgView.image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"calendario" ofType:@"png"]];
+            break;
+        case 1:
+        {
+            NSArray *forecastList = self.weatherMng.forecastManager.weekForecasts;
+            if (forecastList.count > 0) {
+                NrWeatherForecast *dayForecast = [forecastList objectAtIndex:0];
+                NSString *imgName = [self.weatherIcons objectForKey:dayForecast.predictionIcon];
+                item.imgView.image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:imgName ofType:@"png"]];
+            }
+            else {
+                item.dayName.text = @"Weather",
+                item.imgView.image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"weather2" ofType:@"png"]];
+            }
+        }
+            break;
+        case 2:
+            item.dayName.text = @"Horoscope",
+            item.imgView.image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"zodiaco2" ofType:@"png"]];
+            break;
+        case 3:
+            item.dayName.text = @"Restaurants",
+            item.imgView.image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"plato" ofType:@"png"]];
+            break;
+        case 4:
+            item.dayName.text = @"Pubs",
+            item.imgView.image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"ginTonic" ofType:@"png"]];
+            break;
+        case 5:
+            item.dayName.text = @"Flights",
+            item.imgView.image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"avion" ofType:@"png"]];
+            break;
+        case 6:
+            item.dayName.text = @"Hotels",
+            item.imgView.image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"placaHotel" ofType:@"png"]];
+            break;
+        case 7:
+            item.dayName.text = @"Car Rental",
+            item.imgView.image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"carRental" ofType:@"png"]];
+            break;
+            
+        default:
+            item.dayName.text = @"Calendar",
+            item.imgView.image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"calendar" ofType:@"png"]];
+            break;
+    }
+}
+
+- (IBAction)mainItemViewClicked:(id)sender
+{
+
+    @synchronized(self) {
+        [self cover];
+        
+        NrMainItemView *calItem = (NrMainItemView *)sender;
+        NSLog(@"Clicked at item %d", calItem.itemID);
+        
+        self.selectedItem = calItem.itemID;
+        self.selectedDayName = calItem.dayName.text;
+        
+        [self movePointingBarToItem:calItem];
+        
+        self.activityIndicator.hidden = NO;
+        [self.activityIndicator startAnimating];
+        
+        NSString * dayName = [NaradaCalendarManager weekToNSString:TODAY];
+        switch (calItem.itemID) {
+            case 0:
+                //Calendar
+                if (appLocked) {
+                    [self speakEventsOfDayNamed:dayName];
+                }
+                else {
+                    [self changeItemsTo:calItem.itemID];
+                }
+                break;
+            case 1:
+                //Weather
+                if (appLocked) {
+                    [self speakWeatherOfDayNamed:dayName];
+                }
+                else {
+                    [self changeItemsTo:calItem.itemID];
+                }
+                break;
+            case 2:
+                [self speakHoroscope];
+                break;
+            case 3:
+                [self speakRestaurants];
+                break;
+            case 4:
+                [self speakPubs];
+                break;
+            case 5:
+                [self speakFlights];
+                break;
+            case 6:
+                [self speakHotels];
+                break;
+            case 7:
+                [self speakCarRental];
+                break;
+                
+            default:
+                break;
+        }
+    }
+}
+
+
+- (IBAction)calendarItemViewClicked:(id)sender
+{
+    [self cover];
+    
+    NrMainItemView *calItem = (NrMainItemView *)sender;
+    NSLog(@"Clicked at item %d", calItem.itemID);
+    
+    self.selectedItem = calItem.itemID;
+    self.selectedDayName = calItem.dayName.text;
+    
+    [self movePointingBarToItem:calItem];
+    
+    self.activityIndicator.hidden = NO;
+    [self.activityIndicator startAnimating];
+    
+    NSString *dayName = calItem.dayName.text;
+    [self speakEventsOfDayNamed:dayName];
+}
+
+
+- (IBAction)weatherItemViewClicked:(id)sender
+{
+    [self cover];
+    
+    NrMainItemView *calItem = (NrMainItemView *)sender;
+    NSLog(@"Clicked at item %d", calItem.itemID);
+    
+    self.selectedItem = calItem.itemID;
+    self.selectedDayName = calItem.dayName.text;
+    
+    [self movePointingBarToItem:calItem];
+    
+    self.activityIndicator.hidden = NO;
+    [self.activityIndicator startAnimating];
+    
+    NSString *dayName = calItem.dayName.text;
+    [self speakWeatherOfDayNamed:dayName];
+}
+
+- (IBAction)backButtonClicked:(id)sender
+{
+    [self changeItemsToMain];
+    
+    [self hideWeatherButtons];
+}
+
+- (IBAction)changeCityClicked:(id)sender
+{
+    [self presentCityAlertViewWithVoice:NO];
+}
+
+BOOL moreShown = NO;
+
+- (IBAction)moreInfoButtonClicked:(id)sender
+{
+    @synchronized(self) {
+        [self cover];
+        
+        if (moreShown) {
+            [self hideWeatherDetails];
+        }
+        else {
+            [self showWeatherDetails];
+        }
+    }
+}
+
+- (void)showWeatherDetails
+{
+    float duration = 0.3;
+    float delay = 0.2;
+    float translation = 200;
+    float rotation = -30;
+    
+    if (!moreShown) {
+        [self.glController.modelManager animateTranslationDuring:duration incX:-translation incY:0 absolute:NO];
+        [self.glController.modelManager animateRotationDuring:duration degreesX:0 degreesY:-rotation absolute:NO];
+    }
+    
+    UIImage *subImg = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"subicon" ofType:@"png"]];
+    [self.moreInfoButton setBackgroundImage:subImg forState:UIControlStateNormal];
+    
+    self.detailView.alpha = 0.0f;
+    self.detailView.hidden = NO;
+    self.eventsTableView.frame = CGRectMake(0, 0, self.eventsTableView.frame.size.width, self.eventsTableView.frame.size.height);
+    
+    [UIView animateWithDuration:duration delay:0 options:0 animations:^{
+        self.detailView.alpha = 1.0f;
+    } completion:^(BOOL finished) {
+        [self uncover];
+        
+    }];
+    
+    moreShown = YES;
+    
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    [prefs setBool:moreShown forKey:kOpenInfoView];
+    [prefs synchronize];
+}
+
+- (void)hideWeatherDetails
+{
+    float duration = 0.3;
+    float delay = 0.2;
+    float translation = 200;
+    float rotation = -30;
+    
+    if (moreShown) {
+        [self.glController.modelManager animateTranslationDuring:duration incX:translation incY:0 absolute:NO];
+        [self.glController.modelManager animateRotationDuring:duration degreesX:0 degreesY:rotation absolute:NO];
+    }
+    
+    UIImage *addImg = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"addicon" ofType:@"png"]];
+    [self.moreInfoButton setBackgroundImage:addImg forState:UIControlStateNormal];
+    
+    self.detailView.alpha = 1.0f;
+    [UIView animateWithDuration:duration delay:delay options:0 animations:^{
+        self.detailView.alpha = 0.0f;
+    } completion:^(BOOL finished) {
+        self.detailView.hidden = YES;
+        [self uncover];
+    }];
+    
+    moreShown = NO;
+    
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    [prefs setBool:moreShown forKey:kOpenInfoView];
+    [prefs synchronize];
+}
+
+- (void)showWeatherButtons
+{
+    self.bottomCityNameLabel.text = self.weatherMng.locationManager.confirmedLocation.cityName;
+    
+    [UIView animateWithDuration:0.5 animations:^{
+        self.bottomCityNameLabel.alpha = 1.0f;
+        self.bottomCityNameButton.alpha = 1.0f;
+        self.backButton.alpha = 1.0f;
+    }];
+}
+
+- (void)hideWeatherButtons
+{
+    [UIView animateWithDuration:0.5 animations:^{
+//        self.bottomCityNameLabel.alpha = 0.0f;
+        self.backButton.alpha = 0.0f;
+        self.switchMoreInfoView.alpha = 0.0f;
+    }];
+}
+
+#pragma mark -
+#pragma mark Change Items Methods
+
+- (void)presentCityAlertViewWithVoice:(BOOL)voice
+{
+    cityAlertView = [[UIAlertView alloc] init];
+    cityAlertView.alertViewStyle = UIAlertViewStylePlainTextInput;
+    cityAlertView.title = NSLocalizedString(@"ENTER_LOCATION", nil);
+    [cityAlertView addButtonWithTitle:NSLocalizedString(@"CANCEL", nil)];
+    [cityAlertView addButtonWithTitle:NSLocalizedString(@"ACCEPT", nil)];
+    cityAlertView.delegate = self;
+    
+    [cityAlertView show];
+    if (voice) {
+        NSString * filetospeak = [[NSFileManager documentsPath] stringByAppendingPathComponent:@"enter-location.wav"];
+        [self.glController.modelManager repeatAudioWithAbsoluteAudioPath:filetospeak temporary:YES];
+    }
+}
+
+- (void)changeItemsTo:(NSInteger)itemID
+{
+    switch (itemID) {
+        case 0: //CALENDAR
+            [self changeItemsToCalendar];
+            break;
+        case 1: //WEATHER
+        {
+//            self.currentMode = NR_WEATHER;
+//            [self presentCityAlertView];
+            [self speakWeatherOfDayNamed:[NaradaCalendarManager weekToNSString:TODAY]];
+        }
+//            [self changeItemsToWeather];
+        default:
+            break;
+    }
+    
+    [self showWeatherButtons];
+}
+
+- (void)changeItemsToCalendar
+{
+    self.currentMode = NR_CALENDAR;
+    self.eventsTableView.hidden = NO;
+    self.detailWeatherView.hidden = YES;
+    
+    [UIView animateWithDuration:0.3 animations:^{
+        self.scroll.alpha = 0.0f;
+    } completion:^(BOOL finished) {
+        NSLog(@"Animation fade out completed");
+        [self loadScrollCalItem];
+        self.scroll.alpha = 0.0f;
+        [UIView animateWithDuration:0.3 animations:^{
+            self.scroll.alpha = 1.0f;
+        } completion:^(BOOL finished) {
+            NSLog(@"Animation fade in completed");
+            [self makeTableVisible];
+            [self.pointingBar removeFromSuperview];
+            [self loadCalPointingBar];
+            [self.contentsView addSubview:self.pointingBar];
+        }];
+    }];
+}
+
+- (void)changeItemsToWeather
+{
+    self.currentMode = NR_WEATHER;
+    self.eventsTableView.hidden = YES;
+    self.detailWeatherView.hidden = NO;
+    
+    [UIView animateWithDuration:0.3 animations:^{
+        self.scroll.alpha = 0.0f;
+    } completion:^(BOOL finished) {
+        NSLog(@"Animation fade out completed");
+        [self loadScrollWeatherItem];
+        self.scroll.alpha = 0.0f;
+        [UIView animateWithDuration:0.3 animations:^{
+            self.scroll.alpha = 1.0f;
+        } completion:^(BOOL finished) {
+            NSLog(@"Animation fade in completed");
+            [self makeTableVisible];
+            [self.pointingBar removeFromSuperview];
+            [self loadWeatherPointingBar];
+            [self.contentsView addSubview:self.pointingBar];
+        }];
+    }];
+}
+
+- (void)changeItemsToMain
+{
+    self.currentMode = NR_MAIN;
+    [UIView animateWithDuration:0.3 animations:^{
+        self.scroll.alpha = 0.0f;
+    } completion:^(BOOL finished) {
+        NSLog(@"Animation fade out completed");
+        [self loadScrollMainItem];
+        self.scroll.alpha = 0.0f;
+        [UIView animateWithDuration:0.3 animations:^{
+            self.scroll.alpha = 1.0f;
+        } completion:^(BOOL finished) {
+            NSLog(@"Animation fade in completed");
+            [self makeTableVisible];
+            [self.pointingBar removeFromSuperview];
+            [self loadMainPointingBar];
+            [self.contentsView addSubview:self.pointingBar];
+        }];
+    }];
+}
+
+- (void)makeTableVisible
+{
+    self.detailView.hidden = NO;
+    [UIView animateWithDuration:0.2 animations:^{
+        self.detailView.alpha = 1.0f;
+        self.activityIndicator.hidden = YES;
+        [self uncover];
+    }];
+}
+
+
+#pragma mark -
+#pragma mark Calendar Authorization handlers
+
+- (void)userDidAuthorizeCalendarReadingsWithError:(NSError *)error
+{
+    
+}
+
+- (void)userDidNotAuthorizeCalendarReadingsWithError:(NSError *)error
+{
+    UIAlertView *alertView = [[UIAlertView alloc] init];
+    alertView.title = NSLocalizedString(@"AUTHORIZATION_DISCLAIMER_TITLE", nil);
+    alertView.message = NSLocalizedString(@"AUTHORIZATION_DISCLAIMER_DESC", nil);
+    
+    [alertView addButtonWithTitle:NSLocalizedString(@"AUTHORIZATION_DISCLAIMER_BUTTON", nil)];
+    
+    [alertView show];
+}
+
+#pragma mark -
+#pragma mark User Interface Handlers
+
+- (void)backControllerClicked
+{
+    [UIView animateWithDuration:0.2 animations:^{
+        self.assistantView.alpha = 0.0f;
+    } completion:^(BOOL finished) {
+        [self dismissViewControllerAnimated:YES completion:^{
+            NSLog(@"Dismissed");
+        }];
+    }];
+}
+
+#pragma mark -
+#pragma mark Speaker Methods
+
+BOOL notificationRequested = NO;
+NSMutableArray *textsToSpeak = [NSMutableArray array];
+
+- (void)eventsStringLoaded:(NSMutableArray *)events
+{
+    [textsToSpeak addObjectsFromArray:events];
+    
+    enum NrWeekday todayWkd = [NrWeatherForecastManager dateToWeekday:[NSDate date]];
+    NSString *todayName = [NrCalendarMainViewController weekdayToString:todayWkd];
+    [self speakWeatherOfDayNamed:todayName];
+}
+
+- (void)weatherForecastStringLoaded:(NrWeatherForecast *)forecast
+{
+    NSString *forecastStr = [self forecastToHumanReadable:forecast];
+    
+    [textsToSpeak addObject:forecastStr];
+    
+    NSLog(@"Texts to speak are %@", textsToSpeak);
+    
+    [self speakSentences:textsToSpeak withMaxLength:100 toFileName:@"Notification" inLanguage:NSLocalizedString(@"LANG_TTS", nil)];
+}
+
+- (void)speakEventsWeatherForToday
+{
+    [self cover];
+    enum NrWeekday todayWkd = [NrWeatherForecastManager dateToWeekday:[NSDate date]];
+    NSString *todayName = [NrCalendarMainViewController weekdayToString:todayWkd];
+    
+    notificationRequested = YES;
+    [self speakEventsOfDayNamed:todayName];
+}
+
+- (void)speakEventsOfDayNamed:(NSString *)dayName
+{
+    NSRegularExpression *regexp = [NSRegularExpression regularExpressionWithPattern:[NSString stringWithFormat:@"^%@.*.wav", dayName] options:NSRegularExpressionCaseInsensitive error:nil];
+    
+    if ([[NSFileManager defaultManager] fileExists:regexp inPath:[NSFileManager documentsPath]]) {
+        
+        NSMutableArray *fullPaths = [[NSFileManager defaultManager] filesMatching:regexp inPath:[NSFileManager documentsPath]];
+        for (NSString *path in fullPaths) {
+            NSURL *url = [NSURL URLWithString:path];
+            NSString *fileName = [url lastPathComponent];
+            NSLog(@"FileName %@", fileName);
+            [self.filesToSpeak addObject:fileName];
+        }
+        
+        if (appLocked) {
+            [self.filesToSpeak addObject:@"calendar-unlock.wav"];
+        }
+        
+        NSLog(@"%@", self.filesToSpeak);
+        
+//        [self.glController.modelManager repeatAudioWithAbsoluteAudioPath:[[NSFileManager documentsPath] stringByAppendingPathComponent:[self.filesToSpeak objectAtIndex:0]] temporary:YES];
+        [self.glController.modelManager playTemporaryAction:[self.filesToSpeak objectAtIndex:0] withPath:[NSFileManager documentsPath] andDelay:0];
+        [self.filesToSpeak removeObjectAtIndex:0];
+        
+        self.switchMoreInfoView.hidden = NO;
+        [UIView animateWithDuration:0.3 animations:^{
+            self.switchMoreInfoView.alpha = 1.0f;
+        } completion:^(BOOL finished) {
+            NSLog(@"Completed fade in for switchMoreInfoView");
+        }];
+        
+        NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+        if ([prefs boolForKey:kOpenInfoView]) {
+            [self moreInfoButtonClicked:nil];
+        }
+        
+        
+        return;
+    }
+    
+    NSString *lang = NSLocalizedString(@"LANG_TTS", nil);
+    
+//    NaradaCalendarManager *calMng = [[NaradaCalendarManager alloc] init];
+    
+//    NSMutableArray *events = (NSMutableArray *)[calMng getEventsOfTodayWithFlag:NO_FLAG andOptions:NO_PAST_EVENTS];
+    
+    NSArray *dayEvents = [self.weekEventsList objectAtIndex:self.selectedItem];
+    
+    NSMutableArray *eventsStr = [NSMutableArray array];
+    for (EKEvent *event in dayEvents) {
+        NSString *eventDesc = [NaradaCalendarManager eventToHumanReadable:event];
+        [eventsStr addObject:eventDesc];
+    }
+    
+    if ([eventsStr count] == 0) {
+        [eventsStr addObject:[NSLocalizedString(@"NO_EVENTS_SCHEDULED", nil) stringByReplacingOccurrencesOfString:@"[SELECTED_DAY]" withString:dayName]];
+    }
+    else {
+        [eventsStr addObject:NSLocalizedString(@"AND THATs ALL", nil)];
+    }
+    
+    if (notificationRequested) {
+        [self eventsStringLoaded:eventsStr];
+        return;
+    }
+    
+    [self speakSentences:eventsStr withMaxLength:100 toFileName:dayName inLanguage:lang];
+    
+    if (appLocked) {
+        self.filesToSpeak = [NSMutableArray arrayWithObjects:@"events-unlock.wav", nil];
+        
+        presentBuyingOptionsAfterSpeaking = YES;
+    }
+    
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    if ([prefs boolForKey:kOpenInfoView]) {
+        [self moreInfoButtonClicked:nil];
+    }
+    
+    self.switchMoreInfoView.hidden = NO;
+    [UIView animateWithDuration:0.3 animations:^{
+        self.switchMoreInfoView.alpha = 1.0f;
+    } completion:^(BOOL finished) {
+        NSLog(@"Completed fade in for switchMoreInfoView");
+    }];
+}
+
+- (void)speakWeatherOfDayNamed:(NSString *)dayName
+{
+    enum NrWeekday wkd = [self.weatherMng.forecastManager humanStringToWeekday:dayName];
+    
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    
+    if ([prefs objectForKey:kLocationNameKey] == nil)
+    {
+        [self presentCityAlertViewWithVoice:YES];
+    }
+    else {
+        NrWeatherForecast *forecast = [self.weatherMng.forecastManager forecastForWeekday:wkd];
+        if (forecast == nil)
+        {
+            NrWeatherLocation *loc = [[NrWeatherLocation alloc] init];
+            loc = [[NrWeatherLocation alloc] init];
+            loc.cityName = [prefs objectForKey:kLocationNameKey];
+            loc.stateName = [prefs objectForKey:kLocationStateKey];
+            loc.cityCode = [prefs objectForKey:kLocationCityCodeKey];
+            loc.zipCode = [prefs objectForKey:kLocationZipCodeKey];
+            loc.countryName = [prefs objectForKey:kLocationCountryKey];
+            self.weatherMng.locationManager.confirmedLocation = loc;
+            
+            [self.weatherMng.forecastManager requestForecastFromLocation:(NrWeatherLocation *)loc];
+            
+            if (appLocked) {
+                self.currentMode = NR_MAIN;
+            }
+            else {
+                self.currentMode = NR_WEATHER;
+            }
+
+        }
+        else if (self.currentMode == NR_MAIN && appLocked) {
+            //App bloquejada i estem al main
+            [self speakForecast:forecast forDayName:dayName];
+        }
+        else if (self.currentMode == NR_MAIN && !appLocked) {
+            //App desbloquejada i estem al main
+            [self changeItemsToWeather];
+        }
+        else if (self.currentMode == NR_WEATHER) {
+            //Estem al weather (implica app desbloquejada)
+            [self speakForecast:forecast forDayName:dayName];
+            [self loadDetailViewWeatherForecast:forecast forDayName:dayName];
+            
+            NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+            if ([prefs boolForKey:kOpenInfoView]) {
+                [self showWeatherDetails];
+            }
+            
+            self.switchMoreInfoView.hidden = NO;
+            [UIView animateWithDuration:0.3 animations:^{
+                self.switchMoreInfoView.alpha = 1.0f;
+            } completion:^(BOOL finished) {
+                NSLog(@"Completed fade in for switchMoreInfoView");
+            }];
+        }
+    }
+}
+
+- (void)speakForecast:(NrWeatherForecast *)forecast forDayName:(NSString *)dayName
+{
+    NSString *forecastStr = [self forecastToHumanReadable:forecast];
+    NSArray *array = [NSArray arrayWithObject:forecastStr];
+    [self speakSentences:array withMaxLength:100 toFileName:[NSString stringWithFormat:@"Weather%@", dayName] inLanguage:NSLocalizedString(@"LANG_TTS", nil)];
+    
+    if (appLocked) {
+        self.filesToSpeak = [NSMutableArray arrayWithObjects:@"weather-unlock.wav", nil];
+        
+        presentBuyingOptionsAfterSpeaking = YES;
+    }
+}
+
+
+- (NSMutableArray *)toUnimplementedSpeakArray:(NSString *)baseFile
+{
+    int num = arc4random() % 3 + 1;
+    
+    NSString *notImplemented = [NSString stringWithFormat:@"not-implemented%d.wav", num];
+    
+    NSMutableArray *filenames = [NSMutableArray arrayWithObjects:
+                          notImplemented,
+                          baseFile,
+                          @"future-app-update.wav",
+                          @"vote-unlock.wav", nil];
+    
+//    NSString *basePath = [NSBundle mainBundle].resourcePath;
+//    NSMutableArray *returnArray = [NSMutableArray array];
+//    for (NSString *filename in filenames) {
+//        [returnArray addObject:[basePath stringByAppendingPathComponent:filename]];
+//    }
+    
+    return filenames;
+}
+
+- (void)speakFilesArray
+{
+    NSLog(@"Files array is: %@", self.filesToSpeak);
+    
+//    [self.glController.modelManager repeatAudioWithAbsoluteAudioPath:[self.filesToSpeak objectAtIndex:0] temporary:YES];
+    [self.glController.modelManager playTemporaryAction:[self.filesToSpeak objectAtIndex:0] withPath:[NSFileManager documentsPath] andDelay:0];
+    [self.filesToSpeak removeObjectAtIndex:0];
+    
+}
+
+
+- (void)speakHoroscope
+{
+    self.filesToSpeak = [self toUnimplementedSpeakArray:@"horoscope-unlock.wav"];
+    [self speakFilesArray];
+}
+
+- (void)speakRestaurants
+{
+    self.filesToSpeak = [self toUnimplementedSpeakArray:@"restaurants-unlock.wav"];
+    [self speakFilesArray];
+}
+
+- (void)speakPubs
+{
+    self.filesToSpeak = [self toUnimplementedSpeakArray:@"pubs-unlock.wav"];
+    [self speakFilesArray];
+}
+
+- (void)speakFlights
+{
+    self.filesToSpeak = [self toUnimplementedSpeakArray:@"flights-unlock.wav"];
+    [self speakFilesArray];
+}
+
+- (void)speakHotels
+{
+    self.filesToSpeak = [self toUnimplementedSpeakArray:@"hotels-unlock.wav"];
+    [self speakFilesArray];
+}
+
+- (void)speakCarRental
+{
+    self.filesToSpeak = [self toUnimplementedSpeakArray:@"car-unlock.wav"];
+    [self speakFilesArray];
+}
+
+- (IBAction)configButtonClicked:(id)sender
+{
+    NSLog(@"Initial position: %f", [self.glController.modelManager modelPositionY]);
+    
+    [self shutUpModel];
+    
+    NrNotifSchedulerViewController *configVC = [[NrNotifSchedulerViewController alloc] initWithNavController:self.navController];
+//    [self.navController pushViewController:configVC animated:YES];
+    [self presentModalViewController:configVC animated:YES];
+}
+
+
+
+- (void)removeAudios
+{
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *basePath = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
+    
+    NSArray *extensions = [NSArray arrayWithObjects:@"mp3", @"wav", @"pcm", @"fba", nil];
+    
+    for (int i=NO_DAY; i<TOMORROW; i++) {
+        NSString *dayName =  [NaradaCalendarManager weekToNSString:(weekday)i];
+        
+        for (NSString *extension in extensions)
+        {
+            NSRegularExpression *regexp = [NSRegularExpression regularExpressionWithPattern:[NSString stringWithFormat:@"^%@.*.%@", dayName, extension] options:NSRegularExpressionCaseInsensitive error:nil];
+            
+            [[NSFileManager defaultManager] removeFiles:regexp inPath:basePath];
+        }
+    }
+}
+
+- (void)removeWeatherAudios
+{
+    NSFileManager *fm = [NSFileManager defaultManager];
+    
+    NSRegularExpression *regexp = [NSRegularExpression regularExpressionWithPattern:@"Weather[A-Za-z]+[0-9].wav" options:NSRegularExpressionCaseInsensitive error:nil];
+    
+    [fm removeFiles:regexp inPath:[NSFileManager documentsPath]];
+    
+    regexp = [NSRegularExpression regularExpressionWithPattern:@"Weather[A-Za-z]+[0-9].FBA" options:NSRegularExpressionCaseInsensitive error:nil];
+    
+    [fm removeFiles:regexp inPath:[NSFileManager documentsPath]];
+    
+    regexp = [NSRegularExpression regularExpressionWithPattern:@"Weather[A-Za-z]+[0-9].mp3" options:NSRegularExpressionCaseInsensitive error:nil];
+    
+    [fm removeFiles:regexp inPath:[NSFileManager documentsPath]];
+}
+
+#pragma mark Finish Speaking Handler
+
+- (void)handleWillBeginSpeaking
+{
+//    [self makeTableVisible];
+}
+
+- (void)handleDidFinishSpeaking
+{   
+    if (presentBuyingOptionsAfterSpeaking) {
+//        buyAlertView = [[UIAlertView alloc] init];
+//        buyAlertView.title = NSLocalizedString(@"UNLOCK_FULL_VERSION_TITLE", nil);
+//        buyAlertView.message = NSLocalizedString(@"UNLOCK_FULL_VERSION_DESC", nil);
+//        [buyAlertView addButtonWithTitle:NSLocalizedString(@"CANCEL", nil)];
+//        [buyAlertView addButtonWithTitle:NSLocalizedString(@"ACCEPT", nil)];
+//        buyAlertView.delegate = self;
+//
+//        [buyAlertView show];
+        
+        presentBuyingOptionsAfterSpeaking = NO;
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productsLoaded:) name:kProductsLoadedNotification object:nil];
+        
+        Reachability *reach = [Reachability reachabilityForInternetConnection];
+        NetworkStatus netStatus = [reach currentReachabilityStatus];
+        if (netStatus == NotReachable) {
+            NSLog(@"No internet connection!");
+            UIAlertView * alert = [[UIAlertView alloc] init];
+            [alert setMessage:NSLocalizedString(@"ERROR_INTERNET_MSG", nil)];
+            [alert setTitle:NSLocalizedString(@"ERROR", nil)];
+            [alert addButtonWithTitle:NSLocalizedString(@"ACCEPT", nil)];
+            
+            [alert show];
+        }
+        else {
+            if ([NrVAssistantIAPHelper sharedHelper].products == nil) {
+                [[NrVAssistantIAPHelper sharedHelper] requestProducts];
+                self.hud.labelText = NSLocalizedString(@"LOADING_IAP", nil);
+                self.hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+                [self performSelector:@selector(timeout:) withObject:nil afterDelay:30.0];
+            }
+        }
+    }
+}
+
+
+#pragma mark -
+#pragma mark TableView delegate methods
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 1;
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    return self.selectedDayName;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    if (self.selectedItem < 0) {
+        return 0;
+    }
+    else {
+        return ((NSArray *)[self.weekEventsList objectAtIndex:self.selectedItem]).count;
+    }
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString *cellIdentifier = @"Cell";
+    
+    NrEventCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    if (!cell) {
+        cell = [[[NSBundle mainBundle] loadNibNamed:@"NrEventCell" owner:self options:nil] objectAtIndex:0];
+    }
+    
+    NSArray *dayEvents = [self.weekEventsList objectAtIndex:self.selectedItem];
+    EKEvent *event = [dayEvents objectAtIndex:indexPath.row];
+    
+    cell.eventTitle.text = event.title;
+    cell.eventTime.text = [[NSLocalizedString(@"EVENT_TIME_DESC", nil) stringByReplacingOccurrencesOfString:@"[INIT_TIME]"
+                                  withString:[NaradaCalendarManager date:event.startDate toNSStringWithFormat:@"HH:mm"]]
+        stringByReplacingOccurrencesOfString:@"[FINAL_TIME]"
+                                  withString:[NaradaCalendarManager date:event.endDate toNSStringWithFormat:@"HH:mm"]];
+    
+    
+    return cell;
+}
+
+#pragma mark -
+#pragma mark Handlers for the Gesture Recognizer
+
+- (void)handleSwipeLeftFrom:(UIGestureRecognizer *)recognizer
+{
+    NSLog(@"Did Swipe Left");
+//    [self configButtonClicked:nil];
+}
+
+- (void)handleSwipeRightFrom:(UIGestureRecognizer *)recognizer
+{
+    NSLog(@"Did Swipe Right");
+    
+}
+
+
+#pragma mark -
+#pragma mark Weather Manager Handlers
+#pragma mark Weather Location Handlers
+
+- (void)weatherLocationManager:(NrWeatherLocationManager *)locationManager didFailWithError:(NSError *)error
+{
+    UIAlertView * alert = [[UIAlertView alloc] init];
+    [alert setMessage:NSLocalizedString(@"ERROR_WEATHER_LOC_MSG", nil)];
+    [alert setTitle:NSLocalizedString(@"ERROR", nil)];
+    [alert addButtonWithTitle:NSLocalizedString(@"ACCEPT", nil)];
+    
+    [alert show];
+}
+
+- (void)weatherLocationManagerNeedLocationConfirmation:(NrWeatherLocationManager *)locationManager
+{    
+    NrLocationsTableViewController * locationsViewController = [[NrLocationsTableViewController alloc] initWithLocationManager:locationManager];
+    [self presentViewController:locationsViewController.navController animated:YES completion:^{
+        NSLog(@"Completed presenting locations view controller");
+    }];
+}
+
+- (void)weatherLocationManagerDidConfirmLocation:(NrWeatherLocationManager *)locationManager
+{
+    [self.weatherMng.forecastManager requestForecastFromLocation:locationManager.confirmedLocation];
+    
+    [self cover];
+    
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    [prefs setObject:locationManager.confirmedLocation.cityName forKey:kLocationNameKey];
+    [prefs setObject:locationManager.confirmedLocation.cityCode forKey:kLocationCityCodeKey];
+    [prefs setObject:locationManager.confirmedLocation.zipCode forKey:kLocationZipCodeKey];
+    [prefs setObject:locationManager.confirmedLocation.countryName forKey:kLocationCountryKey];
+    [prefs setObject:locationManager.confirmedLocation.stateName forKey:kLocationStateKey];
+    [prefs synchronize];
+    
+    [self showWeatherButtons];
+}
+
+- (void)weatherLocationManagerDidFinishLoading:(NrWeatherLocationManager *)locationManager
+{
+    [self.weatherMng.forecastManager requestForecastFromLocation:locationManager.confirmedLocation];
+    
+    [self cover];
+    
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    [prefs setObject:locationManager.confirmedLocation.cityName forKey:kLocationNameKey];
+    [prefs setObject:locationManager.confirmedLocation.cityCode forKey:kLocationCityCodeKey];
+    [prefs setObject:locationManager.confirmedLocation.zipCode forKey:kLocationZipCodeKey];
+    [prefs setObject:locationManager.confirmedLocation.countryName forKey:kLocationCountryKey];
+    [prefs setObject:locationManager.confirmedLocation.stateName forKey:kLocationStateKey];
+    [prefs synchronize];
+    
+    [self showWeatherButtons];
+}
+
+#pragma mark -
+#pragma mark Weather Forecast Handlers
+
+- (void)weatherForecastManager:(NrWeatherForecastManager *)forecastManager didFailWithError:(NSError *)error
+{
+    UIAlertView * alert = [[UIAlertView alloc] init];
+    [alert setMessage:NSLocalizedString(@"ERROR_WEATHER_LOC_MSG", nil)];
+    [alert setTitle:NSLocalizedString(@"ERROR", nil)];
+    [alert addButtonWithTitle:NSLocalizedString(@"ACCEPT", nil)];
+    
+    [alert show];
+    
+    [self uncover];
+}
+
+- (void)weatherForecastManagerDidFinishLoading:(NrWeatherForecastManager *)forecastManager
+{
+    NSLog(@"Weather forecast did finish loading");
+    
+    if (notificationRequested) {
+        [self weatherForecastStringLoaded:[forecastManager.weekForecasts objectAtIndex:0]];
+    }
+    
+    if (self.currentMode == NR_WEATHER) {
+        [self changeItemsToWeather];
+    }
+    else {
+        [self speakWeatherOfDayNamed:[NaradaCalendarManager weekToNSString:TODAY]];
+    }
+    
+    [self uncover];
+}
+
+
+#pragma mark -
+#pragma mark Alert View Handers
+
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+    if (alertView == cityAlertView) {
+        switch (buttonIndex) {
+            case 0: //Cancel
+                [self handleWillBeginSpeaking];
+                break;
+            case 1: //Accept
+            {
+                NSString *text = [alertView textFieldAtIndex:0].text;
+                if ([text compare:@""] != NSOrderedSame) {
+                    [self.weatherMng.locationManager requestLocationFromCityName:text];
+                }
+                else {
+                    [self handleWillBeginSpeaking];
+                }
+                break;
+            }
+            default:
+                break;
+        }
+        return;
+    }
+    
+    if (alertView == buyAlertView) {
+        switch (buttonIndex) {
+            case 0: //CANCEL
+                break;
+            case 1: //ACCEPT
+            {
+                SKProduct * product = [[NrVAssistantIAPHelper sharedHelper].products objectAtIndex:0];
+                NSLog(@"Buying %@...", product.productIdentifier);
+                [[NrVAssistantIAPHelper sharedHelper] buyProduct:product];
+                self.hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+                self.hud.labelText = NSLocalizedString(@"UNLOCKING APP", nil);
+                [self performSelector:@selector(timeout:) withObject:nil afterDelay:60*5];
+            }
+                break;
+            default:
+                break;
+        }
+        return;
+    }
+    
+    if (alertView == facebookAlert) {
+        switch (buttonIndex) {
+            case 0:
+                break;
+            case 1:
+                [self loginAndPostToWall];
+                break;
+                
+            default:
+                break;
+        }
+    }
+
+}
+
+#pragma mark -
+#pragma mark Notification Listeners for IAP
+
+- (void)setIAPNotificationListeners
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productsLoaded:) name:kProductsLoadedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchased:) name:kProductPurchasedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector: @selector(productPurchaseFailed:) name:kProductPurchaseFailedNotification object: nil];
+}
+
+- (void)setNotificationForWakeFromNotification
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(wavFilesReceived:) name:notificationFilesReceived object:nil];
+}
+
+- (void)setNotificationListenerToWake
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didWakeFromLocalNotification:) name:notificationWakeFromLocalNotification object:nil];
+}
+
+- (void)dismissHUD:(id)arg
+{
+    [MBProgressHUD hideHUDForView:self.view animated:YES];
+    self.hud = nil;
+}
+
+- (void)productsLoaded:(NSNotification *)notification
+{
+    [NSObject cancelPreviousPerformRequestsWithTarget:self];
+    [MBProgressHUD hideHUDForView:self.view animated:YES];
+    
+    [self presentProducts];
+}
+
+- (void)timeout:(id)arg
+{
+    self.hud.labelText = NSLocalizedString(@"TIMEOUT_TITLE", nil);
+    self.hud.detailsLabelText = NSLocalizedString(@"TIMEOUT_DESC", nil);
+    self.hud.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"37x-Checkmark.jpg"]];
+    self.hud.mode = MBProgressHUDModeCustomView;
+    [self performSelector:@selector(dismissHUD:) withObject:nil afterDelay:3.0];
+}
+
+- (void)presentProducts
+{
+    @synchronized(self) {
+        NSLog(@"Presenting products: ...");
+        NSArray *products = [NrVAssistantIAPHelper sharedHelper].products;
+        
+        NSAssert([products count] > 0, @"Product list is empty");
+        SKProduct *product = [products objectAtIndex:0];
+        
+        NSNumberFormatter *numberformatter = [[NSNumberFormatter alloc] init];
+        [numberformatter setFormatterBehavior:NSNumberFormatterBehavior10_4];
+        [numberformatter setNumberStyle:NSNumberFormatterCurrencyStyle];
+        [numberformatter setLocale:product.priceLocale];
+        NSString *formattedString = [numberformatter stringFromNumber:product.price];
+        
+        if (buyAlertView) {
+            return;
+        }
+        buyAlertView = [[UIAlertView alloc] init];
+        buyAlertView.title = product.localizedTitle;
+        buyAlertView.message = formattedString;
+        buyAlertView.delegate = self;
+        [buyAlertView addButtonWithTitle:NSLocalizedString(@"CANCEL", nil)];
+        [buyAlertView addButtonWithTitle:NSLocalizedString(@"BUY_IAP", nil)];
+        
+        
+        [buyAlertView show];
+    }
+}
+
+- (void)productPurchased:(NSNotification *)notification
+{
+    [NSObject cancelPreviousPerformRequestsWithTarget:self];
+    [MBProgressHUD hideHUDForView:self.view animated:YES];
+    
+    NSString *productIdentifier = (NSString *) notification.object;
+    NSLog(@"Purchased: %@", productIdentifier);
+    
+    appLocked = NO;
+}
+
+- (void)productPurchaseFailed:(NSNotification *)notification
+{
+    [NSObject cancelPreviousPerformRequestsWithTarget:self];
+    [MBProgressHUD hideHUDForView:self.view animated:YES];
+    
+    SKPaymentTransaction * transaction = (SKPaymentTransaction *) notification.object;
+    if (transaction.error.code != SKErrorPaymentCancelled) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"ERROR", nil) message:transaction.error.localizedDescription delegate:nil cancelButtonTitle:nil otherButtonTitles:NSLocalizedString(@"OK", nil), nil];
+        
+        [alert show];
+    }
+}
+
+#pragma mark Facebook Methods and handlers
+
+- (IBAction)facebookShareClicked:(id)sender
+{
+    facebookAlert = [[UIAlertView alloc] init];
+    facebookAlert.title = NSLocalizedString(@"ALERTVIEW_FACEBOOK_ASK_TITLE", nil);
+    facebookAlert.message = NSLocalizedString(@"ALERTVIEW_FACEBOOK_ASK_DESC", nil);
+    facebookAlert.delegate = self;
+    [facebookAlert addButtonWithTitle:NSLocalizedString(@"CANCEL", nil)];
+    [facebookAlert addButtonWithTitle:NSLocalizedString(@"ACCEPT", nil)];
+    
+//    [self loginAndPostToWall];
+    
+//    NSError *error;
+//    if (![[GANTracker sharedTracker] trackEvent:@"share" action:@"facebook" label:@"ended" value:0 withError:&error]) {
+//        NSLog(@"Error in tracking: %@", [error localizedDescription]);
+//    }
+//    
+//    if (![[GANTracker sharedTracker] trackEvent:@"share" action:@"ended" label:@"ended" value:0 withError:&error]) {
+//        NSLog(@"Error in tracking: %@", [error localizedDescription]);
+//    }
+}
+
+- (void)loginAndPostToWall
+{
+    self.facebookTools = [[NaradaFacebookTools alloc] initWithAppID:facebookAppId andDelegate:self];
+    NrAppDelegate *delegate = (NrAppDelegate *)[UIApplication sharedApplication].delegate;
+    
+    delegate.facebookTools = self.facebookTools;
+    
+    if ([self.facebookTools isLoggedIn]) {
+        [self facebookPostToWall];
+    }
+    else {
+        postImmediately = YES;
+        [self.facebookTools login];
+    }
+}
+
+- (void)facebookPostToWall
+{
+    NSString *message = NSLocalizedString(@"FACEBOOK_MSG", nil);
+    
+    //    [self.facebookTools postToWallWithMessage:message andLink:link andLinkName:name andLinkCaption:caption andDescription:description];
+    
+    NSLog(@"%@", message);
+    
+    [self.facebookTools postToWallWithMessage:message andImage:[UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"screenshot" ofType:@"png"]]];
+    
+    self.activityIndicator.hidden = NO;
+    [self.activityIndicator startAnimating];
+    
+}
+
+- (void)facebookDidLogin
+{
+    NSLog(@"User did login");
+    
+    if (postImmediately) {
+        [self facebookPostToWall];
+        postImmediately = NO;
+    }
+}
+
+- (void)facebookDidLogout
+{
+    NSLog(@"User did logout");
+}
+
+- (void)facebookDidNotLogin:(BOOL)cancelled
+{
+    NSLog(@"User did not log in, cancelled is %@", cancelled ? @"true": @"false");
+}
+
+- (void)facebookDidReceiveUserInfo:(NSDictionary *)userInfo
+{
+    NSLog(@"Facebook did receive user info");
+}
+
+- (void)facebookDidPostToWall
+{
+    UIAlertView *al = [[UIAlertView alloc] init];
+    al.title = NSLocalizedString(@"ALERTVIEW_FACEBOOK_CONFIRMATION_TITLE", nil);
+    al.message = NSLocalizedString(@"ALERTVIEW_FACEBOOK_CONFIRMATION_DESC", nil);
+    [al addButtonWithTitle:NSLocalizedString(@"ACCEPT", nil)];
+    [al show];
+    
+    [self.activityIndicator stopAnimating];
+    self.activityIndicator.hidden = YES;
+}
+
+- (void)facebookDidFailPostingToWallWithError:(NSError *)error
+{
+    UIAlertView *al = [[UIAlertView alloc] init];
+    al.title = NSLocalizedString(@"ERROR", nil);
+    al.message = [error localizedDescription];
+    [al addButtonWithTitle:NSLocalizedString(@"ACCEPT", nil)];
+    [al show];
+    
+    [self.activityIndicator stopAnimating];
+    self.activityIndicator.hidden = YES;
+}
+
+
+
+#pragma mark -
+#pragma mark toHuman Readable Methods
+
+- (NSString *)forecastToHumanReadable:(NrWeatherForecast *)forecast
+{
+    if ([NSLocalizedString(@"LANG_TTS", nil) compare:@"en"] == NSOrderedSame) {
+        NSString * forecastStr = NSLocalizedString(@"FORECAST_TEMPLATE_1_EN", nil);
+        forecastStr = [forecastStr stringByReplacingOccurrencesOfString:@"[DAYNAME]" withString:[NrCalendarMainViewController weekdayToString:forecast.weekday]];
+        forecastStr = [forecastStr stringByReplacingOccurrencesOfString:@"[CITYNAME]" withString:self.weatherMng.locationManager.confirmedLocation.cityName];
+        forecastStr = [forecastStr stringByReplacingOccurrencesOfString:@"[LONG-PRED]" withString:forecast.longPrediction];
+        return forecastStr;
+    }
+    else if (forecast.reliable) {
+        
+        NSString *baseStr = NSLocalizedString(@"FORECAST_TEMPLATE_1", nil);
+        
+        NSString *forecastStr = baseStr;
+        forecastStr = [forecastStr stringByReplacingOccurrencesOfString:@"[DAYNAME]" withString:[NrCalendarMainViewController weekdayToString:forecast.weekday]];
+        forecastStr = [forecastStr stringByReplacingOccurrencesOfString:@"[CITYNAME]" withString:self.weatherMng.locationManager.confirmedLocation.cityName];
+        forecastStr = [forecastStr stringByReplacingOccurrencesOfString:@"[SHORT-PRED]" withString:NSLocalizedString(forecast.predictionIcon, nil)];
+        forecastStr = [forecastStr stringByReplacingOccurrencesOfString:@"[TEMPERATURE]" withString:[NSString stringWithFormat:@"%d", forecast.tempDesc]];
+        forecastStr = [forecastStr stringByReplacingOccurrencesOfString:@"[WIND-DIRECTION]" withString:[NrCalendarMainViewController windDirectionToString:forecast.windDirDesc]];
+        forecastStr = [forecastStr stringByReplacingOccurrencesOfString:@"[WIND-SPEED]" withString:[NSString stringWithFormat:@"%d", forecast.windSpeedDesc]];
+        forecastStr = [forecastStr stringByReplacingOccurrencesOfString:@"[HUMIDITY]" withString:[NSString stringWithFormat:@"%d", forecast.humidDesc]];
+        forecastStr = [forecastStr stringByReplacingOccurrencesOfString:@"[FEELS-TEMP]" withString:[NSString stringWithFormat:@"%d", forecast.feelsTempDesc]];
+        
+        NSLog(@"Forecast for today: %@", forecastStr);
+        
+        return forecastStr;
+    }
+    else {
+        NSString *baseStr = NSLocalizedString(@"FORECAST_TEMPLATE_1", nil);
+        
+        NSString *forecastStr = baseStr;
+        forecastStr = [forecastStr stringByReplacingOccurrencesOfString:@"[DAYNAME]" withString:[NrCalendarMainViewController weekdayToString:forecast.weekday]];
+        forecastStr = [forecastStr stringByReplacingOccurrencesOfString:@"[CITYNAME]" withString:self.weatherMng.locationManager.confirmedLocation.cityName];
+        forecastStr = [forecastStr stringByReplacingOccurrencesOfString:@"[SHORT-PRED]" withString:NSLocalizedString(forecast.predictionIcon, nil)];
+        forecastStr = [forecastStr stringByReplacingOccurrencesOfString:@"[MAX-TEMP]" withString:[NSString stringWithFormat:@"%d", forecast.highTemp]];
+        forecastStr = [forecastStr stringByReplacingOccurrencesOfString:@"[MIN-TEMP]" withString:[NSString stringWithFormat:@"%d", forecast.lowTemp]];
+        
+        return forecastStr;
+    }
+    
+}
+
++ (NSString *)weekdayToString:(enum NrWeekday)wkd
+{
+    switch (wkd) {
+        case NrSUNDAY:
+            return NSLocalizedString(@"SUNDAY", nil);
+        case NrMONDAY:
+            return NSLocalizedString(@"MONDAY", nil);
+        case NrTUESDAY:
+            return NSLocalizedString(@"TUESDAY", nil);
+        case NrWEDNESDAY:
+            return NSLocalizedString(@"WEDNESDAY", nil);
+        case NrTHURSDAY:
+            return NSLocalizedString(@"THURSDAY", nil);
+        case NrFRIDAY:
+            return NSLocalizedString(@"FRIDAY", nil);
+        case NrSATURDAY:
+            return NSLocalizedString(@"SATURDAY", nil);
+            
+        default:
+            return @"";
+    }
+}
+
++ (NSString *)windDirectionToString:(enum NrWindDirections)direction
+{
+    switch (direction) {
+        case NORTH:
+            return NSLocalizedString(@"NORTH", nil);
+        case NORTHNORTHEAST:
+            return NSLocalizedString(@"NORTHNORTHEAST", nil);
+        case NORTHEAST:
+            return NSLocalizedString(@"NORTHEAST", nil);
+        case EASTNORTHEAST:
+            return NSLocalizedString(@"EASTNORTHEAST", nil);
+        case EAST:
+            return NSLocalizedString(@"EAST", nil);
+        case EASTSOUTHEAST:
+            return NSLocalizedString(@"EASTSOUTHEAST", nil);
+        case SOUTHEAST:
+            return NSLocalizedString(@"SOUTHEAST", nil);
+        case SOUTHSOUTHEAST:
+            return NSLocalizedString(@"SOUTHSOUTHEAST", nil);
+        case SOUTH:
+            return NSLocalizedString(@"SOUTH", nil);
+        case SOUTHSOUTHWEST:
+            return NSLocalizedString(@"SOUTHSOUTHWEST", nil);
+        case SOUTHWEST:
+            return NSLocalizedString(@"SOUTHWEST", nil);
+        case WESTSOUTHWEST:
+            return NSLocalizedString(@"WESTSOUTHWEST", nil);
+        case WEST:
+            return NSLocalizedString(@"WEST", nil);
+            
+        default:
+            return NSLocalizedString(@"OTHER", nil);
+            break;
+    }
+}
+
+- (void)loadWeatherIcons
+{
+    NSDictionary *conditions = [NSDictionary dictionaryWithObjectsAndKeys:
+    @"sol",         @"cond999.gif",
+    @"sol",         @"cond000.gif",
+    @"solNublado2", @"cond001.gif",
+    @"solNublado",  @"cond002.gif", 
+    @"solNublado",  @"cond003.gif", 
+    @"solNublado",  @"cond004.gif", 
+    @"lluvia1",     @"cond005.gif", 
+    @"tormenta",    @"cond006.gif", 
+    @"sol",         @"cond007.gif", 
+    @"nieve2",      @"cond008.gif",
+    @"lluvia1",     @"cond009.gif", 
+    @"sol",         @"cond010.gif", 
+    @"nieve2",      @"cond011.gif",
+    @"nieve2",      @"cond012.gif",
+    @"solNublado",  @"cond013.gif", 
+    @"lluvia1",     @"cond014.gif",
+    @"lluvia1",     @"cond015.gif", 
+    @"solNublado",  @"cond016.gif", 
+    @"sol",         @"cond017.gif", 
+    @"tormenta",    @"cond018.gif", 
+    @"lluvia1",     @"cond019.gif", 
+    @"lluvia2",     @"cond020.gif", 
+    @"nieve2",      @"cond021.gif", 
+    @"tormenta",    @"cond022.gif", 
+    @"solNublado2", @"cond023.gif", 
+    @"solNublado2", @"cond024.gif", 
+    @"nieve2",      @"cond025.gif", 
+    @"sol",         @"cond026.gif", 
+    @"lluvia2",     @"cond027.gif", 
+    @"nieve2",      @"cond028.gif", 
+    @"nieve2",      @"cond029.gif", 
+    @"tormenta",    @"cond030.gif", 
+    @"sol",         @"cond031.gif", 
+    @"lluvia1",     @"cond032.gif", 
+    @"solNublado",  @"cond033.gif",
+    @"sol",         @"cond034.gif", 
+    @"sol",         @"cond035.gif", 
+    @"nieve2",      @"cond036.gif", 
+    @"sol",         @"cond037.gif", 
+    @"lluvia2",     @"cond038.gif", 
+    @"lluvia2",     @"cond039.gif", 
+    @"nieve2",      @"cond040.gif", 
+    @"lluvia3",     @"cond041.gif", 
+    @"lluvia1",     @"cond042.gif", 
+    @"nieve2",      @"cond043.gif", 
+    @"nieve2",      @"cond044.gif", 
+    @"lluvia2",     @"cond045.gif", 
+    @"lluvia2",     @"cond046.gif", 
+    @"lluvia2",     @"cond047.gif", 
+    @"lluvia2",     @"cond048.gif", 
+    @"lluvia2",     @"cond049.gif", 
+    @"sol",         @"cond050.gif", 
+    @"solNublado2", @"cond051.gif", 
+    @"lluvia1",     @"cond052.gif", 
+    @"tormenta",    @"cond053.gif", 
+    @"nieve2",      @"cond054.gif", 
+    @"nieve2",      @"cond055.gif", 
+    @"solNublado",  @"cond056.gif",
+    @"solNublado",  @"cond057.gif", 
+    @"lluvia1",     @"cond058.gif", 
+    @"lluvia1",     @"cond059.gif", 
+    @"lluvia1",     @"cond060.gif", 
+    @"lluvia1",     @"cond061.gif", 
+    @"nieve2",      @"cond062.gif", 
+    @"lluvia3",     @"cond063.gif", 
+    @"sol",         @"cond064.gif", 
+    @"sol",         @"cond065.gif", 
+    @"solNublado2", @"cond066.gif", 
+    @"sol",         @"cond067.gif", 
+    @"solNublado2", @"cond068.gif", 
+    @"solNublado",  @"cond069.gif", 
+    @"sol",         @"cond070.gif", 
+    @"solNublado2", @"cond071.gif", 
+    @"sol",         @"cond072.gif", 
+    @"solNublado",  @"cond073.gif", 
+    @"solNublado",  @"cond074.gif", 
+    @"sol",         @"cond075.gif", 
+    @"sol",         @"cond076.gif", 
+    @"sol",         @"cond077.gif", 
+    @"nieve2",      @"cond078.gif", 
+    @"nieve2",      @"cond079.gif", 
+    @"nieve2",      @"cond080.gif", 
+    @"lluvia1",     @"cond081.gif", 
+    @"lluvia1",     @"cond082.gif", 
+    @"lluvia2",     @"cond083.gif", 
+    @"lluvia1",     @"cond084.gif", 
+    @"lluvia1",     @"cond085.gif", 
+    @"lluvia1",     @"cond086.gif", 
+    @"lluvia1",     @"cond087.gif", 
+    @"lluvia2",     @"cond088.gif", 
+    @"lluvia3",     @"cond089.gif", 
+    @"nieve2",      @"cond090.gif", 
+    @"nieve2",      @"cond091.gif", 
+    @"nieve2",      @"cond092.gif", 
+    @"tormenta",    @"cond093.gif", 
+    @"tormenta",    @"cond094.gif", 
+    @"tormenta",    @"cond095.gif", 
+    @"lluvia1",     @"cond096.gif", 
+    @"lluvia2",     @"cond097.gif", 
+    @"lluvia3",     @"cond098.gif", 
+    @"nieve2",      @"cond099.gif", 
+    @"nieve2",      @"cond100.gif", 
+    @"nieve2",      @"cond101.gif", 
+    @"nieve2",      @"cond102.gif", 
+    @"nieve2",      @"cond103.gif", 
+    @"nieve2",      @"cond104.gif", 
+    @"tormenta",    @"cond105.gif", 
+    @"tormenta",    @"cond106.gif", 
+    @"tormenta",    @"cond107.gif", 
+    @"lluvia1",     @"cond108.gif", 
+    @"lluvia2",     @"cond109.gif", 
+    @"lluvia3",     @"cond110.gif", 
+    @"nieve2",      @"cond111.gif", 
+    @"nieve2",      @"cond112.gif", 
+    @"nieve2",      @"cond113.gif", 
+    @"lluvia1",     @"cond114.gif", 
+    @"lluvia2",     @"cond115.gif", 
+    @"lluvia3",     @"cond116.gif", 
+    @"nieve2",      @"cond117.gif", 
+    @"nieve2",      @"cond118.gif", 
+    @"nieve2",      @"cond119.gif", 
+    @"lluvia1",     @"cond120.gif", 
+    @"lluvia1",     @"cond121.gif", 
+    @"lluvia1",     @"cond122.gif", 
+    @"lluvia1",     @"cond123.gif", 
+    @"lluvia1",     @"cond124.gif",
+    @"lluvia1",     @"cond125.gif", 
+    @"nieve2",      @"cond126.gif", 
+    @"nieve2",      @"cond127.gif", 
+    @"nieve2",      @"cond128.gif", 
+    @"nieve2",      @"cond129.gif", 
+    @"nieve2",      @"cond130.gif", 
+    @"nieve2",      @"cond131.gif", 
+    @"lluvia1",     @"cond132.gif", 
+    @"lluvia1",     @"cond133.gif", 
+    @"lluvia1",     @"cond134.gif", 
+    @"lluvia1",     @"cond135.gif", 
+    @"lluvia1",     @"cond136.gif", 
+    @"lluvia1",     @"cond137.gif", 
+    @"nieve2",      @"cond138.gif", 
+    @"lluvia1",     @"cond139.gif", 
+    @"lluvia1",     @"cond140.gif", 
+    @"lluvia1",     @"cond141.gif", 
+    @"nieve2",      @"cond142.gif", 
+    @"tormenta",    @"cond143.gif", 
+    @"sol",         @"cond144.gif", 
+    @"nieve2",      @"cond145.gif", 
+    @"nieve2",      @"cond146.gif", 
+    @"tormenta",    @"cond147.gif", 
+    @"lluvia2",     @"cond148.gif", 
+    @"nieve2",      @"cond149.gif", 
+    @"lluvia2",     @"cond150.gif", 
+    @"nieve2",      @"cond151.gif", 
+    @"lluvia2",     @"cond152.gif", 
+    @"nieve2",      @"cond153.gif", 
+    @"nieve2",      @"cond154.gif", 
+    @"lluvia2",     @"cond155.gif", 
+    @"lluvia1",     @"cond156.gif", 
+    @"nieve2",      @"cond157.gif", 
+    @"sol",         @"cond158.gif", 
+    @"solNublado",  @"cond159.gif", 
+    @"nieve2",      @"cond160.gif", 
+    @"nieve2",      @"cond161.gif", 
+    @"lluvia1",     @"cond162.gif", 
+    @"lluvia3",     @"cond163.gif", 
+    @"lluvia1",     @"cond164.gif", 
+    @"lluvia1",     @"cond165.gif", 
+    @"lluvia1",     @"cond166.gif", 
+    @"lluvia1",     @"cond167.gif", 
+    @"lluvia1",     @"cond168.gif",
+    @"lluvia1",     @"cond169.gif", 
+    @"lluvia1",     @"cond170.gif", 
+    @"lluvia1",     @"cond171.gif", 
+    @"lluvia1",     @"cond172.gif", 
+    @"lluvia1",     @"cond173.gif", 
+    @"lluvia1",     @"cond174.gif", 
+    @"lluvia1",     @"cond175.gif", 
+    @"nieve2",      @"cond176.gif", 
+    nil];
+    
+    NSArray *keys = [conditions allKeys];
+    for (NSString *key in keys)
+    {
+        NSString *path = [[NSBundle mainBundle] pathForResource:[conditions objectForKey:key] ofType:@"png"];
+        UIImage *img = [UIImage imageWithContentsOfFile:path];
+        
+        NSAssert1(img, @"Image not found for key %@", key);
+    }
+    
+    self.weatherIcons = conditions;
+}
+
+
+
+@end
