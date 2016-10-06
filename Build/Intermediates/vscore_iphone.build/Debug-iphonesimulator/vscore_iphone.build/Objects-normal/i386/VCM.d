@@ -1,10 +1,10 @@
 dependencies: \
-  /Users/Gilbert/Desktop/Gilbert/Project/iOS/uciassistant/libs/vscore/source/libCharModel/VCM.cpp \
-  /Users/Gilbert/Desktop/Gilbert/Project/iOS/uciassistant/libs/vscore_iphone/vscore_iphone_Prefix.pch \
-  /Users/Gilbert/Desktop/Gilbert/Project/iOS/uciassistant/libs/vscore/header/Logger.h \
+  /Users/kenmorte/Downloads/uciassistant/libs/vscore/source/libCharModel/VCM.cpp \
+  /Users/kenmorte/Downloads/uciassistant/libs/vscore_iphone/vscore_iphone_Prefix.pch \
+  /Users/kenmorte/Downloads/uciassistant/libs/vscore/header/Logger.h \
   ../vscore/header/Base.h ../vscore/header/Singleton.h \
   ../vscore/header/Timer.h \
-  /Users/Gilbert/Desktop/Gilbert/Project/iOS/uciassistant/libs/vscore/header/VCM.h \
+  /Users/kenmorte/Downloads/uciassistant/libs/vscore/header/VCM.h \
   ../vscore/header/FDP.h ../vscore/header/FBAPMapping.h \
   ../vscore/header/Math3D.h ../vscore/header/MathMacros.h \
   ../vscore/header/Vector2.h ../vscore/header/Vector3.h \

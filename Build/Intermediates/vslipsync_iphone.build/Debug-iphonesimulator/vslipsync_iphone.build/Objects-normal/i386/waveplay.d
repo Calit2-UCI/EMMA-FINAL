@@ -1,24 +1,33 @@
 dependencies: \
-  /Users/Gilbert/Desktop/Gilbert/Project/iOS/uciassistant/libs/vslipsync/source/waveplay.cpp \
-  /Users/Gilbert/Desktop/Gilbert/Project/iOS/uciassistant/libs/vslipsync_iphone/vslipsync_iphone_Prefix.pch \
-  /Users/Gilbert/Desktop/Gilbert/Project/iOS/uciassistant/libs/vslipsync/header/wavePlay.h \
+  /Users/kenmorte/Downloads/uciassistant/libs/vslipsync/source/waveplay.cpp \
+  /Users/kenmorte/Downloads/uciassistant/libs/vslipsync_iphone/vslipsync_iphone_Prefix.pch \
+  /Users/kenmorte/Downloads/uciassistant/libs/vslipsync/header/wavePlay.h \
   ../vscore_iphone/math.h \
-  /Users/Gilbert/Desktop/Gilbert/Project/iOS/uciassistant/libs/vslipsync/header/LipSync.h \
-  ../vscore/header/FbaAction.h ../vscore/header/FBADecoder.h \
-  ../vscore/header/FBAPs.h ../vscore/header/FAPs.h \
-  ../vscore/header/FBACodecCommon.h ../vscore/header/LLFAPs.h \
-  ../vscore/header/FAP1.h ../vscore/header/FAP2.h \
-  ../vscore/header/BAPs.h ../vscore/header/Fba_object_plane.h \
-  ../vscore/header/Fba_in_buffer.h ../vscore/header/Face_object.h \
-  ../vscore/header/Body_object.h ../vscore/header/FBACodingParameters.h \
-  ../vscore/header/FBAEncoder.h \
+  /Users/kenmorte/Downloads/uciassistant/libs/vslipsync/header/LipSync.h \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/FbaAction.h \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/FBADecoder.h \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/FBAPs.h \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/FAPs.h \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/FBACodecCommon.h \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/LLFAPs.h \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/FAP1.h \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/FAP2.h \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/BAPs.h \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/Fba_object_plane.h \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/Fba_in_buffer.h \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/Face_object.h \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/Body_object.h \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/FBACodingParameters.h \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/FBAEncoder.h \
   ../vsgdependencies/libiconv-1.13.1/srclib/stdio.h \
   ../vsgdependencies/libiconv-1.13.1/srclib/stdlib.h \
   ../vslipsync/header/AudioStreamLipSync.hpp \
-  ../vscore/header/AudioStreamResource.hpp \
-  ../vscore/header/AudioContext.hpp ../vscore/header/AudioResource.hpp \
-  ../vscore/header/AudioCapture.hpp ../vslipsync/header/CVisemes.h \
-  /Users/Gilbert/Desktop/Gilbert/Project/iOS/uciassistant/libs/vslipsync/header/MFCC/mfcc.h \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/AudioStreamResource.hpp \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/AudioContext.hpp \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/AudioResource.hpp \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/AudioCapture.hpp \
+  ../vslipsync/header/CVisemes.h \
+  /Users/kenmorte/Downloads/uciassistant/libs/vslipsync/header/MFCC/mfcc.h \
   ../vslipsync/header/NeuralNetwork.h ../vslipsync/header/LipSync.h \
-  /Users/Gilbert/Desktop/Gilbert/Project/iOS/uciassistant/libs/vslipsync/header/SilentStreamLipSync.hpp \
-  ../vscore/header/AudioStreamSilentResource.hpp
+  /Users/kenmorte/Downloads/uciassistant/libs/vslipsync/header/SilentStreamLipSync.hpp \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/AudioStreamSilentResource.hpp

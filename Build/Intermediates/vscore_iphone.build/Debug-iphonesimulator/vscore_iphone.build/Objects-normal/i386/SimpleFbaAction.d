@@ -1,7 +1,7 @@
 dependencies: \
-  /Users/Gilbert/Desktop/Gilbert/Project/iOS/uciassistant/libs/vscore/source/libFAPlayer/SimpleFbaAction.cpp \
-  /Users/Gilbert/Desktop/Gilbert/Project/iOS/uciassistant/libs/vscore_iphone/vscore_iphone_Prefix.pch \
-  /Users/Gilbert/Desktop/Gilbert/Project/iOS/uciassistant/libs/vscore/header/SimpleFbaAction.h \
+  /Users/kenmorte/Downloads/uciassistant/libs/vscore/source/libFAPlayer/SimpleFbaAction.cpp \
+  /Users/kenmorte/Downloads/uciassistant/libs/vscore_iphone/vscore_iphone_Prefix.pch \
+  /Users/kenmorte/Downloads/uciassistant/libs/vscore/header/SimpleFbaAction.h \
   ../vscore/header/FbaAction.h ../vscore/header/FBADecoder.h \
   ../vscore/header/FBAPs.h ../vscore/header/FAPs.h \
   ../vscore/header/FBACodecCommon.h ../vscore/header/LLFAPs.h \

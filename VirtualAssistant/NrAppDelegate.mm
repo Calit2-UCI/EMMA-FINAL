@@ -11,7 +11,7 @@
 #import "NrViewController.h"
 
 #import "NrCalendarMainViewController.h"
-
+#import <EstimoteSDK/EstimoteSDK.h>
 
 #import <UIKit/UIKit.h>
 
@@ -24,8 +24,7 @@ const NSString *notificationEventsKey = @"Events";
 const NSString *notificationHoroscopeKey = @"Horoscope";
 const NSString *notificationWeatherKey = @"Weather";
 
-NSString *trackerID = @"UA-35776901-1";
-NSInteger trackerDispatchPeriod = 10;
+
 UIAlertView * pushAlert;
 NSURL *updateURL;
 NSString *plistFile;
@@ -46,6 +45,8 @@ NSString *plistFile;
     }
     self.window.rootViewController = self.viewController;
     [self.window makeKeyAndVisible];
+    
+    [ESTConfig setupAppID:@"simhomecalplug-gmail-com-s-j54" andAppToken:@"362c81bd0e6a2f3c970fa5bd08c88e6c"];
 
     return YES;
 }
@@ -176,7 +177,7 @@ NSString *plistFile;
 
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url
 {
-
+    //
 }
 
 - (UILocalNotification *)scheduleUpdateLocalNotification

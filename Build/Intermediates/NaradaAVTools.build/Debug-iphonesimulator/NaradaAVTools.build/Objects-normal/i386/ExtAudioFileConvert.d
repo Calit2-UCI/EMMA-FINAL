@@ -1,3 +1,3 @@
 dependencies: \
-  /Users/Gilbert/Desktop/Gilbert/Project/iOS/uciassistant/libs/naradaavtools/converters/ExtAudioFileConvert.cpp \
-  /Users/Gilbert/Desktop/Gilbert/Project/iOS/uciassistant/libs/naradaavtools/converters/CAStreamBasicDescription.h
+  /Users/kenmorte/Downloads/uciassistant/libs/naradaavtools/converters/ExtAudioFileConvert.cpp \
+  /Users/kenmorte/Downloads/uciassistant/libs/naradaavtools/converters/CAStreamBasicDescription.h

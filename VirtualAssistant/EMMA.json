@@ -1,0 +1,122 @@
+{
+    "Time" : "10:41:21",
+    
+    "Station 1": {
+        "Number of Devices" : 3,
+        "Total Usage" : 100,
+        
+        "Devices" : {
+            "Device 1" : {
+                "Name" : "Lamp",
+                "Type" : "Light",
+                "Total Usage/Week" : 16,
+                "Watts" : 30,
+                "Status" : "On"
+            },
+            
+            "Device 2" : {
+                "Name" : "Fan",
+                "Type" : "Life",
+                "Total Usage/Week" : 25,
+                "Watts" : 80,
+                "Status" : "On"
+            },
+            
+            "Device 3" : {
+                "Name" : "Appliance",
+                "Type" : "Life",
+                "Total Usage/Week" : 25,
+                "Watts" : 1,
+                "Status" : "On"
+            }
+        }
+    },
+    
+    "Station 2": {
+        "Number of Devices" : 3,
+        "Total Usage" : 100,
+        
+        "Devices" : {
+            "Device 1" : {
+                "Name" : "AppleTV",
+                "Type" : "Entertainment",
+                "Total Usage/Week" : 16,
+                "Watts" : 20,
+                "Status" : "Off"
+            },
+            
+            "Device 2" : {
+                "Name" : "TV",
+                "Type" : "Entertainment",
+                "Total Usage/Week" : 25,
+                "Watts" : 150,
+                "Status" : "On"
+            },
+            
+            "Device 3" : {
+                "Name" : "BluRay",
+                "Type" : "Entertainment",
+                "Total Usage/Week" : 25,
+                "Watts" : 30,
+                "Status" : "Off"
+            
+            }
+        }
+    },
+    
+    "Station 3": {
+        "Number of Devices" : 3,
+        "Total Usage" : 100,
+        
+        "Devices" : {
+            "Device 1" : {
+                "Name" : "RiceCooker",
+                "Type" : "Life",
+                "Total Usage/Week" : 16,
+                "Watts" : 900,
+                "Status" : "On"
+            },
+            
+            "Device 2" : {
+                "Name" : "CoffeeMaker",
+                "Type" : "Life",
+                "Total Usage/Week" : 25,
+                "Watts" :300,
+                "Status" : "On"
+            },
+            
+            "Device 3" : {
+                "Name" : "Toaster",
+                "Type" : "Life",
+                "Total Usage/Week" : 25,
+                "Watts" :500,
+                "Status" : "Off"
+            }
+            
+        }
+    },
+    
+    
+    "EMMA" : {
+        "Speak" : {
+            "Trigger" : 0,
+            "TTS" : "Hello Sergio, this is a longer sentence to prove to you that it is a longer thing."
+        },
+        
+        "Animation" : {
+            "Trigger" : 0,
+            "Facial" : "NA"
+        },
+        
+        "Info" : {
+            "Trigger" : 1,
+            "TTS" : "Welcome to station 1."
+        },
+        
+        "Video" : {
+            "Trigger" : 0,
+            "TTS" : "Welcome to SIMHome! My name is EMMA, and I will be showing you how to use the application and guide you through a tour of your home. Let's get started with an introduction video!",
+            "File" : "SimHome Prototype v3.mp4"
+        }
+    }
+}

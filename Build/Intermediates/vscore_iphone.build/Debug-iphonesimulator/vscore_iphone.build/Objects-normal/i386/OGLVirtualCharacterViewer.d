@@ -1,7 +1,7 @@
 dependencies: \
-  /Users/Gilbert/Desktop/Gilbert/Project/iOS/uciassistant/libs/vscore/source/libCore/OGLVirtualCharacterViewer.cpp \
-  /Users/Gilbert/Desktop/Gilbert/Project/iOS/uciassistant/libs/vscore_iphone/vscore_iphone_Prefix.pch \
-  /Users/Gilbert/Desktop/Gilbert/Project/iOS/uciassistant/libs/vscore/header/OGLVirtualCharacterViewer.h \
+  /Users/kenmorte/Downloads/uciassistant/libs/vscore/source/libCore/OGLVirtualCharacterViewer.cpp \
+  /Users/kenmorte/Downloads/uciassistant/libs/vscore_iphone/vscore_iphone_Prefix.pch \
+  /Users/kenmorte/Downloads/uciassistant/libs/vscore/header/OGLVirtualCharacterViewer.h \
   ../vscore/header/BaseOGLVRMLModelRenderer.h ../vscore/header/Point3d.h \
   ../vscore/header/VRMLModelRenderer.h \
   ../vscore/header/VRMLRendererTraverser.h ../vscore/header/VRMLModel.h \
@@ -37,6 +37,6 @@ dependencies: \
   ../vscore/header/VirtualActionManager.h \
   ../vscore/header/VirtualAction.h ../vslipsync/header/LipSync.h \
   ../vslipsync/header/AudioStreamLipSync.hpp \
-  /Users/Gilbert/Desktop/Gilbert/Project/iOS/uciassistant/libs/vscore/header/AudioStreamResource.hpp \
+  /Users/kenmorte/Downloads/uciassistant/libs/vscore/header/AudioStreamResource.hpp \
   ../vslipsync/header/CVisemes.h ../vslipsync/header/MFCC/mfcc.h \
   ../vslipsync/header/NeuralNetwork.h

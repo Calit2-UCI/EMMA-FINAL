@@ -9,8 +9,20 @@
 #import "NrViewController.h"
 #import "NrAppDelegate.h"
 #import "NrCalendarMainViewController.h"
+#import "BeaconDetails.h"
+#import "BeaconDetailsCloudFactory.h"
+#import "CachingContentFactory.h"
+#import "ProximityContentManager.h"
 
-@interface NrViewController ()
+@interface NrViewController ()<ProximityContentManagerDelegate>
+@property (nonatomic) ProximityContentManager *proximityContentManager;
+
+@end
+
+
+@protocol BeaconValueDelegate <NSObject>
+
+- (void) passValue:(NSString *) value;
 
 @end
 
@@ -18,10 +30,15 @@
 
 @synthesize glController = _glController;
 @synthesize modelManager = _modelManager;
-
+NrCalendarMainViewController *calVC;
 @synthesize mainView;
 
 CGFloat initX, initY;
+BOOL first = YES;
+int station;
+
+id<PassValueDelegate> strongDelegate;
+
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -42,9 +59,24 @@ CGFloat initX, initY;
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
+    
+//    self.proximityContentManager = [[ProximityContentManager alloc]
+//                                    initWithBeaconIDs:@[
+//                                                        [[BeaconID alloc] initWithUUIDString:@"B9407F30-F5F8-466E-AFF9-25556B57FE6D" major:10575 minor:30159],
+//                                                        [[BeaconID alloc] initWithUUIDString:@"B9407F30-F5F8-466E-AFF9-25556B57FE6D" major:12315 minor:42375],
+//                                                        [[BeaconID alloc] initWithUUIDString:@"B9407F30-F5F8-466E-AFF9-25556B57FE6D" major:21412 minor:5512]
+//                                                        ]
+//                                    beaconContentFactory:[[CachingContentFactory alloc] initWithBeaconContentFactory:[BeaconDetailsCloudFactory new]]];
+//    self.proximityContentManager.delegate = self;
+//    
+//    [self.proximityContentManager startContentUpdates];
+//    strongDelegate = self.delegate;
+//    station = 0;
+//    _count = 0;
+//    _currentStation =@"candy";
+//    _preStation = nil;
 }
 
-BOOL first = YES;
 
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -77,6 +109,22 @@ BOOL first = YES;
         
     }
     first = NO;
+    self.proximityContentManager = [[ProximityContentManager alloc]
+                                    initWithBeaconIDs:@[
+                                                        [[BeaconID alloc] initWithUUIDString:@"B9407F30-F5F8-466E-AFF9-25556B57FE6D" major:10575 minor:30159],
+                                                        [[BeaconID alloc] initWithUUIDString:@"B9407F30-F5F8-466E-AFF9-25556B57FE6D" major:12315 minor:42375],
+                                                        [[BeaconID alloc] initWithUUIDString:@"B9407F30-F5F8-466E-AFF9-25556B57FE6D" major:21412 minor:5512]
+                                                        ]
+                                    beaconContentFactory:[[CachingContentFactory alloc] initWithBeaconContentFactory:[BeaconDetailsCloudFactory new]]];
+    self.proximityContentManager.delegate = self;
+    
+    [self.proximityContentManager startContentUpdates];
+    strongDelegate = self.delegate;
+    station = 0;
+    _count = 0;
+    _currentStation =@"candy";
+    _preStation = nil;
+
 }
 
 - (void)didReceiveMemoryWarning
@@ -85,6 +133,9 @@ BOOL first = YES;
     // Dispose of any resources that can be recreated.
 }
 
+
+
+//useless,cuz we don't even use it.
 - (NSString *)copyAudiosToReadablePath
 {
     NSString *readablePath = [NSFileManager documentsPath];
@@ -151,7 +202,7 @@ BOOL first = YES;
 - (void)initModel
 {
     [self setNotificationListeners];
-    self.modelManager = [self.glController loadModelWithPath:@"reana.afm" AndBackground:@"office_white_hall.jpg" AndPerspective:YES];
+    self.modelManager = [self.glController loadModelWithPath:@"reana.afm" AndBackground:@"Background6.png" AndPerspective:YES];
     
     
     [self.glController.glView startAnimation];
@@ -164,6 +215,8 @@ BOOL first = YES;
     } else {
         self.mainView = [[[NSBundle mainBundle] loadNibNamed:@"NrMainView_iPad" owner:self options:nil] objectAtIndex:0];
     }
+    
+    //interesting code.
     
     self.mainView.mainController = self;
     
@@ -204,7 +257,7 @@ BOOL first = YES;
     [self.modelManager rotateModelX:-6 y:0 absolute:NO];
     
 
-    
+    //to initiaze the IBAction.
     [self toCalendarManagerClicked:nil];
 }
 
@@ -213,8 +266,6 @@ BOOL first = YES;
 - (IBAction)toCalendarManagerClicked:(id)sender
 {    
 
-    
-    NrCalendarMainViewController *calVC;
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
         calVC = [[NrCalendarMainViewController alloc] initWithNibName:@"NrMainViewController_iPhone" bundle:nil];
     }
@@ -222,9 +273,113 @@ BOOL first = YES;
         calVC = [[NrCalendarMainViewController alloc] initWithNibName:@"NrMainViewController_iPad" bundle:nil];
     }
     
+    //calVC.stationChosen = station;
+    calVC.currentStation = @"beetroot";
+    
     [self presentViewController:calVC animated:NO completion:^{
         NSLog(@"Ended presenting view controlller");
     }];
 }
 
+- (void)proximityContentManager:(ProximityContentManager *)proximityContentManager didUpdateContent:(id)content {
+
+    
+    BeaconDetails *beaconDetails = content;
+    if (beaconDetails) {
+        NSLog(@"%@",beaconDetails.beaconName);
+////        self.currentStation = beaconDetails.beaconName;
+//        if([beaconDetails.beaconName isEqualToString:@"beetroot"])
+//        {
+//            //calVC.stationChosen = 0;
+//            
+//        }
+////        [strongDelegate passValue:beaconDetails.beaconName];
+//        if([beaconDetails.beaconName isEqualToString:@"candy"])
+//        {
+//            //calVC.stationChosen = 1;
+//                    }
+//        if([beaconDetails.beaconName isEqualToString:@"lemon"])
+//        {
+//            //calVC.stationChosen = 2;
+//                    }
+//        //[self dataUpdate:beaconDetails.beaconName];
+        
+        //[self dataUpdate:beaconDetails.beaconName];
+        calVC.currentStation = beaconDetails.beaconName;
+        
+    } else {
+        NSLog(@"Not beacons");
+        //calVC.stationChosen = 0;
+//        self.currentStation = nil;
+    }
+}
+
+
+#pragma mark-
+#pragma alert
+
+//-(void) dataUpdate:(NSString *) station{
+//    NSLog(@"data updated! the station is %@",station);
+//    if ([_currentStation isEqualToString:station] ) {
+//        _count++;
+//        if(_count < 4)
+//        {
+//            NSLog(@"count is %d, less than 10s",_count);
+//        }
+//        else{
+//            NSLog(@"enough");
+//            _count = 0;
+//            if (![_preStation isEqualToString:station] ) {
+////                [self pushAlertButton:station];
+//                if([station isEqualToString:@"beetroot"]){
+//                     calVC.stationChosen = 0;
+//                }
+//                if([station isEqualToString:@"candy"]){
+//                    calVC.stationChosen = 1;
+//                }
+//                if([station isEqualToString:@"lemon"]){
+//                    calVC.stationChosen = 2;
+//                }
+//                calVC.currentStation = station;
+//                _preStation = station;
+//            }
+//        }
+//    } else {
+//        _count = 1;
+//        _currentStation = station;
+//        NSLog(@"New Stations");
+//    }
+//}
+
+//- (void)makeAlertController:(UIAlertController *)ac{
+//    
+//    [ac addAction:[UIAlertAction
+//                   actionWithTitle:@"Yes"
+//                   style:UIAlertActionStyleDefault
+//                   handler:^(UIAlertAction *action) {
+//                       [self yesButtonPushed];
+//                   }]];
+//    
+//    [ac addAction:[UIAlertAction
+//                   actionWithTitle:@"Cancel"
+//                   style:UIAlertActionStyleCancel
+//                   handler:^(UIAlertAction *action) {
+//                       [self cancelButtonPushed];
+//                   }]];
+//    [self presentViewController:ac animated:YES completion:nil];
+//}
+//
+//- (void)cancelButtonPushed {
+//    NSLog(@"Cancel");
+//}
+//- (void)yesButtonPushed{
+//    NSLog(@"YEs!");
+//}
+//
+//- (void)pushAlertButton:(NSString *) station{
+//    
+//    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:[NSString stringWithFormat:@"%@ is detected!",station] message:nil preferredStyle:UIAlertControllerStyleAlert];
+//    
+//    [self makeAlertController:alertController];
+//}
 @end

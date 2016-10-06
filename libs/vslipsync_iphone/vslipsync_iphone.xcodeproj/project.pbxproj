@@ -312,10 +312,7 @@
 				);
 				INSTALL_PATH = /usr/local/lib;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
-				LIBRARY_SEARCH_PATHS = (
-					"/Users/Sgago/UCIAssistant/libs/vscore_iphone/build/Debug-iphoneos",
-					"../**",
-				);
+				LIBRARY_SEARCH_PATHS = "../**";
 				OTHER_LDFLAGS = "";
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
 				PRODUCT_NAME = vslipsync_iphone;
@@ -341,10 +338,7 @@
 				);
 				INSTALL_PATH = /usr/local/lib;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
-				LIBRARY_SEARCH_PATHS = (
-					"/Users/Sgago/UCIAssistant/libs/vscore_iphone/build/Debug-iphoneos",
-					"../**",
-				);
+				LIBRARY_SEARCH_PATHS = "../**";
 				OTHER_LDFLAGS = "";
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
 				PRODUCT_NAME = vslipsync_iphone;

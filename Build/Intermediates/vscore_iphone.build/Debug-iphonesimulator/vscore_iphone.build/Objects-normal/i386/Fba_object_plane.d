@@ -1,7 +1,7 @@
 dependencies: \
-  /Users/Gilbert/Desktop/Gilbert/Project/iOS/uciassistant/libs/vscore/source/libFBADecoder/Fba_object_plane.cpp \
-  /Users/Gilbert/Desktop/Gilbert/Project/iOS/uciassistant/libs/vscore_iphone/vscore_iphone_Prefix.pch \
-  /Users/Gilbert/Desktop/Gilbert/Project/iOS/uciassistant/libs/vscore/header/Fba_object_plane.h \
+  /Users/kenmorte/Downloads/uciassistant/libs/vscore/source/libFBADecoder/Fba_object_plane.cpp \
+  /Users/kenmorte/Downloads/uciassistant/libs/vscore_iphone/vscore_iphone_Prefix.pch \
+  /Users/kenmorte/Downloads/uciassistant/libs/vscore/header/Fba_object_plane.h \
   ../vscore/header/Fba_in_buffer.h ../vscore/header/Fba_object_plane.h \
   ../vscore/header/Face_object.h ../vscore/header/FAPs.h \
   ../vscore/header/FBACodecCommon.h ../vscore/header/LLFAPs.h \

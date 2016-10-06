@@ -1,5 +1,5 @@
 dependencies: \
-  /Users/Gilbert/Desktop/Gilbert/Project/iOS/uciassistant/libs/naradacharacterlib/Classes/EAGLView.mm \
+  /Users/kenmorte/Downloads/uciassistant/libs/naradacharacterlib/Classes/EAGLView.mm \
   ../naradacharacterlib/Classes/EAGLView.h \
   ../naradacharacterlib/Classes/ES1Renderer.h \
   ../naradacharacterlib/Classes/ESRenderer.h \

@@ -1,48 +1,73 @@
 dependencies: \
-  /Users/Gilbert/Desktop/Gilbert/Project/iOS/uciassistant/libs/naradacharacterlib/Classes/ModelManager.mm \
+  /Users/kenmorte/Downloads/uciassistant/libs/naradacharacterlib/Classes/ModelManager.mm \
   ../naradacharacterlib/Classes/ModelManager.h \
   ../vsgdependencies/libiconv-1.13.1/srclib/stdio.h \
   ../naradacharacterlib/Classes/PathsAndConstants.h \
-  ../vslipsync/header/LipSync.h ../vscore/header/FbaAction.h \
-  ../vscore/header/FBADecoder.h ../vscore/header/FBAPs.h \
-  ../vscore/header/FAPs.h ../vscore/header/FBACodecCommon.h \
-  ../vscore/header/LLFAPs.h ../vscore/header/FAP1.h \
-  ../vscore/header/FAP2.h ../vscore/header/BAPs.h \
-  ../vscore/header/Fba_object_plane.h ../vscore/header/Fba_in_buffer.h \
-  ../vscore/header/Face_object.h ../vscore/header/Body_object.h \
-  ../vscore/header/FBACodingParameters.h ../vscore/header/FBAEncoder.h \
+  /Users/kenmorte/Desktop/uciassistant/libs/vslipsync/header/LipSync.h \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/FbaAction.h \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/FBADecoder.h \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/FBAPs.h \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/FAPs.h \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/FBACodecCommon.h \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/LLFAPs.h \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/FAP1.h \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/FAP2.h \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/BAPs.h \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/Fba_object_plane.h \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/Fba_in_buffer.h \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/Face_object.h \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/Body_object.h \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/FBACodingParameters.h \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/FBAEncoder.h \
   ../vsgdependencies/libiconv-1.13.1/srclib/stdlib.h \
-  ../vslipsync/header/AudioStreamLipSync.hpp \
-  ../vscore/header/AudioStreamResource.hpp \
-  ../vscore/header/AudioContext.hpp ../vscore/header/AudioResource.hpp \
-  ../vscore/header/AudioCapture.hpp ../vslipsync/header/CVisemes.h \
-  ../vslipsync/header/MFCC/mfcc.h ../vslipsync/header/NeuralNetwork.h \
+  /Users/kenmorte/Desktop/uciassistant/libs/vslipsync/header/AudioStreamLipSync.hpp \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/AudioStreamResource.hpp \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/AudioContext.hpp \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/AudioResource.hpp \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/AudioCapture.hpp \
+  /Users/kenmorte/Desktop/uciassistant/libs/vslipsync/header/CVisemes.h \
+  /Users/kenmorte/Desktop/uciassistant/libs/vslipsync/header/MFCC/mfcc.h \
+  /Users/kenmorte/Desktop/uciassistant/libs/vslipsync/header/NeuralNetwork.h \
   ../naradacharacterlib/Classes/ES1Renderer.h \
   ../naradacharacterlib/Classes/ESRenderer.h \
-  ../vscore/header/VirtualCharacter.hpp \
-  ../vscore/header/BaseOGLVRMLModelRenderer.h ../vscore/header/Point3d.h \
-  ../vscore/header/VRMLModelRenderer.h \
-  ../vscore/header/VRMLRendererTraverser.h ../vscore/header/VRMLModel.h \
-  ../vscore/header/myMatrix.h ../vscore/header/FileIO.h \
-  ../vscore/header/VRMLFitToScreenTraverser.h \
-  ../vscore/header/FAPlayer.h ../vscore/header/VisageCharModel.h \
-  ../vscore/header/Base.h ../vscore/header/Logger.h \
-  ../vscore/header/Singleton.h ../vscore/header/Timer.h \
-  ../vscore/header/Math3D.h ../vscore/header/MathMacros.h \
-  ../vscore/header/Vector2.h ../vscore/header/Vector3.h \
-  ../vscore/header/Quat.h ../vscore/header/Matrix4.h \
-  ../vscore/header/Mesh.h ../vscore/header/MorphTarget.h \
-  ../vscore/header/Skeleton.h ../vscore/header/Joint.h \
-  ../vscore/header/FDP.h ../vscore/header/FBAPMapping.h \
-  ../vscore/header/FbaFileAction.h \
-  ../vscore/header/NaradaNotificationCenter.hpp \
-  ../vscore/header/NaradaException.h \
-  ../vscore/header/NaradaNotificationMessages.h \
-  ../vscore/header/FAPlayerTimer.h ../vscore/header/AFM.h \
-  ../vscore/header/OGLVideoPlayer.h ../vscore/header/RGBTextureArray.h \
-  ../vscore/header/GLVideoTexture.h \
-  ../vscore/header/VirtualActionManager.h \
-  ../vscore/header/VirtualAction.h \
-  /Users/Gilbert/Desktop/Gilbert/Project/iOS/uciassistant/libs/naradacharacterlib/Classes/simpleViewer/header/OGLViewer.h \
-  ../vscore/header/OGLVirtualCharacterViewer.h \
-  ../vscore/header/Image.hpp
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/VirtualCharacter.hpp \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/BaseOGLVRMLModelRenderer.h \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/Point3d.h \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/VRMLModelRenderer.h \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/VRMLRendererTraverser.h \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/VRMLModel.h \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/myMatrix.h \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/FileIO.h \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/VRMLFitToScreenTraverser.h \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/FAPlayer.h \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/VisageCharModel.h \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/Base.h \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/Logger.h \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/Singleton.h \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/Timer.h \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/Math3D.h \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/MathMacros.h \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/Vector2.h \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/Vector3.h \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/Quat.h \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/Matrix4.h \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/Mesh.h \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/MorphTarget.h \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/Skeleton.h \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/Joint.h \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/FDP.h \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/FBAPMapping.h \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/FbaFileAction.h \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/NaradaNotificationCenter.hpp \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/NaradaException.h \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/NaradaNotificationMessages.h \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/FAPlayerTimer.h \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/AFM.h \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/OGLVideoPlayer.h \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/RGBTextureArray.h \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/GLVideoTexture.h \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/VirtualActionManager.h \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/VirtualAction.h \
+  /Users/kenmorte/Downloads/uciassistant/libs/naradacharacterlib/Classes/simpleViewer/header/OGLViewer.h \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/OGLVirtualCharacterViewer.h \
+  /Users/kenmorte/Desktop/uciassistant/libs/vscore/header/Image.hpp

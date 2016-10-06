@@ -11,6 +11,7 @@
 #import "NrGridTableViewCell.h"
 #import "NrCalendarMainViewController.h"
 #import "NrSpeechGenerator.h"
+#import "PNChart.h"
 
 #define smartTableCell1Width 205  // Smart table cells
 #define smartTableCell2Width 190
@@ -25,6 +26,7 @@ UIColor *gray_color = [UIColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:0.5];
 UIColor *black_color = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.5];
 
 UISwitch *device_switch;
+static dispatch_once_t onceToken;
 
 #pragma mark -
 #pragma mark Initialization
@@ -101,10 +103,24 @@ UISwitch *device_switch;
         if ([self.device  isEqual:@"Device 1"]) {
             if (indexPath.row == 0) {           // top row
                 cell.cell1.text = [NSString stringWithFormat:@"%@", self.station_data[@"Devices"][self.device][@"Name"]];
-                [self init_switch_for_cell:cell];
+                if([cell.cell1.text isEqualToString:@"Lamp"]){
+                    dispatch_once(&onceToken, ^{
+                        [self init_switch_for_cell:cell];
+                    });
+                }
+                else{
+                    [self init_switch_for_cell:cell];
+                }
+                
+                
             }
             else if (indexPath.row == 1) {     // middle rows
                 cell.cell1.text = @"$30 per month";
+               // NSString* x = [calendarMainViewController dataUpdated];
+                //09/02/2016
+                //TODO
+               // [calendarMainViewController parseJSON:[calendarMainViewController dataUpdated]];
+                               // NSLog(@"%@",x);
                 cell.cell1.textColor = [UIColor greenColor];
             }
             else if (indexPath.row == 2) {
@@ -124,7 +140,8 @@ UISwitch *device_switch;
         else if ([self.device isEqual:@"Device 2"]) {
             if (indexPath.row == 0) {           // top row
                 cell.cell1.text = [NSString stringWithFormat:@"%@", self.station_data[@"Devices"][self.device][@"Name"]];
-                [self init_switch_for_cell:cell];
+                    [self init_switch_for_cell:cell];
+
             }
             else if (indexPath.row == 1) {     // middle rows
                 cell.cell1.text = @"$45 per month";
@@ -152,7 +169,8 @@ UISwitch *device_switch;
         else if ([self.device isEqual:@"Device 3"]) {
             if (indexPath.row == 0) {           // top row
                 cell.cell1.text = [NSString stringWithFormat:@"%@", self.station_data[@"Devices"][self.device][@"Name"]];
-                [self init_switch_for_cell:cell];
+
+                    [self init_switch_for_cell:cell];
             }
             else if (indexPath.row == 1) {     // middle rows
                 cell.cell1.text = @"$44.05 per month";
@@ -181,6 +199,112 @@ UISwitch *device_switch;
     }
 }
 
+
+- (void) update_row:(NrGridTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
+{
+    if (self.station_data != nil && self.station_data[@"Number of Devices"] != nil) {
+        
+        // THIS IS ALL SCRIPTED FOR NOW
+        
+        if ([self.device  isEqual:@"Device 1"]) {
+            if (indexPath.row == 0) {           // top row
+                cell.cell1.text = [NSString stringWithFormat:@"%@", self.station_data[@"Devices"][self.device][@"Name"]];
+                if([cell.cell1.text isEqualToString:@"Lamp"]){
+                    dispatch_once(&onceToken, ^{
+                        [self update_switch_for_cell:cell];;
+                    });
+                }
+                else{
+                    [self update_switch_for_cell:cell];
+                }
+            }
+            else if (indexPath.row == 1) {     // middle rows
+                cell.cell1.text = @"$30 per month";
+                // NSString* x = [calendarMainViewController dataUpdated];
+                //09/02/2016
+                //TODO
+                // [calendarMainViewController parseJSON:[calendarMainViewController dataUpdated]];
+                // NSLog(@"%@",x);
+                cell.cell1.textColor = [UIColor greenColor];
+            }
+            else if (indexPath.row == 2) {
+                cell.cell1.text = @"You spend less than 90% all lamp owners!";
+                
+                // Colors the "90%" part
+                NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithAttributedString:cell.cell1.attributedText];
+                [text addAttribute:NSForegroundColorAttributeName
+                             value:[UIColor greenColor]
+                             range:[cell.cell1.text rangeOfString:@"90%"]];
+                [cell.cell1 setAttributedText:text];
+            }
+            else {                              // last row
+                cell.cell1.text = @"Enter Energy Saver Mode?";
+            }
+        }
+        else if ([self.device isEqual:@"Device 2"]) {
+            if (indexPath.row == 0) {           // top row
+                cell.cell1.text = [NSString stringWithFormat:@"%@", self.station_data[@"Devices"][self.device][@"Name"]];
+                [self update_switch_for_cell:cell];
+                
+            }
+            else if (indexPath.row == 1) {     // middle rows
+                cell.cell1.text = @"$45 per month";
+                cell.cell1.textColor = [UIColor redColor];
+            }
+            else if (indexPath.row == 2) {
+                cell.cell1.text = @"Improved spending: $15/month";
+                
+                NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithAttributedString:cell.cell1.attributedText];
+                [text addAttribute:NSForegroundColorAttributeName
+                             value:[UIColor greenColor]
+                             range:[cell.cell1.text rangeOfString:@"$15/month"]];
+                [cell.cell1 setAttributedText:text];
+            }
+            else {                              // last row
+                cell.cell1.text = @"Enter Energy Saver Mode to save $1233/year?";
+                
+                NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithAttributedString:cell.cell1.attributedText];
+                [text addAttribute:NSForegroundColorAttributeName
+                             value:[UIColor greenColor]
+                             range:[cell.cell1.text rangeOfString:@"$1233/year"]];
+                [cell.cell1 setAttributedText:text];
+            }
+        }
+        else if ([self.device isEqual:@"Device 3"]) {
+            if (indexPath.row == 0) {           // top row
+                cell.cell1.text = [NSString stringWithFormat:@"%@", self.station_data[@"Devices"][self.device][@"Name"]];
+                
+                [self update_switch_for_cell:cell];
+            }
+            else if (indexPath.row == 1) {     // middle rows
+                cell.cell1.text = @"$44.05 per month";
+                cell.cell1.textColor = [UIColor redColor];
+            }
+            else if (indexPath.row == 2) {
+                cell.cell1.text = @"Improved spending: $40.05/month";
+                
+                // Colors the "$40.05/month" part
+                NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithAttributedString:cell.cell1.attributedText];
+                [text addAttribute:NSForegroundColorAttributeName
+                             value:[UIColor greenColor]
+                             range:[cell.cell1.text rangeOfString:@"$40.05/month"]];
+                [cell.cell1 setAttributedText:text];
+            }
+            else {                              // last row
+                cell.cell1.text = @"Enter Energy Saver Mode to save $4.00/mo?";
+                
+                NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithAttributedString:cell.cell1.attributedText];
+                [text addAttribute:NSForegroundColorAttributeName
+                             value:[UIColor greenColor]
+                             range:[cell.cell1.text rangeOfString:@"$4.00/mo"]];
+                [cell.cell1 setAttributedText:text];
+            }
+        }
+    }
+}
+
+
+
 - (void) update_table
 {
     NSInteger num_of_devices = [self.station_data[@"Number of Devices"] integerValue];
@@ -197,7 +321,7 @@ UISwitch *device_switch;
 - (void) update_cell_data:(NrGridTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
     // update the data inside the table here
-    [self init_row:cell atIndexPath:indexPath];
+    [self update_row:cell atIndexPath:indexPath];
 }
 
 - (void) change_cell_content:(NrGridTableViewCell *)cell for_device:(NSString *)device_key
@@ -362,27 +486,80 @@ UISwitch *device_switch;
 {
     device_switch = [[UISwitch alloc] initWithFrame:CGRectZero];
     cell.accessoryView = device_switch;
-    [device_switch setOn:[self switchIsOn] animated:YES];
+    BOOL status = device_switch.isOn;
+    if ([self.station_data[@"Devices"][self.device][@"Status"]  isEqual: @"Off"])
+        status = NO;
+    else
+        status = YES;
+//    if([calendarMainViewController.lampValue integerValue] > 0)
+//        status = true;
+//    else
+//        status = false;
+    if([self.station_data[@"Devices"][self.device][@"Name"] isEqualToString:@"Lamp"]){
+            if([calendarMainViewController.lampValue integerValue] > 5)
+                status = true;
+            else
+                status = false;
+    }
+    [device_switch setOn:status animated:NO];
+    
     [device_switch addTarget:self action:@selector(switch_changed:) forControlEvents:UIControlEventTouchUpInside];
 }
 
-- (BOOL)switchIsOn
+- (void)update_switch_for_cell:(NrGridTableViewCell *)cell
 {
-    if ([self.station_data[@"Devices"][self.device][@"Status"]  isEqual: @"Off"])
-        return NO;
-    return YES;
+    device_switch = [[UISwitch alloc] initWithFrame:CGRectZero];
+    cell.accessoryView = device_switch;
+    BOOL status;
+    status = device_switch.isOn;
+    if([calendarMainViewController.lampValue integerValue] > 5)
+                status = true;
+            else
+                status = false;
+    //status = device_switch.isOn;
+    [device_switch setOn:status animated:NO];
+    
+    [device_switch addTarget:self action:@selector(switch_changed:) forControlEvents:UIControlEventTouchUpInside];
 }
+
+//
+//- (BOOL)switchIsOn:(BOOL) flag
+//{
+//    if(flag){
+//    if ([self.station_data[@"Devices"][self.device][@"Status"]  isEqual: @"Off"])
+//        return NO;
+//    return YES;
+//    }
+//}
+
 
 - (void) switch_changed:(id)sender
 {
     UISwitch* switch_sender = sender;
     if (switch_sender.on) {
+        
+        if([[self device_name] isEqualToString:@"Lamp"]){
         // turn on the device here
         NSLog(@"Sentence: %@", [device_speech turn_on_device_message:[self device_name]]);
         [calendarMainViewController speakAction:[device_speech turn_on_device_message:[self device_name]]];
+        NSURL *url = [NSURL URLWithString:@"http://128.195.151.158/simhome/control/on/?device=Bulb&level=100"];
+        
+        NSURL *url1 = [NSURL URLWithString:@"http://128.195.151.158/simhome/db/?type=showpower&&dev=lamp"];
+        NSData *data = [NSData dataWithContentsOfURL:url];
+        NSString *ret = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+        NSLog(@"ret=%@", ret);
+        //TODOTODO
+        }
+        
     } else {
         // turn off the device here
+         if([[self device_name] isEqualToString:@"Lamp"]){
         [calendarMainViewController speakAction:[device_speech turn_off_device_message:[self device_name]]];
+        NSURL *url = [NSURL URLWithString:@"http://128.195.151.158/simhome/control/on/?device=Bulb&level=0"];
+        NSData *data = [NSData dataWithContentsOfURL:url];
+        NSString *ret = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+        NSLog(@"ret=%@", ret);
+         }
     }
 }
 

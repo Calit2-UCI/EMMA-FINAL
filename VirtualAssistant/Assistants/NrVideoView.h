@@ -14,7 +14,9 @@
 
 @interface NrVideoView : UIView
 
-@property (nonatomic, strong) IBOutlet UIView *videoCanvas;
+@property (strong, nonatomic) IBOutlet UIView *videoCanvas;
+@property (strong, nonatomic) IBOutlet UIView *gestureRecognizer;
+
 @property (nonatomic, strong) MPMoviePlayerController *moviePlayer;
 @property (nonatomic, strong) IBOutlet UILabel *VideoNameLabel;
 

@@ -1,3 +1,3 @@
 dependencies: \
-  /Users/Gilbert/Desktop/Gilbert/Project/iOS/uciassistant/VirtualAssistant/main.m \
-  ../uciassistant/VirtualAssistant/NrAppDelegate.h
+  /Users/kenmorte/Downloads/uciassistant/VirtualAssistant/main.m \
+  /Users/kenmorte/Downloads/uciassistant/VirtualAssistant/NrAppDelegate.h

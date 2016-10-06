@@ -1,4 +1,4 @@
 dependencies: \
-  /Users/Gilbert/Desktop/Gilbert/Project/iOS/uciassistant/libs/naradaavtools/Classes/source/NaradaAVMixer.mm \
-  /Users/Gilbert/Desktop/Gilbert/Project/iOS/uciassistant/libs/naradaavtools/Classes/headers/NaradaAVMixer.h \
-  /Users/Gilbert/Desktop/Gilbert/Project/iOS/uciassistant/libs/naradaavtools/Classes/headers/NaradaAVMixerDelegate.h
+  /Users/kenmorte/Downloads/uciassistant/libs/naradaavtools/Classes/source/NaradaAVMixer.mm \
+  /Users/kenmorte/Downloads/uciassistant/libs/naradaavtools/Classes/headers/NaradaAVMixer.h \
+  /Users/kenmorte/Downloads/uciassistant/libs/naradaavtools/Classes/headers/NaradaAVMixerDelegate.h

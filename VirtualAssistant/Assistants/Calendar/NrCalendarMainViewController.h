@@ -15,6 +15,7 @@
 #import "NrStationItemView.h"
 #import "NaradaDownloader.h"
 
+
 #import <MediaPlayer/MediaPlayer.h>
 
 /*
@@ -62,6 +63,12 @@ NaradaDownloaderDelegate
 @property (nonatomic, strong) UIScrollView *scroll;
 
 @property (nonatomic, strong) NSMutableArray *itemList;
+@property (nonatomic) NSInteger stationChosen;
+@property (nonatomic) NSString *currentStation;
+@property (nonatomic) NSString * preStation;
+@property (nonatomic) NSMutableDictionary *action_flags;
+@property (nonatomic) NSString * lampValue;
+@property (nonatomic) NSString * fanValue;
 
 - (IBAction)mainItemViewClicked:(id)sender;
 - (IBAction)deviceItemViewClicked:(id)sender;
@@ -96,6 +103,9 @@ NaradaDownloaderDelegate
 // Speak methods
 -(void) speakAction:(NSString *)sentence;
 
+//data update
+-(NSData *) dataUpdated;
+-(NSDictionary*)parseJSON: (NSData *) downloaded_data;
 // Video-view methods
 -(void) MoveModelOut;
 -(void) MoveModelIn;

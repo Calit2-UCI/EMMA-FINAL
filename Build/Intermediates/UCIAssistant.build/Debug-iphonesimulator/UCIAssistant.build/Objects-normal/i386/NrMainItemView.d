@@ -1,3 +1,3 @@
 dependencies: \
-  /Users/Gilbert/Desktop/Gilbert/Project/iOS/uciassistant/VirtualAssistant/Assistants/Calendar/NrMainItemView.m \
-  ../uciassistant/VirtualAssistant/Assistants/Calendar/NrMainItemView.h
+  /Users/kenmorte/Downloads/uciassistant/VirtualAssistant/Assistants/Calendar/NrMainItemView.m \
+  /Users/kenmorte/Downloads/uciassistant/VirtualAssistant/Assistants/Calendar/NrMainItemView.h

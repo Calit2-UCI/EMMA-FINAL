@@ -11,11 +11,13 @@
 
 #import <UIKit/UIKit.h>
 
+#import "PNChart.h"
 @interface NrTableViewController : UITableViewController
 
 @property (nonatomic, strong) NSMutableDictionary* station_data;
 
 @property (nonatomic, strong) UIScrollView* mainSlider;
+@property (nonatomic) PNPieChart *pieChart;
 
 - (id)initWithData:(NSMutableDictionary *)station;
 
@@ -28,7 +30,8 @@
 - (void)setViewController:(UIViewController *)viewController;
 
 - (NSDictionary *) get_data;
-
+- (void)drawPieChart;
+-(void)removePieChart;
 @end
 
 #endif //UCIAssistant_NrTableView_h

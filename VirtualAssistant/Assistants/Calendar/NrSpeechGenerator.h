@@ -22,6 +22,8 @@
 @property (nonatomic, retain) NSArray *connect_to_station_messages;
 
 @property (nonatomic, retain) NSArray *enter_overview_messages;           // from main menu / video view
+@property (nonatomic, retain) NSArray *enter_piechart_messages;
+
 @property (nonatomic, retain) NSArray *return_to_overview_messages;       // from smart table view
 @property (nonatomic, retain) NSArray *already_in_overview_messages;       // from overview table
 
@@ -38,13 +40,14 @@
 
 
 - (NSString *)welcome_message;
-
+- (NSString *)find_station;
 - (NSString *)request_device_info_message;
 - (NSString *)overview_device_info_message_with_device:(NSString *)device andCurrentStatus:(NSString *)status andPowerUsage:(NSString *) power;
 
 - (NSString *)connect_to_station_message;
 
 - (NSString *)enter_overview_message_with_station:(NSString *)station;
+- (NSString *)enter_piechart_message_with_station:(NSString *)station;
 - (NSString *)return_to_overview_message_with_station:(NSString *)station;
 - (NSString *)already_in_overview_message_with_station:(NSString *)station;
 

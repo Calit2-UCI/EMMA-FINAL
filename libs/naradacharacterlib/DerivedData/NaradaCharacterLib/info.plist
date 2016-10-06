@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>LastAccessedDate</key>
+	<date>2016-07-28T17:30:03Z</date>
 	<key>WorkspacePath</key>
 	<string>/Users/Gilbert/Desktop/Gilbert/Project/iOS/uciassistant/libs/naradacharacterlib/NaradaCharacterLib.xcodeproj</string>
 </dict>

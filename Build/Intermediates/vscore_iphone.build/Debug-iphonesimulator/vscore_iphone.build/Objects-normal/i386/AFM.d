@@ -1,8 +1,8 @@
 dependencies: \
-  /Users/Gilbert/Desktop/Gilbert/Project/iOS/uciassistant/libs/vscore/source/libAfm/AFM.cpp \
-  /Users/Gilbert/Desktop/Gilbert/Project/iOS/uciassistant/libs/vscore_iphone/vscore_iphone_Prefix.pch \
+  /Users/kenmorte/Downloads/uciassistant/libs/vscore/source/libAfm/AFM.cpp \
+  /Users/kenmorte/Downloads/uciassistant/libs/vscore_iphone/vscore_iphone_Prefix.pch \
   ../vsgdependencies/libiconv-1.13.1/srclib/stdlib.h \
-  /Users/Gilbert/Desktop/Gilbert/Project/iOS/uciassistant/libs/vscore/header/AFM.h \
+  /Users/kenmorte/Downloads/uciassistant/libs/vscore/header/AFM.h \
   ../vscore/header/VisageCharModel.h ../vscore/header/Base.h \
   ../vscore/header/Logger.h ../vscore/header/Singleton.h \
   ../vscore/header/Timer.h ../vscore/header/Math3D.h \
@@ -20,10 +20,10 @@ dependencies: \
   ../vscore/header/FBADecoder.h ../vscore/header/Fba_object_plane.h \
   ../vscore/header/Fba_in_buffer.h ../vscore/header/Face_object.h \
   ../vscore/header/Body_object.h ../vscore/header/FBACodingParameters.h \
-  /Users/Gilbert/Desktop/Gilbert/Project/iOS/uciassistant/libs/vscore/header/VCM.h \
-  /Users/Gilbert/Desktop/Gilbert/Project/iOS/uciassistant/libs/vscore/header/BaseFileIO.h \
-  /Users/Gilbert/Desktop/Gilbert/Project/iOS/uciassistant/libs/vscore/header/BaseAFMDeformer.h \
+  /Users/kenmorte/Downloads/uciassistant/libs/vscore/header/VCM.h \
+  /Users/kenmorte/Downloads/uciassistant/libs/vscore/header/BaseFileIO.h \
+  /Users/kenmorte/Downloads/uciassistant/libs/vscore/header/BaseAFMDeformer.h \
   ../vscore/header/AFMDeformer.h \
-  /Users/Gilbert/Desktop/Gilbert/Project/iOS/uciassistant/libs/vscore/header/NaradaNotificationCenter.hpp \
+  /Users/kenmorte/Downloads/uciassistant/libs/vscore/header/NaradaNotificationCenter.hpp \
   ../vscore/header/NaradaException.h \
   ../vscore/header/NaradaNotificationMessages.h

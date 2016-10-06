@@ -1,3 +1,3 @@
 dependencies: \
-  /Users/Gilbert/Desktop/Gilbert/Project/iOS/uciassistant/VirtualAssistant/Assistants/NrGridTableViewCell.m \
-  ../uciassistant/VirtualAssistant/Assistants/NrGridTableViewCell.h
+  /Users/kenmorte/Downloads/uciassistant/VirtualAssistant/Assistants/NrGridTableViewCell.m \
+  /Users/kenmorte/Downloads/uciassistant/VirtualAssistant/Assistants/NrGridTableViewCell.h

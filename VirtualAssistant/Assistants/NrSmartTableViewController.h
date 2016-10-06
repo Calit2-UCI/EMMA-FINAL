@@ -17,6 +17,7 @@
 @property (nonatomic, strong) NSMutableDictionary* station_data;
 
 @property (nonatomic, strong) NSString* device;
+@property (nonatomic) PNPieChart *pieChart;
 
 - (id)initWithDevice:(NSString *)device withViewController:(UIViewController *)viewController withData:(NSMutableDictionary *)station;
 

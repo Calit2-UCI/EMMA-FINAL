@@ -32,10 +32,6 @@
 	<true/>
 	<key>UIApplicationExitsOnSuspend</key>
 	<false/>
-	<key>UILaunchImageFile</key>
-	<string>Default</string>
-	<key>UILaunchImageFile~ipad</key>
-	<string>Default_iPad</string>
 	<key>UIPrerenderedIcon</key>
 	<false/>
 	<key>UIStatusBarHidden</key>

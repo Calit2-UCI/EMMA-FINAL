@@ -1,3 +1,7 @@
+//comment by Gilbert:
+//Using a subview of gesture view,cover view,to switch gesture recognition. 
+
+
 #import "GLViewController.h"
 #import "EAGLView.h"
 
@@ -11,7 +15,7 @@
 
 using namespace std;
 
-CGPoint originPoint;
+//CGPoint originPoint;
 
 UITapGestureRecognizer *singleFingerDoubleTap;
 UIPanGestureRecognizer *panGesture;
@@ -37,7 +41,7 @@ states state = STILL;
 
 @synthesize modelManager;
 @synthesize glView;
-
+@synthesize originPoint;
 
 @synthesize waitLabel;
 @synthesize loading;
@@ -150,15 +154,6 @@ states state = STILL;
     [glView stopAnimation];
 }
 
-
-
-
-
-
-
-
-
-
 - (void)dealloc {
 	
     [self releaseModelManagerListeners];
@@ -197,7 +192,6 @@ states state = STILL;
 
 
 #pragma mark New Show Methods
-
 
 
 - (void)setStateInit

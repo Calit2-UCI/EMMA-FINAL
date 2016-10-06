@@ -1,3 +1,3 @@
 dependencies: \
-  /Users/Gilbert/Desktop/Gilbert/Project/iOS/uciassistant/VirtualAssistant/Assistants/Calendar/NrSpeechGenerator.m \
-  ../uciassistant/VirtualAssistant/Assistants/Calendar/NrSpeechGenerator.h
+  /Users/kenmorte/Downloads/uciassistant/VirtualAssistant/Assistants/Calendar/NrSpeechGenerator.m \
+  /Users/kenmorte/Downloads/uciassistant/VirtualAssistant/Assistants/Calendar/NrSpeechGenerator.h

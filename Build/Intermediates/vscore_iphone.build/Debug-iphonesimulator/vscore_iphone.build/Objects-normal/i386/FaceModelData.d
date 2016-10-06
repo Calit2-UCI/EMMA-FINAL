@@ -1,7 +1,7 @@
 dependencies: \
-  /Users/Gilbert/Desktop/Gilbert/Project/iOS/uciassistant/libs/vscore/source/libSimpleCloner/FaceModelData.cpp \
-  /Users/Gilbert/Desktop/Gilbert/Project/iOS/uciassistant/libs/vscore_iphone/vscore_iphone_Prefix.pch \
-  /Users/Gilbert/Desktop/Gilbert/Project/iOS/uciassistant/libs/vscore/header/FaceModelData.h \
+  /Users/kenmorte/Downloads/uciassistant/libs/vscore/source/libSimpleCloner/FaceModelData.cpp \
+  /Users/kenmorte/Downloads/uciassistant/libs/vscore_iphone/vscore_iphone_Prefix.pch \
+  /Users/kenmorte/Downloads/uciassistant/libs/vscore/header/FaceModelData.h \
   ../vscore/header/AFM.h ../vscore/header/VisageCharModel.h \
   ../vscore/header/Base.h ../vscore/header/Logger.h \
   ../vscore/header/Singleton.h ../vscore/header/Timer.h \

@@ -29,6 +29,11 @@ enum nrMode {
     NR_SMART_TABLE
 };
 
+enum CrDegree {
+    CR_OUT,
+    CR_IN
+};
+
 @interface NrMainViewController : UIViewController <
 NaradaTTSDelegate,
 NrMainViewControllerDelegate,
@@ -63,6 +68,7 @@ NaradaAudioConverterDelegate
 @property (nonatomic, strong) UITableView *eventsTableView;
 
 @property (nonatomic, assign) enum nrMode currentMode;
+@property (nonatomic, assign) enum CrDegree currentDegree;
 
 @property (nonatomic, assign) NSInteger selectedItem;
 

@@ -138,5 +138,6 @@
 @property (nonatomic, retain) IBOutlet UIButton *playAudio;
 
 @property(nonatomic, retain)     NSNumber* timeStamp;
+@property(nonatomic) CGPoint originPoint;
 
 @end

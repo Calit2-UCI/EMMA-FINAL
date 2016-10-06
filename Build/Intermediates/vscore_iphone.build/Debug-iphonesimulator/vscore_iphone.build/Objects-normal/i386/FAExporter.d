@@ -1,8 +1,8 @@
 dependencies: \
-  /Users/Gilbert/Desktop/Gilbert/Project/iOS/uciassistant/libs/vscore/source/libAfm/FAExporter.cpp \
-  /Users/Gilbert/Desktop/Gilbert/Project/iOS/uciassistant/libs/vscore_iphone/vscore_iphone_Prefix.pch \
-  /Users/Gilbert/Desktop/Gilbert/Project/iOS/uciassistant/libs/vscore/header/myMatrix.h \
-  /Users/Gilbert/Desktop/Gilbert/Project/iOS/uciassistant/libs/vscore/header/FAExporter.h \
+  /Users/kenmorte/Downloads/uciassistant/libs/vscore/source/libAfm/FAExporter.cpp \
+  /Users/kenmorte/Downloads/uciassistant/libs/vscore_iphone/vscore_iphone_Prefix.pch \
+  /Users/kenmorte/Downloads/uciassistant/libs/vscore/header/myMatrix.h \
+  /Users/kenmorte/Downloads/uciassistant/libs/vscore/header/FAExporter.h \
   ../vscore/header/FAPlayer.h ../vscore/header/VisageCharModel.h \
   ../vscore/header/Base.h ../vscore/header/Logger.h \
   ../vscore/header/Singleton.h ../vscore/header/Timer.h \

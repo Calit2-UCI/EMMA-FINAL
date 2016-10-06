@@ -35,6 +35,7 @@
         [self init_turn_on_device_messages];
         [self init_back_to_menu_messages];
         [self init_back_to_station_menu_messages];
+        [self init_enter_piechart_messages];
     }
     
     return self;
@@ -94,6 +95,17 @@
                                      ];
 }
 
+- (void)init_enter_piechart_messages
+{
+    // Format with Station #
+    self.enter_piechart_messages = @[@"This is your pie chart for %@.",
+                                     @"Here is the pie chart for %@.",
+                                     @"Now displaying the pie chart for %@.",
+                                     ];
+}
+
+
+
 - (void)init_return_to_overview_messages
 {
     // Format with Station #
@@ -117,10 +129,10 @@
 - (void)init_enter_smart_table_view_messages
 {
     // Format with Device Name
-    self.enter_smart_table_view_messages = @[@"Showing the smart table view for the %@.",
-                                             @"Here is the smart table view for your %@.",
-                                             @"Displaying the smart table view for the %@.",
-                                             @"Now displaying the smart table view for your %@."
+    self.enter_smart_table_view_messages = @[@"Showing the view for the %@.",
+                                             @"Here is the view for your %@.",
+                                             @"Displaying the view for the %@.",
+                                             @"Now displaying the  view for your %@."
                                           ];
 }
 
@@ -199,6 +211,10 @@
     return [self.welcome_messages objectAtIndex:random_index];
 }
 
+- (NSString *)find_station{
+    return @"I find a nearby station. Do you want to show the information?";
+}
+
 - (NSString *)request_device_info_message
 {
     NSUInteger random_index = [self random_index_for_array:self.request_device_info_messages];
@@ -228,6 +244,17 @@
     return [NSString stringWithFormat:sentence_without_station, station];
 }
 
+
+- (NSString *)enter_piechart_message_with_station:(NSString *)station
+{
+    NSUInteger random_index = [self random_index_for_array:self.enter_piechart_messages];
+    NSString *sentence_without_station = [self.enter_piechart_messages objectAtIndex:random_index];
+    
+    return [NSString stringWithFormat:sentence_without_station, station];
+}
+
+
+
 - (NSString *)return_to_overview_message_with_station:(NSString *)station
 {
     NSUInteger random_index = [self random_index_for_array:self.return_to_overview_messages];
@@ -236,6 +263,8 @@
     return [NSString stringWithFormat:sentence_without_station, station];
 }
 
+
+
 - (NSString *)already_in_overview_message_with_station:(NSString *)station
 {
     NSUInteger random_index = [self random_index_for_array:self.already_in_overview_messages];
@@ -243,6 +272,7 @@
     
     return [NSString stringWithFormat:sentence_without_station, station];
 }
+
 
 - (NSString *)enter_smart_table_view_message_with_device:(NSString *)device
 {

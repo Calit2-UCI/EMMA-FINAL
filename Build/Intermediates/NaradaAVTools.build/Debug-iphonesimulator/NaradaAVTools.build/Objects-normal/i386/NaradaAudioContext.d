@@ -1,4 +1,4 @@
 dependencies: \
-  /Users/Gilbert/Desktop/Gilbert/Project/iOS/uciassistant/libs/naradaavtools/Classes/source/NaradaAudioContext.cpp \
-  /Users/Gilbert/Desktop/Gilbert/Project/iOS/uciassistant/libs/naradaavtools/Classes/headers/NaradaAudioContext.hpp \
-  /Users/Gilbert/Desktop/Gilbert/Project/iOS/uciassistant/libs/naradaavtools/Classes/headers/NaradaAudioResource.hpp
+  /Users/kenmorte/Downloads/uciassistant/libs/naradaavtools/Classes/source/NaradaAudioContext.cpp \
+  /Users/kenmorte/Downloads/uciassistant/libs/naradaavtools/Classes/headers/NaradaAudioContext.hpp \
+  /Users/kenmorte/Downloads/uciassistant/libs/naradaavtools/Classes/headers/NaradaAudioResource.hpp

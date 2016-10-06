@@ -35,6 +35,7 @@
 @synthesize selectedItem;
 @synthesize contentsView;
 @synthesize currentMode;
+@synthesize currentDegree;
 
 
 @synthesize shuttingUp = _shuttingUp;
@@ -104,8 +105,12 @@ CGFloat pointingBarYMargin = 2;
     
     self.pointingBar = [[UIView alloc] initWithFrame:CGRectMake(self.view.frame.size.width, self.daysView.frame.origin.y + self.daysView.frame.size.height + pointingBarYMargin, itemWidth * 0.5, itemHeight)];
     
-    self.pointingBar.backgroundColor = [UIColor colorWithRed:224.0f/255.0f green:161.0f/255.0f blue:34.0f/255.0f alpha:255.0f/255.0f];
+    //self.pointingBar.backgroundColor = [UIColor colorWithRed:224.0f/255.0f green:161.0f/255.0f blue:34.0f/255.0f alpha:255.0f/255.0f];
+    self.pointingBar.backgroundColor = [UIColor colorWithRed:224.0f/255.0f green:161.0f/255.0f blue:34.0f/255.0f alpha:0.0f/255.0f];
     
+    
+    
+    //TODO not here change here to change aplpha
     self.pointingBar.alpha = 0.0f;
     
     

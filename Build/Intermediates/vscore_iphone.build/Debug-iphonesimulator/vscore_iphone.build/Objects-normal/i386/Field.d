@@ -1,8 +1,8 @@
 dependencies: \
-  /Users/Gilbert/Desktop/Gilbert/Project/iOS/uciassistant/libs/vscore/source/libVRMLParser/Field.cpp \
-  /Users/Gilbert/Desktop/Gilbert/Project/iOS/uciassistant/libs/vscore_iphone/vscore_iphone_Prefix.pch \
-  /Users/Gilbert/Desktop/Gilbert/Project/iOS/uciassistant/libs/vscore/header/stdafx.h \
-  /Users/Gilbert/Desktop/Gilbert/Project/iOS/uciassistant/libs/vscore/header/Field.h \
+  /Users/kenmorte/Downloads/uciassistant/libs/vscore/source/libVRMLParser/Field.cpp \
+  /Users/kenmorte/Downloads/uciassistant/libs/vscore_iphone/vscore_iphone_Prefix.pch \
+  /Users/kenmorte/Downloads/uciassistant/libs/vscore/header/stdafx.h \
+  /Users/kenmorte/Downloads/uciassistant/libs/vscore/header/Field.h \
   ../vscore/header/Element.h ../vscore/header/Node.h \
   ../vsgdependencies/libiconv-1.13.1/srclib/stdio.h \
   ../vscore/header/Array.h ../vscore/header/List.h \
@@ -10,4 +10,4 @@ dependencies: \
   ../vscore/header/NaradaNotificationCenter.hpp \
   ../vscore/header/NaradaException.h \
   ../vscore/header/NaradaNotificationMessages.h \
-  /Users/Gilbert/Desktop/Gilbert/Project/iOS/uciassistant/libs/vscore/header/FieldValue.h
+  /Users/kenmorte/Downloads/uciassistant/libs/vscore/header/FieldValue.h

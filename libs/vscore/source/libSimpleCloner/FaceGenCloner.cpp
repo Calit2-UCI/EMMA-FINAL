@@ -12,6 +12,9 @@ namespace VisageSDK
 		targetData = new FaceModelData();
 	}
 
+    //0906
+    //TODO
+    //change the face
 	AFM* FaceGenCloner::clone( VRMLModel* faceGenModel )
 	{
 		int i, j, n;

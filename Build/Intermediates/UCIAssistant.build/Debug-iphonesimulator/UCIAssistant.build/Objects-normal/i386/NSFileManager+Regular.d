@@ -1,2 +1,2 @@
 dependencies: \
-  /Users/Gilbert/Desktop/Gilbert/Project/iOS/uciassistant/VirtualAssistant/Categories/NSFileManager+Regular.m
+  /Users/kenmorte/Downloads/uciassistant/VirtualAssistant/Categories/NSFileManager+Regular.m

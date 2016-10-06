@@ -2,7 +2,7 @@
 
 <action bg=true loop=false kind=body name=handsMovement>
 	<basicAction> basicMotion.FBA </basicAction>
-	<basicAction> explainHandsTogether.FBA </basicAction>
+	
 	<basicAction> animCompleta1.FBA </basicAction>
 </action>
 

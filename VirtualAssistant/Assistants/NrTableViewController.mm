@@ -10,6 +10,7 @@
 #import "NrGridTableViewCell.h"
 #import "NrCalendarMainViewController.h"
 
+
 #import "NrSpeechGenerator.h"
 
 #define overviewTableCell1Width 205  // Smart table cells
@@ -110,7 +111,8 @@ UISwitch *overview_switch;
 {
     self.station_data = [NSMutableDictionary dictionaryWithDictionary:station];
     [self.station_data setValue:station[@"Number of Devices"] forKey:@"Number of Devices"];
-    [self.station_data setValue:station[@"Total Energy Consumption"] forKey:@"Total Energy Consumption"];
+    //[self.station_data setValue:station[@"Total Energy Consumption"] forKey:@"Total Energy Consumption"];
+    [self.station_data setValue:station[@"Total Usage"] forKey:@"Total Usage"];
         
     
     NSLog(@"Station data updated: %@", self.station_data);
@@ -145,7 +147,8 @@ UISwitch *overview_switch;
             
             overview_switch = [[UISwitch alloc] initWithFrame:CGRectZero];
             cell.accessoryView = overview_switch;
-            [overview_switch setOn:[self switchIsOn] animated:YES];
+
+                [overview_switch setOn:[self switchIsOn] animated:NO];
             [overview_switch addTarget:self action:@selector(switch_changed:) forControlEvents:UIControlEventValueChanged];
         }
         else if (0 < indexPath.row && indexPath.row <= num_of_devices) {     // middle rows
@@ -161,10 +164,24 @@ UISwitch *overview_switch;
             }
         
             cell.cell1.text = self.station_data[@"Devices"][device_key][@"Name"];
-            cell.cell2.text = [NSString stringWithFormat:@"%@ kW/Hour", self.station_data[@"Devices"][device_key][@"Watts"]];
-            
+            //change here to change the power consumption
+            NSLog(@"cell.cell1.text is %@",cell.cell1.text);
+            cell.cell2.text = [NSString stringWithFormat:@"%@ W/Hour", self.station_data[@"Devices"][device_key][@"Watts"]];
+            NSLog(@"cell.cell1.text is %@",cell.cell1.text);
             [self set_device_color:device_key for_cell:cell];
         }
+    }
+}
+
+-(void) init_table
+{
+    NSInteger num_of_devices = [self number_of_devices];
+    
+    for (NSInteger i = 0; i < num_of_devices+1; ++i) {
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:i inSection:0];
+        NrGridTableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+        
+        [self update_cell_data:cell atIndexPath:indexPath];
     }
 }
 
@@ -185,6 +202,13 @@ UISwitch *overview_switch;
     if (self.station_data != nil && self.station_data[@"Number of Devices"] != nil) {
         NSInteger num_of_devices = [self number_of_devices];
         
+        if (indexPath.row == 0) {           // top row
+            cell.cell1.text = station_title;
+            cell.cell1.font = [UIFont fontWithName:@"Arial-BoldMT" size:32];
+            cell.cell1.textColor = [UIColor whiteColor];
+            cell.cell1.backgroundColor = [UIColor blackColor];
+            cell.cell1.frame = CGRectMake(0, 0, overviewTableCell1Width+overviewTableCell2Width, cell.cell1.frame.size.height);
+        }
         if (0 < indexPath.row && indexPath.row <= num_of_devices) {     // middle rows
             NSInteger device_number = indexPath.row;
             NSString *device_key = [NSString stringWithFormat:@"Device %d", device_number];
@@ -198,7 +222,14 @@ UISwitch *overview_switch;
 - (void) change_cell_content:(NrGridTableViewCell *)cell for_device:(NSString *)device_key
 {
     NSString *new_cell_1_text = self.station_data[@"Devices"][device_key][@"Name"];
-    NSString *new_cell_2_text = [NSString stringWithFormat:@"%@ kW/Hour", self.station_data[@"Devices"][device_key][@"Watts"]];
+    NSString *new_cell_2_text = [NSString stringWithFormat:@"%@ W/Hour", self.station_data[@"Devices"][device_key][@"Watts"]];
+    if([new_cell_1_text isEqualToString:@"Lamp"]){
+        new_cell_2_text = [NSString stringWithFormat:@"%@ W/Hour", mainViewController.lampValue];
+    }
+    if([new_cell_1_text isEqualToString:@"Fan"]){
+        new_cell_2_text = [NSString stringWithFormat:@"%@ W/Hour", mainViewController.fanValue];
+    }
+    
     
     if (cell.cell1.text != new_cell_1_text)
         cell.cell1.text = new_cell_1_text;
@@ -209,6 +240,8 @@ UISwitch *overview_switch;
 
 - (void)set_device_color:(NSString *)device_key for_cell:(NrGridTableViewCell *)cell
 {
+    //TODO rewrite
+    //just for demo
     if (self.station_data != nil && self.station_data[@"Devices"] != nil) {
         if ([self.station_data[@"Devices"][device_key][@"Status"]  isEqual: @"Off"]) {
             cell.cell1.textColor = off_color;
@@ -219,6 +252,14 @@ UISwitch *overview_switch;
         else {
             cell.cell1.textColor = unknown_color;
             cell.cell2.textColor = unknown_color;
+        }
+        if([self.station_data[@"Devices"][device_key][@"Name"] isEqualToString:@"Lamp"]){
+            if([mainViewController.lampValue integerValue] > 5){
+                cell.cell1.textColor = on_color;
+            }
+            else{
+                cell.cell1.textColor = off_color;
+            }
         }
         
     }
@@ -356,5 +397,29 @@ UISwitch *overview_switch;
     // For example: self.myOutlet = nil;
 }
 
+
+#pragma mark pie chart
+- (void)drawPieChart{
+
+    NSArray *items = @[
+                       [PNPieChartDataItem dataItemWithValue:35 color:PNFreshGreen description:@"LAMP"],
+                       [PNPieChartDataItem dataItemWithValue:70 color:PNDeepGreen description:@"TV"],
+                       ];
+    self.pieChart = [[PNPieChart alloc] initWithFrame:CGRectMake(SCREEN_WIDTH /2.0 - 100, 135, 200.0, 200.0) items:items];
+    self.pieChart.showOnlyValues = NO;
+    self.pieChart.legendStyle = PNLegendItemStyleStacked;
+    self.pieChart.legendFont = [UIFont boldSystemFontOfSize:12.0f];
+    
+//    UIView *legend = [self.pieChart getLegendWithMaxWidth:200];
+//    [legend setFrame:CGRectMake(130, 350, legend.frame.size.width, legend.frame.size.height)];
+//    [self.view addSubview:legend];
+    
+    //[self.view addSubview:self.pieChart];
+
+}
+
+-(void)removePieChart{
+    [self.pieChart removeFromSuperview];
+}
 
 @end
