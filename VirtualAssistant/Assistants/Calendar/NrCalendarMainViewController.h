@@ -17,6 +17,8 @@
 
 
 #import <MediaPlayer/MediaPlayer.h>
+#import <AudioToolbox/AudioToolbox.h>
+#import <AVFoundation/AVFoundation.h>
 
 /*
  #define kLocationNameKey @"kLocationNameKey"
@@ -69,6 +71,7 @@ NaradaDownloaderDelegate
 @property (nonatomic) NSMutableDictionary *action_flags;
 @property (nonatomic) NSString * lampValue;
 @property (nonatomic) NSString * fanValue;
+@property (strong, nonatomic) AVAudioPlayer *audioPlayer;
 
 - (IBAction)mainItemViewClicked:(id)sender;
 - (IBAction)deviceItemViewClicked:(id)sender;
@@ -122,5 +125,7 @@ NaradaDownloaderDelegate
 -(void) speakGood1WithDelay:(float)delay;
 -(void)StopAndHideVideoViewClicked;
 -(void)playMovieClicked;
+
+// NotificationView methods
 
 @end

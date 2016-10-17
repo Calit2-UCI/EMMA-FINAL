@@ -394,6 +394,8 @@
 		9E6EB9291DA306D2004B79DE /* CachingContentFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E6EB9201DA306D2004B79DE /* CachingContentFactory.m */; };
 		9E6EB92A1DA306D2004B79DE /* NearestBeaconManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E6EB9221DA306D2004B79DE /* NearestBeaconManager.m */; };
 		9E6EB92B1DA306D2004B79DE /* ProximityContentManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E6EB9241DA306D2004B79DE /* ProximityContentManager.m */; };
+		9E9C9FE51DAEBC5F00BA9723 /* x_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 9E9C9FE41DAEBC5F00BA9723 /* x_icon.png */; };
+		9E9C9FEA1DAF012000BA9723 /* ding.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 9E9C9FE91DAF012000BA9723 /* ding.mp3 */; };
 		C3C7792119CAD9D0008299E9 /* GLViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C3C7791E19CAD9D0008299E9 /* GLViewController.xib */; };
 		C3C7792219CAD9D0008299E9 /* GLViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = C3C7791F19CAD9D0008299E9 /* GLViewController_iPad.xib */; };
 		C3C7792319CAD9D0008299E9 /* GLViewController_iPhone5.xib in Resources */ = {isa = PBXBuildFile; fileRef = C3C7792019CAD9D0008299E9 /* GLViewController_iPhone5.xib */; };
@@ -890,6 +892,8 @@
 		9E6EB9221DA306D2004B79DE /* NearestBeaconManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NearestBeaconManager.m; sourceTree = "<group>"; };
 		9E6EB9231DA306D2004B79DE /* ProximityContentManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProximityContentManager.h; sourceTree = "<group>"; };
 		9E6EB9241DA306D2004B79DE /* ProximityContentManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProximityContentManager.m; sourceTree = "<group>"; };
+		9E9C9FE41DAEBC5F00BA9723 /* x_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = x_icon.png; sourceTree = "<group>"; };
+		9E9C9FE91DAF012000BA9723 /* ding.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = ding.mp3; path = ../ding.mp3; sourceTree = "<group>"; };
 		C3C7791E19CAD9D0008299E9 /* GLViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GLViewController.xib; sourceTree = "<group>"; };
 		C3C7791F19CAD9D0008299E9 /* GLViewController_iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GLViewController_iPad.xib; sourceTree = "<group>"; };
 		C3C7792019CAD9D0008299E9 /* GLViewController_iPhone5.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GLViewController_iPhone5.xib; sourceTree = "<group>"; };
@@ -1272,6 +1276,7 @@
 		79E781881635939800D09E21 /* audio */ = {
 			isa = PBXGroup;
 			children = (
+				9E9C9FE91DAF012000BA9723 /* ding.mp3 */,
 				79E781891635939800D09E21 /* car-unlock.FBA */,
 				79E7818B1635939800D09E21 /* car-unlock.wav */,
 				79E7818D1635939800D09E21 /* enter-location.FBA */,
@@ -1494,6 +1499,7 @@
 		79FAC96F161493E0006F25E7 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				9E9C9FE41DAEBC5F00BA9723 /* x_icon.png */,
 				0D9356A91D81E31900F57C4B /* connect7.png */,
 				0D9356AA1D81E31900F57C4B /* connect3.png */,
 				0D9356AB1D81E31900F57C4B /* connect8.png */,
@@ -1799,6 +1805,7 @@
 				0D93562E1D80C91500F57C4B /* shirt_material_2020099.jpg in Resources */,
 				0D93562F1D80C91500F57C4B /* ucirvine_07_121.jpg in Resources */,
 				0D9356301D80C91500F57C4B /* ucirvine_07_121.png in Resources */,
+				9E9C9FE51DAEBC5F00BA9723 /* x_icon.png in Resources */,
 				0DB2D6561D79999A0045E65C /* RiceCooker.png in Resources */,
 				0DB2D6571D79999A0045E65C /* Lamp.png in Resources */,
 				0DB2D6581D79999A0045E65C /* TV.png in Resources */,
@@ -1942,6 +1949,7 @@
 				790BDAFE162D736000A0C4BE /* ginTonic.png in Resources */,
 				31737C3319E6113E001484F7 /* 2Weight.txt in Resources */,
 				790BDAFF162D736000A0C4BE /* info.png in Resources */,
+				9E9C9FEA1DAF012000BA9723 /* ding.mp3 in Resources */,
 				790BDB00162D736000A0C4BE /* palmeras.png in Resources */,
 				31857BAD195B3F1D0088D25D /* Default-568h@2x.png in Resources */,
 				790BDB01162D736000A0C4BE /* placaHotel.png in Resources */,

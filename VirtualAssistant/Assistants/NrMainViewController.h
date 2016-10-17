@@ -53,6 +53,7 @@ NaradaAudioConverterDelegate
 @property (nonatomic, strong) IBOutlet UIView *daysView;
 @property (nonatomic, strong) IBOutlet UIView *assistantView;
 @property (nonatomic, strong) IBOutlet UIView *detailView;
+
 @property (nonatomic, strong) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (nonatomic, strong) IBOutlet UIButton *shareButton;
 @property (nonatomic, strong) IBOutlet UILabel *bottomCityNameLabel;
@@ -60,10 +61,18 @@ NaradaAudioConverterDelegate
 @property (nonatomic, strong) IBOutlet UIButton *moreInfoButton;
 @property (nonatomic, strong) IBOutlet UIView *switchMoreInfoView;
 
+@property (nonatomic, strong) IBOutlet UIView *notificationView;
+@property (nonatomic, strong) IBOutlet UILabel *notificationLabel;
+@property (nonatomic, strong) IBOutlet UIButton *notificationAcceptButton;
+@property (nonatomic, strong) IBOutlet UIButton *notificationRejectButton;
+@property (nonatomic, strong) IBOutlet UISwipeGestureRecognizer *notificationSwipeGestureRecognizer;
+
+-(void)respondToSwipeGesture:(UITapGestureRecognizer *)recognizer;
 
 @property (nonatomic, strong) IBOutlet UIButton *backButton;
 @property (nonatomic, strong) IBOutlet UIButton *skipButton;
 @property (nonatomic, strong) IBOutlet UIButton *exitButton;
+@property (nonatomic, strong) IBOutlet UIButton *connectButton;
 
 @property (nonatomic, strong) UITableView *eventsTableView;
 
@@ -93,6 +102,12 @@ NaradaAudioConverterDelegate
 
 
 @property (nonatomic, assign) BOOL shuttingUp;
+
+- (IBAction)notificationAcceptClicked:(id)sender;
+- (IBAction)notificationRejectClicked:(id)sender;
+
+- (IBAction)connectButtonClicked:(id)sender;
+
 
 - (void)loadPointingBarFromFrame:(CGRect)itemFrame;
 - (void)movePointingBarToFrame:(CGRect)baseframe;

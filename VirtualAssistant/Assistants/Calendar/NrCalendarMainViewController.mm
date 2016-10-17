@@ -67,6 +67,7 @@ int counter;
 int count = 0;
 NrSpeechGenerator *speech_generator;
 UITapGestureRecognizer *singleFingerTap;
+UISwipeGestureRecognizer *swipeRecognizer;
 
 //  *** Action members ***
 //TODO
@@ -97,6 +98,13 @@ NrSmartTableViewController *pieChartController;
 NrSmartTableViewController *smartTableViewController;
 BOOL tableViewDisplayed = NO;
 
+// *** NotificationView members ***
+NSInteger notificationYPositionShow = 21;
+NSInteger notificationYPositionHide = 106;
+
+// *** Connect members ***
+BOOL canConnectWithStations = YES;
+
 // *** ChartView Members ***
 
 
@@ -114,8 +122,6 @@ NSDictionary *stationConverter = @{@"beetroot" : @"Station 1",
                                    @"candy": @"Station 2",
                                    @"lemon": @"Station 3",
                                    };
-
-
 
 
 
@@ -153,6 +159,13 @@ NSDictionary *stationConverter = @{@"beetroot" : @"Station 1",
     self.exitButton = [UIButton buttonWithType:UIButtonTypeSystem];
     [self.view addSubview:exitButton];
     self.exitButton.alpha = 0.0f;
+    
+    self.notificationSwipeGestureRecognizer = [[UISwipeGestureRecognizer alloc]
+                       initWithTarget:self action:@selector(respondToSwipeGesture:)];
+    [[self.notificationView superview] addGestureRecognizer:self.notificationSwipeGestureRecognizer];
+    [self.notificationView addGestureRecognizer:self.notificationSwipeGestureRecognizer];
+    [self.notificationLabel addGestureRecognizer:self.notificationSwipeGestureRecognizer];
+    
 //    self.proximityContentManager = [[ProximityContentManager alloc]
 //                                    initWithBeaconIDs:@[
 //                                                        [[BeaconID alloc] initWithUUIDString:@"B9407F30-F5F8-466E-AFF9-25556B57FE6D" major:10575 minor:30159],
@@ -165,7 +178,6 @@ NSDictionary *stationConverter = @{@"beetroot" : @"Station 1",
     
 //    NrViewController *beaconValueController = [[NrViewController alloc] init];
 //    beaconValueController.delegate = self;
-    NSLog(@"this is ");
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -293,6 +305,7 @@ NSDictionary *stationConverter = @{@"beetroot" : @"Station 1",
     if (canClickBack) {
         canClickBack = NO;
         if (self.currentMode != NR_MAIN) {
+            [self slideNotificationViewDown];
             if (self.currentMode == NR_STATION) {
                 [self changeItemsToMain];
                 [self shutUp];
@@ -315,8 +328,9 @@ NSDictionary *stationConverter = @{@"beetroot" : @"Station 1",
                 [self StopAndHideVideoViewClicked];
                 
             }
-            else
+            else {
                 [self shutUp];
+            }
             
             can_speak = YES;
         }
@@ -1007,6 +1021,7 @@ NSDictionary *stationConverter = @{@"beetroot" : @"Station 1",
             [self uncover];
             return;
         }
+        
         processing = YES;
         self.activityIndicator.hidden = NO;
         [self.activityIndicator startAnimating];
@@ -1066,7 +1081,8 @@ NSDictionary *stationConverter = @{@"beetroot" : @"Station 1",
             
             [self.glController.modelManager animateTranslationDuring:duration incX:-translation incY:0 absolute:NO];
             [self.glController.modelManager animateRotationDuring:duration degreesX:0 degreesY:-rotation absolute:NO];
-            self.currentDegree = CR_OUT;}
+            self.currentDegree = CR_OUT;
+        }
     }
     
 }
@@ -1091,7 +1107,7 @@ NSDictionary *stationConverter = @{@"beetroot" : @"Station 1",
     if (![timer isValid]) {
         timerStarted = true;
         
-        timer = [NSTimer scheduledTimerWithTimeInterval:update_inteveral target:self selector:@selector(updateStation) userInfo:nil repeats:YES];
+        timer = [NSTimer scheduledTimerWithTimeInterval:update_inteveral target:self selector:@selector(increaseTimerCount) userInfo:nil repeats:YES];
         toUpdate = (!toUpdate);
         [timer fire];
     }
@@ -1116,12 +1132,15 @@ NSDictionary *stationConverter = @{@"beetroot" : @"Station 1",
     // Function that gets called within timed-intervals
     
     //    self.TimerButton.text = [NSString stringWithFormat:@"%d", counter];
-    
     if (started) {
         counter ++;
     }
     
-    [self updateStation];
+    if (canConnectWithStations)
+        [self updateStation];
+    else {
+        [self slideNotificationViewDown];
+    }
 }
 
 #pragma mark -
@@ -1231,18 +1250,30 @@ NSDictionary *stationConverter = @{@"beetroot" : @"Station 1",
 //    NSString *ret = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
 //    NSLog(@"ret=%@", ret);
     
-    NSError *error;;
+    NSError *error;
+    NSMutableArray *json;
     NSData *data = [NSData dataWithContentsOfURL: url1];
-    NSMutableArray *json = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
-    lampValue = [json valueForKey:@"showpower"];
+    
+    if ([data length] > 0) {         // check if data is null
+        json = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+        lampValue = [json valueForKey:@"showpower"];
+    } else {
+        lampValue = @"10";
+    }
     [action_flags[current_station][@"Devices"][@"Device 1"] setObject:lampValue forKey:@"Watts"];
     
     // Here is an example of changing the data inside the dictionary!
 //    [action_flags[current_station][@"Devices"][@"Device 1"] setObject:@"Hello world!" forKey:@"Name"];
     
     data = [NSData dataWithContentsOfURL: url2];
-    json = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
-    fanValue = [json valueForKey:@"showpower"];
+    if ([data length] > 0) {        // check if data is null
+        json = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+        fanValue = [json valueForKey:@"showpower"];
+    } else {
+        fanValue = @"10";
+    }
+    
+
     [action_flags[current_station][@"Devices"][@"Device 2"] setObject:lampValue forKey:@"Watts"];
     
     if (self.currentMode == NR_OVERVIEW_TABLE)
@@ -1942,47 +1973,131 @@ NSDictionary *stationConverter = @{@"beetroot" : @"Station 1",
             self.currentStation = station;
             NSLog(@"New Stations");
         }
-
-    
-}
-- (void)makeAlertController:(UIAlertController *)ac{
-    
-    [ac addAction:[UIAlertAction
-                   actionWithTitle:@"Yes"
-                   style:UIAlertActionStyleDefault
-                   handler:^(UIAlertAction *action) {
-                       [self yesButtonPushed:self.currentStation];
-                   }]];
-    
-    [ac addAction:[UIAlertAction
-                   actionWithTitle:@"Cancel"
-                   style:UIAlertActionStyleCancel
-                   handler:^(UIAlertAction *action) {
-                       [self cancelButtonPushed];
-                   }]];
-    [self presentViewController:ac animated:YES completion:nil];
 }
 
-- (void)cancelButtonPushed {
-    NSLog(@"Cancel");
+#pragma mark -
+#pragma mark Connect Helpers
+
+- (IBAction)connectButtonClicked:(id)sender
+{
+    canConnectWithStations = !canConnectWithStations;
+    
+    if (canConnectWithStations) {
+        [self.connectButton setAlpha:1.0];
+        [self pushAlertButton:self.currentStation];
+    }
+    else
+        [self.connectButton setAlpha:0.5];
 }
-- (void)yesButtonPushed:(NSString *) station{
-    NSLog(@"YEs!");
-    @synchronized (self) {
-    self.currentMode = NR_STATION;
-    [self stationItemViewWithAlert:stationConverter[station]];
+
+
+#pragma mark -
+#pragma mark Notification Helpers
+
+-(void)respondToSwipeGesture:(UITapGestureRecognizer *)recognizer
+{
+    NSLog(@"GESTURE BRUH");
+    if ([swipeRecognizer direction] == UISwipeGestureRecognizerDirectionDown) {
+        [self slideNotificationViewDown];
     }
 }
 
+-(BOOL)notificationViewShown {
+    return self.notificationView.frame.origin.y == notificationYPositionShow;
+}
+
+-(BOOL)notificationViewHidden {
+    return self.notificationView.frame.origin.y == notificationYPositionHide;
+}
+
+-(void)slideNotificationViewDown {
+    if ([self notificationViewHidden]) {
+        return;
+    }
+    
+    [self.notificationAcceptButton setEnabled:false];
+    [self.notificationRejectButton setEnabled:false];
+    [UIView animateWithDuration:0.65 delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+        [self.notificationView setFrame:CGRectMake(self.notificationView.frame.origin.x,
+                                                   notificationYPositionHide,
+                                                   self.notificationView.frame.size.width,
+                                                   self.notificationView.frame.size.height)];
+        
+    } completion:^(BOOL finished) {}];
+}
+-(void)slideNotificationViewUp {
+    if ([self notificationViewShown]) {
+        return;
+    }
+    
+    [self.notificationAcceptButton setEnabled:true];
+    [self.notificationRejectButton setEnabled:true];
+    
+    [UIView animateWithDuration:0.7 delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+        
+        [self.notificationView setFrame:CGRectMake(self.notificationView.frame.origin.x,
+                                                   notificationYPositionShow,
+                                                   self.notificationView.frame.size.width,
+                                                   self.notificationView.frame.size.height)];
+        
+    } completion:^(BOOL finished) {
+        [self performSelector:@selector(slideNotificationViewDown) withObject:nil afterDelay:10];
+    }];
+}
+
+#pragma mark Notification Handlers
+
+- (IBAction)notificationRejectClicked:(id)sender {
+    NSLog(@"Reject notification");
+    
+    // Animate notification view back down away from user
+    [self slideNotificationViewDown];
+}
+- (IBAction)notificationAcceptClicked:(id)sender{
+    NSLog(@"Accept notification");
+    [self slideNotificationViewDown];
+    
+    @synchronized (self) {
+        if (self.currentMode == NR_VIDEO)       // remove video view when changing stations
+            [videoView removeFromSuperview];
+        
+        self.currentMode = NR_STATION;
+        [self stationItemViewWithAlert:stationConverter[self.currentStation]];
+    }
+}
+
+#pragma mark Notification Methods
+
 - (void)pushAlertButton:(NSString *) station{
     
-    if(self.currentMode != NR_VIDEO){
-        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:[NSString stringWithFormat:@"%@ is detected!",stationConverter[station]] message:nil preferredStyle:UIAlertControllerStyleAlert];
-        //[self shutUp];
-        [self speakAction:[speech_generator find_station]];
+    if(self.currentMode != NR_VIDEO && canConnectWithStations){
         
-        [self makeAlertController:alertController];
+        NSString* stationInNotificationLabel = [[self.notificationLabel text] stringByReplacingOccurrencesOfString:@"detected! Connect to it?" withString:@""];
+        NSLog(@"Notification view string = %@", stationInNotificationLabel);
         
+        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(slideNotificationViewDown) object:nil];
+        
+        [self.notificationLabel setText:[NSString stringWithFormat:@"%@ detected! Connect to it?", stationConverter[station]]];
+        
+        // Animate the notification view up to the screen
+        [self slideNotificationViewUp];
+        
+//        [self speakAction:[speech_generator find_station]];
+        
+        NSString *soundFilePath = [[NSBundle mainBundle] pathForResource:@"ding" ofType:@"mp3"];
+        NSURL *soundFileURL = [NSURL fileURLWithPath:soundFilePath];
+        NSLog(@"sound file url = %@", soundFileURL);
+        
+        AVAudioSession *session = [AVAudioSession sharedInstance];
+        [session setCategory:AVAudioSessionCategoryPlayback error:nil];
+
+        if (!self.audioPlayer)
+            self.audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:soundFileURL error:nil];
+        
+        [self.audioPlayer prepareToPlay];
+        [self.audioPlayer play];
+        
+
     }
 }
 
