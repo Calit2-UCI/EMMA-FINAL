@@ -25,6 +25,7 @@
 @synthesize coverView;
 @synthesize assistantView;
 @synthesize detailView;
+@synthesize secondDetailView;
 @synthesize shareButton;
 @synthesize daysView;
 @synthesize glController;

@@ -21,6 +21,16 @@ NrSpeechGenerator *table_view_speech = [[NrSpeechGenerator alloc] init];
 
 NrCalendarMainViewController *mainViewController;
 
+@interface DeviceSwitch : UISwitch {
+    NSString *device;
+}
+@property (nonatomic, readwrite, retain) NSString* device;
+@end
+
+@implementation DeviceSwitch
+@synthesize device;
+@end
+
 @implementation NrTableViewController
 
 UIColor *gray_row_color = [UIColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:0.7];
@@ -141,33 +151,51 @@ UISwitch *overview_switch;
         if (indexPath.row == 0) {           // top row
             cell.cell1.text = station_title;
             cell.cell1.font = [UIFont fontWithName:@"Arial-BoldMT" size:32];
+            [cell.cell1 setAdjustsFontSizeToFitWidth:YES];
             cell.cell1.textColor = [UIColor whiteColor];
             cell.cell1.backgroundColor = [UIColor blackColor];
             cell.cell1.frame = CGRectMake(0, 0, overviewTableCell1Width+overviewTableCell2Width, cell.cell1.frame.size.height);
-            
-            overview_switch = [[UISwitch alloc] initWithFrame:CGRectZero];
-            cell.accessoryView = overview_switch;
-
-                [overview_switch setOn:[self switchIsOn] animated:NO];
-            [overview_switch addTarget:self action:@selector(switch_changed:) forControlEvents:UIControlEventValueChanged];
         }
-        else if (0 < indexPath.row && indexPath.row <= num_of_devices) {     // middle rows
-            NSInteger device_number = indexPath.row;
+        else if (indexPath.row == 1) {
+            cell.cell3.backgroundColor = cell.cell2.backgroundColor = cell.cell1.backgroundColor = gray_row_color;
+            
+            cell.cell1.text = @"Device";
+            [cell.cell1 setFont:[UIFont fontWithName:@"Arial Rounded MT Bold" size:18]];
+            [cell.cell1 setAdjustsFontSizeToFitWidth:YES];
+            
+            cell.cell2.text = @"Consumption";
+            [cell.cell2 setFont:[UIFont fontWithName:@"Arial Rounded MT Bold" size:18]];
+            [cell.cell2 setAdjustsFontSizeToFitWidth:YES];
+            
+            cell.cell3.text = @"Status";
+            [cell.cell3 setFont:[UIFont fontWithName:@"Arial Rounded MT Bold" size:18]];
+            [cell.cell3 setAdjustsFontSizeToFitWidth:YES];
+        }
+        else if (1 < indexPath.row && indexPath.row <= num_of_devices+2) {     // middle rows
+            NSInteger device_number = indexPath.row-1;
             NSString *device_key = [NSString stringWithFormat:@"Device %d", device_number];
             
             if (indexPath.row % 2 == 0) {
-                cell.cell1.backgroundColor = dark_gray_row_color;
-                cell.cell2.backgroundColor = dark_gray_row_color;
+                cell.cell3.backgroundColor = cell.cell2.backgroundColor = cell.cell1.backgroundColor = dark_gray_row_color;
             } else {
-                cell.cell1.backgroundColor = gray_row_color;
-                cell.cell2.backgroundColor = gray_row_color;
+                cell.cell3.backgroundColor = cell.cell2.backgroundColor = cell.cell1.backgroundColor = gray_row_color;
             }
+            
+            DeviceSwitch* deviceSwitch = [[DeviceSwitch alloc] initWithFrame:CGRectZero];
+            cell.accessoryView = deviceSwitch;
+            
+            NSString* status = self.station_data[@"Devices"][device_key][@"Status"];
+            [deviceSwitch setDevice:self.station_data[@"Devices"][device_key][@"Name"]];
+            [deviceSwitch setOn:[self switchIsOn:status] animated:YES];
+            [deviceSwitch addTarget:self action:@selector(switch_changed:) forControlEvents:UIControlEventValueChanged];
         
             cell.cell1.text = self.station_data[@"Devices"][device_key][@"Name"];
+            [cell.cell1 setAdjustsFontSizeToFitWidth:YES];
+            
             //change here to change the power consumption
-            NSLog(@"cell.cell1.text is %@",cell.cell1.text);
-            cell.cell2.text = [NSString stringWithFormat:@"%@ W/Hour", self.station_data[@"Devices"][device_key][@"Watts"]];
-            NSLog(@"cell.cell1.text is %@",cell.cell1.text);
+            cell.cell2.text = [NSString stringWithFormat:@"%@ W", self.station_data[@"Devices"][device_key][@"Watts"]];
+            [cell.cell2 setAdjustsFontSizeToFitWidth:YES];
+            
             [self set_device_color:device_key for_cell:cell];
         }
     }
@@ -177,7 +205,7 @@ UISwitch *overview_switch;
 {
     NSInteger num_of_devices = [self number_of_devices];
     
-    for (NSInteger i = 0; i < num_of_devices+1; ++i) {
+    for (NSInteger i = 0; i < num_of_devices+2; ++i) {
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:i inSection:0];
         NrGridTableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
         
@@ -189,7 +217,7 @@ UISwitch *overview_switch;
 {
     NSInteger num_of_devices = [self number_of_devices];
     
-    for (NSInteger i = 0; i < num_of_devices+1; ++i) {
+    for (NSInteger i = 0; i < num_of_devices+2; ++i) {
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:i inSection:0];
         NrGridTableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
         
@@ -209,8 +237,8 @@ UISwitch *overview_switch;
             cell.cell1.backgroundColor = [UIColor blackColor];
             cell.cell1.frame = CGRectMake(0, 0, overviewTableCell1Width+overviewTableCell2Width, cell.cell1.frame.size.height);
         }
-        if (0 < indexPath.row && indexPath.row <= num_of_devices) {     // middle rows
-            NSInteger device_number = indexPath.row;
+        if (1 < indexPath.row && indexPath.row <= num_of_devices+2) {     // middle rows
+            NSInteger device_number = indexPath.row-1;
             NSString *device_key = [NSString stringWithFormat:@"Device %d", device_number];
             
             [self change_cell_content:cell for_device:device_key];
@@ -222,17 +250,20 @@ UISwitch *overview_switch;
 - (void) change_cell_content:(NrGridTableViewCell *)cell for_device:(NSString *)device_key
 {
     NSString *new_cell_1_text = self.station_data[@"Devices"][device_key][@"Name"];
-    NSString *new_cell_2_text = [NSString stringWithFormat:@"%@ W/Hour", self.station_data[@"Devices"][device_key][@"Watts"]];
+    NSString *new_cell_2_text = [NSString stringWithFormat:@"%@ W", self.station_data[@"Devices"][device_key][@"Watts"]];
+    
     if([new_cell_1_text isEqualToString:@"Lamp"]){
-        new_cell_2_text = [NSString stringWithFormat:@"%@ W/Hour", mainViewController.lampValue];
+        new_cell_2_text = [NSString stringWithFormat:@"%@ W", mainViewController.lampValue];
     }
     if([new_cell_1_text isEqualToString:@"Fan"]){
-        new_cell_2_text = [NSString stringWithFormat:@"%@ W/Hour", mainViewController.fanValue];
+        new_cell_2_text = [NSString stringWithFormat:@"%@ W", mainViewController.fanValue];
     }
     
     
     if (cell.cell1.text != new_cell_1_text)
         cell.cell1.text = new_cell_1_text;
+    
+//    cell.cell3.text = @"Testing";
     
     if (cell.cell2.text != new_cell_2_text)
         cell.cell2.text = new_cell_2_text;
@@ -261,7 +292,6 @@ UISwitch *overview_switch;
                 cell.cell1.textColor = off_color;
             }
         }
-        
     }
 }
 
@@ -285,8 +315,9 @@ UISwitch *overview_switch;
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (self.station_data != nil && self.station_data[@"Number of Devices"] != nil)
-        return [self.station_data[@"Number of Devices"] integerValue] + 1;
+        return [self.station_data[@"Number of Devices"] integerValue] + 2;
         // + 1 to account for title/top row
+        // + 1 to account for header row
 
     return 0;
 }
@@ -298,7 +329,6 @@ UISwitch *overview_switch;
     
     NrGridTableViewCell *cell = (NrGridTableViewCell*)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-//        cell = [[NrGridTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
         cell = [[NrGridTableViewCell alloc] initWithMode:TABLE_OVERVIEW withStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
         cell.lineColor = [UIColor blackColor];
     }
@@ -338,7 +368,7 @@ UISwitch *overview_switch;
 
     if (indexPath.row == 0)
         return [NSString stringWithFormat:@"Your overview table features devices and their kilowatts per hour. You can click on each device to have me explain their usage."];
-    else if (0 < indexPath.row && indexPath.row <= num_of_devices) {
+    else if (1 < indexPath.row && indexPath.row <= num_of_devices+1) {
         NrGridTableViewCell *cell = [self tableView:self.tableView cellForRowAtIndexPath:indexPath];
         NSLog(@"Background color: %@", cell.cell1.backgroundColor);
         return [table_view_speech overview_device_info_message_with_device:cell.cell1.text
@@ -356,25 +386,24 @@ UISwitch *overview_switch;
 #pragma mark -
 #pragma mark Switch handlers
 
-- (BOOL)switchIsOn
+- (BOOL)switchIsOn:(NSString *)status
 {
-    for (NSInteger device_number = 1; device_number <= [self number_of_devices]; device_number++) {
-        NSString *device_key = [NSString stringWithFormat:@"Device %d", device_number];
-        if ([self.station_data[@"Devices"][device_key][@"Status"]  isEqual: @"Off"])
-            return NO;
-    }
-    return YES;
+    if ([[status lowercaseString] isEqualToString:@"on"])
+        return YES;
+    else
+        return NO;
 }
 
 - (void) switch_changed:(id)sender
 {
-    UISwitch* switch_sender = sender;
+    DeviceSwitch* switch_sender = sender;
+    NSString *device = [switch_sender device];
     if (switch_sender.on) {
         // turn on all devices in station here
-        [mainViewController speakAction:[table_view_speech turn_on_station_message:station_title]];
+        [mainViewController speakAction:[table_view_speech turn_on_device_message:device]];
     } else {
         // turn off all devices in station here
-        [mainViewController speakAction:[table_view_speech turn_off_station_message:station_title]];
+        [mainViewController speakAction:[table_view_speech turn_off_device_message:device]];
     }
 }
 

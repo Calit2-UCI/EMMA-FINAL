@@ -13,9 +13,15 @@
 #import "NrSpeechGenerator.h"
 #import "PNChart.h"
 
-#define smartTableCell1Width 205  // Smart table cells
-#define smartTableCell2Width 190
-#define smartTableCellHeight 60
+#define tableWidth 400
+#define smartTableWidth 310
+#define numberOfSmartTableColumns 2 // change if adding/deleting columns for smart table
+
+#define smartTableCell1Width tableWidth / numberOfSmartTableColumns  // Smart table cells
+#define smartTableCell2Width tableWidth / numberOfSmartTableColumns
+#define smartTableMiddleRowCellWidth smartTableWidth / numberOfSmartTableColumns // middle row for smart table
+#define smartTableCell3Width 0
+#define smartTableCellHeight 44
 
 NrCalendarMainViewController *calendarMainViewController;
 NrSpeechGenerator *device_speech = [[NrSpeechGenerator alloc] init];
@@ -98,103 +104,41 @@ static dispatch_once_t onceToken;
 {
     if (self.station_data != nil && self.station_data[@"Number of Devices"] != nil) {
         
-        // THIS IS ALL SCRIPTED FOR NOW
-        
-        if ([self.device  isEqual:@"Device 1"]) {
-            if (indexPath.row == 0) {           // top row
-                cell.cell1.text = [NSString stringWithFormat:@"%@", self.station_data[@"Devices"][self.device][@"Name"]];
-                if([cell.cell1.text isEqualToString:@"Lamp"]){
-                    dispatch_once(&onceToken, ^{
-                        [self init_switch_for_cell:cell];
-                    });
-                }
-                else{
+        if (indexPath.row == 0) {
+            cell.cell1.text = [NSString stringWithFormat:@"%@", self.station_data[@"Devices"][self.device][@"Name"]];
+            if([cell.cell1.text isEqualToString:@"Lamp"]){
+                dispatch_once(&onceToken, ^{
                     [self init_switch_for_cell:cell];
-                }
-                
-                
+                });
             }
-            else if (indexPath.row == 1) {     // middle rows
-                cell.cell1.text = @"$30 per month";
-               // NSString* x = [calendarMainViewController dataUpdated];
-                //09/02/2016
-                //TODO
-               // [calendarMainViewController parseJSON:[calendarMainViewController dataUpdated]];
-                               // NSLog(@"%@",x);
-                cell.cell1.textColor = [UIColor greenColor];
+            else{
+                [self init_switch_for_cell:cell];
             }
-            else if (indexPath.row == 2) {
-                cell.cell1.text = @"You spend less than 90% all lamp owners!";
-                
-                // Colors the "90%" part
-                NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithAttributedString:cell.cell1.attributedText];
-                [text addAttribute:NSForegroundColorAttributeName
-                             value:[UIColor greenColor]
-                             range:[cell.cell1.text rangeOfString:@"90%"]];
-                [cell.cell1 setAttributedText:text];
-            }
-            else {                              // last row
-                cell.cell1.text = @"Enter Energy Saver Mode?";
-            }
-        }
-        else if ([self.device isEqual:@"Device 2"]) {
-            if (indexPath.row == 0) {           // top row
-                cell.cell1.text = [NSString stringWithFormat:@"%@", self.station_data[@"Devices"][self.device][@"Name"]];
-                    [self init_switch_for_cell:cell];
-
-            }
-            else if (indexPath.row == 1) {     // middle rows
-                cell.cell1.text = @"$45 per month";
-                cell.cell1.textColor = [UIColor redColor];
-            }
-            else if (indexPath.row == 2) {
-                cell.cell1.text = @"Improved spending: $15/month";
-                
-                NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithAttributedString:cell.cell1.attributedText];
-                [text addAttribute:NSForegroundColorAttributeName
-                             value:[UIColor greenColor]
-                             range:[cell.cell1.text rangeOfString:@"$15/month"]];
-                [cell.cell1 setAttributedText:text];
-            }
-            else {                              // last row
-                cell.cell1.text = @"Enter Energy Saver Mode to save $1233/year?";
-                
-                NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithAttributedString:cell.cell1.attributedText];
-                [text addAttribute:NSForegroundColorAttributeName
-                             value:[UIColor greenColor]
-                             range:[cell.cell1.text rangeOfString:@"$1233/year"]];
-                [cell.cell1 setAttributedText:text];
-            }
-        }
-        else if ([self.device isEqual:@"Device 3"]) {
-            if (indexPath.row == 0) {           // top row
-                cell.cell1.text = [NSString stringWithFormat:@"%@", self.station_data[@"Devices"][self.device][@"Name"]];
-
-                    [self init_switch_for_cell:cell];
-            }
-            else if (indexPath.row == 1) {     // middle rows
-                cell.cell1.text = @"$44.05 per month";
-                cell.cell1.textColor = [UIColor redColor];
-            }
-            else if (indexPath.row == 2) {
-                cell.cell1.text = @"Improved spending: $40.05/month";
-                
-                // Colors the "$40.05/month" part
-                NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithAttributedString:cell.cell1.attributedText];
-                [text addAttribute:NSForegroundColorAttributeName
-                             value:[UIColor greenColor]
-                             range:[cell.cell1.text rangeOfString:@"$40.05/month"]];
-                [cell.cell1 setAttributedText:text];
-            }
-            else {                              // last row
-                cell.cell1.text = @"Enter Energy Saver Mode to save $4.00/mo?";
-                
-                NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithAttributedString:cell.cell1.attributedText];
-                [text addAttribute:NSForegroundColorAttributeName
-                             value:[UIColor greenColor]
-                             range:[cell.cell1.text rangeOfString:@"$4.00/mo"]];
-                [cell.cell1 setAttributedText:text];
-            }
+            
+        } else if (indexPath.row == 1) {
+            // Header column for 'brand'
+            cell.cell1.text = @"Brand";
+            
+            // Vallue for 'brand' key
+            cell.cell2.text = [NSString stringWithFormat:@"%@", self.station_data[@"Devices"][self.device][@"Brand"]];
+            
+        } else if (indexPath.row == 2) {
+            // Header column for 'model'
+            cell.cell1.text = @"Model";
+            
+            // Vallue for 'brand' key
+            cell.cell2.text = [NSString stringWithFormat:@"%@", self.station_data[@"Devices"][self.device][@"Model"]];
+            
+        } else if (indexPath.row == 3) {
+            // Header column for 'max consumption'
+            cell.cell1.text = @"  Max consumption"; // added the space in the beginning as padding inside table
+            
+            // Value for 'max consumption' key
+            cell.cell2.text = @"Test";
+            
+        } else if (indexPath.row == 4) {
+            // Header column for 'max consumption'
+            cell.cell1.text = [NSString stringWithFormat:@"Total usage last week: %@", @"0 W"];
         }
     }
 }
@@ -204,101 +148,32 @@ static dispatch_once_t onceToken;
 {
     if (self.station_data != nil && self.station_data[@"Number of Devices"] != nil) {
         
-        // THIS IS ALL SCRIPTED FOR NOW
-        
-        if ([self.device  isEqual:@"Device 1"]) {
-            if (indexPath.row == 0) {           // top row
-                cell.cell1.text = [NSString stringWithFormat:@"%@", self.station_data[@"Devices"][self.device][@"Name"]];
-                if([cell.cell1.text isEqualToString:@"Lamp"]){
-                    dispatch_once(&onceToken, ^{
-                        [self update_switch_for_cell:cell];;
-                    });
-                }
-                else{
-                    [self update_switch_for_cell:cell];
-                }
+        if (indexPath.row == 0) {
+            cell.cell1.text = [NSString stringWithFormat:@"%@", self.station_data[@"Devices"][self.device][@"Name"]];
+            if([cell.cell1.text isEqualToString:@"Lamp"]){
+                dispatch_once(&onceToken, ^{
+                    [self init_switch_for_cell:cell];
+                });
             }
-            else if (indexPath.row == 1) {     // middle rows
-                cell.cell1.text = @"$30 per month";
-                // NSString* x = [calendarMainViewController dataUpdated];
-                //09/02/2016
-                //TODO
-                // [calendarMainViewController parseJSON:[calendarMainViewController dataUpdated]];
-                // NSLog(@"%@",x);
-                cell.cell1.textColor = [UIColor greenColor];
+            else{
+                [self init_switch_for_cell:cell];
             }
-            else if (indexPath.row == 2) {
-                cell.cell1.text = @"You spend less than 90% all lamp owners!";
-                
-                // Colors the "90%" part
-                NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithAttributedString:cell.cell1.attributedText];
-                [text addAttribute:NSForegroundColorAttributeName
-                             value:[UIColor greenColor]
-                             range:[cell.cell1.text rangeOfString:@"90%"]];
-                [cell.cell1 setAttributedText:text];
-            }
-            else {                              // last row
-                cell.cell1.text = @"Enter Energy Saver Mode?";
-            }
-        }
-        else if ([self.device isEqual:@"Device 2"]) {
-            if (indexPath.row == 0) {           // top row
-                cell.cell1.text = [NSString stringWithFormat:@"%@", self.station_data[@"Devices"][self.device][@"Name"]];
-                [self update_switch_for_cell:cell];
-                
-            }
-            else if (indexPath.row == 1) {     // middle rows
-                cell.cell1.text = @"$45 per month";
-                cell.cell1.textColor = [UIColor redColor];
-            }
-            else if (indexPath.row == 2) {
-                cell.cell1.text = @"Improved spending: $15/month";
-                
-                NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithAttributedString:cell.cell1.attributedText];
-                [text addAttribute:NSForegroundColorAttributeName
-                             value:[UIColor greenColor]
-                             range:[cell.cell1.text rangeOfString:@"$15/month"]];
-                [cell.cell1 setAttributedText:text];
-            }
-            else {                              // last row
-                cell.cell1.text = @"Enter Energy Saver Mode to save $1233/year?";
-                
-                NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithAttributedString:cell.cell1.attributedText];
-                [text addAttribute:NSForegroundColorAttributeName
-                             value:[UIColor greenColor]
-                             range:[cell.cell1.text rangeOfString:@"$1233/year"]];
-                [cell.cell1 setAttributedText:text];
-            }
-        }
-        else if ([self.device isEqual:@"Device 3"]) {
-            if (indexPath.row == 0) {           // top row
-                cell.cell1.text = [NSString stringWithFormat:@"%@", self.station_data[@"Devices"][self.device][@"Name"]];
-                
-                [self update_switch_for_cell:cell];
-            }
-            else if (indexPath.row == 1) {     // middle rows
-                cell.cell1.text = @"$44.05 per month";
-                cell.cell1.textColor = [UIColor redColor];
-            }
-            else if (indexPath.row == 2) {
-                cell.cell1.text = @"Improved spending: $40.05/month";
-                
-                // Colors the "$40.05/month" part
-                NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithAttributedString:cell.cell1.attributedText];
-                [text addAttribute:NSForegroundColorAttributeName
-                             value:[UIColor greenColor]
-                             range:[cell.cell1.text rangeOfString:@"$40.05/month"]];
-                [cell.cell1 setAttributedText:text];
-            }
-            else {                              // last row
-                cell.cell1.text = @"Enter Energy Saver Mode to save $4.00/mo?";
-                
-                NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithAttributedString:cell.cell1.attributedText];
-                [text addAttribute:NSForegroundColorAttributeName
-                             value:[UIColor greenColor]
-                             range:[cell.cell1.text rangeOfString:@"$4.00/mo"]];
-                [cell.cell1 setAttributedText:text];
-            }
+            
+        } else if (indexPath.row == 1) {
+            // Value for 'brand' key
+            cell.cell2.text = [NSString stringWithFormat:@"%@", self.station_data[@"Devices"][self.device][@"Brand"]];
+            
+        } else if (indexPath.row == 2) {
+            // Vallue for 'brand' key
+            cell.cell2.text = [NSString stringWithFormat:@"%@", self.station_data[@"Devices"][self.device][@"Model"]];
+            
+        } else if (indexPath.row == 3) {
+            // Value for 'max consumption' key
+            cell.cell2.text = @"100 W";
+            
+        } else if (indexPath.row == 4) {
+            // Header column for 'max consumption'
+            cell.cell1.text = [NSString stringWithFormat:@"Total usage last week: %@", @"0 W"];
         }
     }
 }
@@ -348,7 +223,7 @@ static dispatch_once_t onceToken;
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 4;
+    return 5;
 }
 
 // Customize the appearance of table view cells.
@@ -364,40 +239,46 @@ static dispatch_once_t onceToken;
     
     // Since we are drawing the lines ourself, we need to know which cell is the top cell in the table so that
     // we can draw the line on the top
-    
-    
     if (indexPath.row == 0) {
         cell.topCell = YES;
         
         cell.cell1.font = [UIFont fontWithName:@"Arial-BoldMT" size:32];
+        [cell.cell1 setAdjustsFontSizeToFitWidth:YES];
         cell.cell1.textColor = [UIColor whiteColor];
         cell.cell1.backgroundColor = [UIColor blackColor];
         
         cell.cell1.frame = CGRectMake(0, 0, smartTableCell1Width+smartTableCell2Width, cell.cell1.frame.size.height);
+        cell.cell2.backgroundColor = [UIColor clearColor];
         cell.cell2.frame = CGRectMake(0, 0, 0,0);
-    }
-    else if (indexPath.row == 1) {
+        
+    } else if (indexPath.row == 4) {
         cell.topCell = NO;
         
-        cell.cell1.backgroundColor = [UIColor grayColor];
-        cell.cell1.textColor = [UIColor whiteColor];
-        
-        cell.cell1.font = [UIFont fontWithName:@"Arial-MT" size:32];
+        cell.cell1.font = [UIFont fontWithName:@"Arial-BoldMT" size:24];
+        [cell.cell1 setAdjustsFontSizeToFitWidth:YES];
+        cell.cell1.textColor = [UIColor blackColor];
+        cell.cell1.backgroundColor = gray_color;
         cell.cell1.frame = CGRectMake(0, 0, smartTableCell1Width+smartTableCell2Width, cell.cell1.frame.size.height);
+        
+        cell.cell2.textColor = [UIColor blackColor];
+        cell.cell2.backgroundColor = [UIColor clearColor];
         cell.cell2.frame = CGRectMake(0, 0, 0,0);
     }
     else {
         cell.topCell = NO;
         
-        cell.cell1.backgroundColor = [UIColor grayColor];
-        cell.cell1.textColor = [UIColor whiteColor];
+        cell.cell1.backgroundColor = gray_color;
+        cell.cell1.font = [UIFont fontWithName:@"Arial Rounded MT Bold" size:18];
+        [cell.cell1 setAdjustsFontSizeToFitWidth:YES];
+        [cell.cell2 setTextAlignment:NSTextAlignmentRight];
         
-        cell.cell1.font = [UIFont fontWithName:@"Arial-MT" size:20];
-
-        cell.cell1.frame = CGRectMake(0, 0, smartTableCell1Width+smartTableCell2Width, cell.cell1.frame.size.height);
-        cell.cell2.frame = CGRectMake(0, 0, 0, 0);
+        cell.cell2.font = [UIFont fontWithName:@"Arial Rounded MT" size:24];
+        [cell.cell2 setAdjustsFontSizeToFitWidth:YES];
+        [cell.cell2 setTextAlignment:NSTextAlignmentCenter];
         
-        [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+        cell.cell2.backgroundColor = gray_color;
+        cell.cell1.frame = CGRectMake(0, 0, smartTableMiddleRowCellWidth+20, smartTableCellHeight);
+        cell.cell2.frame = CGRectMake(smartTableMiddleRowCellWidth+20, 0, 2*smartTableMiddleRowCellWidth-20, smartTableCellHeight);
     }
     
     // Configure the cell.

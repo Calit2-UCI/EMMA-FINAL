@@ -53,6 +53,7 @@ NaradaAudioConverterDelegate
 @property (nonatomic, strong) IBOutlet UIView *daysView;
 @property (nonatomic, strong) IBOutlet UIView *assistantView;
 @property (nonatomic, strong) IBOutlet UIView *detailView;
+@property (nonatomic, strong) IBOutlet UIView *secondDetailView;
 
 @property (nonatomic, strong) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (nonatomic, strong) IBOutlet UIButton *shareButton;

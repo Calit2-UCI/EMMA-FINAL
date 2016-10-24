@@ -23,7 +23,7 @@ enum table_mode {
     
     UILabel *cell1;
     UILabel *cell2;
-//    UILabel *cell3;
+    UILabel *cell3;
 //    UILabel *cell4;
 }
 
@@ -33,7 +33,7 @@ enum table_mode {
 @property (nonatomic) BOOL topCell;
 @property (readonly) UILabel* cell1;
 @property (readonly) UILabel* cell2;
-//@property (readonly) UILabel* cell3;
+@property (readonly) UILabel* cell3;
 //@property (readonly) UILabel* cell4;
 
 @end

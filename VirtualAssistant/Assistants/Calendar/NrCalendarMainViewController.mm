@@ -94,6 +94,7 @@ NrVideoView *videoView;
 
 // *** TableView members ***
 NrTableViewController *tableViewController;
+NrTableViewController *secondTableViewController;
 NrSmartTableViewController *pieChartController;
 NrSmartTableViewController *smartTableViewController;
 BOOL tableViewDisplayed = NO;
@@ -200,6 +201,10 @@ NSDictionary *stationConverter = @{@"beetroot" : @"Station 1",
 //    [self setIAPNotificationListeners];
     self.detailView.alpha = 0.0f;
     self.detailView.hidden = NO;
+    
+    // for second detail view
+    self.secondDetailView.alpha = 0.0f;
+    self.secondDetailView.hidden = NO;
     
     appLocked = NO;
    
@@ -340,8 +345,10 @@ NSDictionary *stationConverter = @{@"beetroot" : @"Station 1",
 - (IBAction)exitButtonClicked:(id)sender
 {
     @synchronized(self) {
-        exit(0);
-        }
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Are you sure you want to exit?" message:nil preferredStyle:UIAlertControllerStyleAlert];
+        
+        [self makeAlertController:alertController];
+    }
 }
 
 
@@ -355,15 +362,36 @@ NSDictionary *stationConverter = @{@"beetroot" : @"Station 1",
     }];
 }
 
+#pragma mark Exit Functions
+- (void)makeAlertController:(UIAlertController *)ac{
+    
+    [ac addAction:[UIAlertAction
+                   actionWithTitle:@"Yes"
+                   style:UIAlertActionStyleDefault
+                   handler:^(UIAlertAction *action) {
+                       exit(0);
+                   }]];
+    
+    [ac addAction:[UIAlertAction
+                   actionWithTitle:@"No"
+                   style:UIAlertActionStyleCancel
+                   handler:^(UIAlertAction *action) {}]];
+    [self presentViewController:ac animated:YES completion:nil];
+}
+
 #pragma mark Detail View Functions
 
 -(void) ShowDetailView
 {
     [self.assistantView addSubview:self.detailView];
     
+    // for second detail view
+//    [self.assistantView addSubview:self.secondDetailView];
+    
     [self MoveModelOut];
     [UIView animateWithDuration:0.5 animations:^{
         self.detailView.alpha = 1.0f;
+        [self.secondDetailView setAlpha:1.0f];
     } completion:^(BOOL finished) {
         NSLog(@"Showing DetailView");
     }];
@@ -375,6 +403,7 @@ NSDictionary *stationConverter = @{@"beetroot" : @"Station 1",
     [UIView animateWithDuration:0.5 animations:^{
         [self adjustDetailViewToOverviewTable];
         self.detailView.alpha = 0.0f;
+        self.secondDetailView.alpha = 0.0f;
     } completion:^(BOOL finished) {
         NSLog(@"Hiding DetailView");
     }];
@@ -550,14 +579,10 @@ NSDictionary *stationConverter = @{@"beetroot" : @"Station 1",
     //    scroll.pagingEnabled = YES;
     
     NSInteger numberOfItems = [action_flags[current_station][@"Number of Devices"] integerValue] + 2; // + 1 to account for overview tab and station view
-    //    [self loadCalendarEvents];
     
     
     NrDeviceItemView *sampleLittleView = [[NrDeviceItemView alloc] initWithID:0];
     self.contentsView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, sampleLittleView.frame.size.width * numberOfItems, self.daysView.frame.size.height)];
-    
-    //    self.daysView.backgroundColor = [UIColor clearColor];
-    //    self.contentsView.backgroundColor = [UIColor redColor];
     
     self.itemList = [NSMutableArray array];
     
@@ -1130,8 +1155,6 @@ NSDictionary *stationConverter = @{@"beetroot" : @"Station 1",
 - (void)increaseTimerCount
 {
     // Function that gets called within timed-intervals
-    
-    //    self.TimerButton.text = [NSString stringWithFormat:@"%d", counter];
     if (started) {
         counter ++;
     }
@@ -1633,10 +1656,25 @@ NSDictionary *stationConverter = @{@"beetroot" : @"Station 1",
 {
     tableViewController.tableView.alpha = 0.0f;
     
+    NSArray *items;
+    items = [self loadPieChartDataForStation];
+    
     [self adjustDetailViewToOverviewTable];
+    [self.assistantView addSubview:self.secondDetailView];
     [UIView animateWithDuration:0.5 animations:^ {
         tableViewController.tableView.frame = CGRectMake(0, 0, self.detailView.frame.size.width, self.detailView.frame.size.height);
         [self.detailView addSubview:tableViewController.tableView];
+        
+        // for second view inside detail view
+        [self.secondDetailView setHidden:NO];
+        [self.secondDetailView setAlpha:1.0f];
+        pieChartController.pieChart = [[PNPieChart alloc] initWithFrame:CGRectMake(0, 0, self.secondDetailView.frame.size.width, self.secondDetailView.frame.size.height) items:items];
+        [self.secondDetailView addSubview:pieChartController.pieChart];
+        
+        pieChartController.pieChart.showOnlyValues = NO;
+        pieChartController.pieChart.descriptionTextFont  = [UIFont fontWithName:@"Avenir-Medium" size:15.0];
+        
+        [self appearViewWithDuration:0.5 onView:pieChartController.pieChart];
     }];
     [self appearViewWithDuration:1.0 onView:tableViewController.tableView];
 }
@@ -1663,7 +1701,6 @@ NSDictionary *stationConverter = @{@"beetroot" : @"Station 1",
         }
         
         tableViewDisplayed = YES;
-        
         tableViewController.view.frame = self.detailView.bounds;
         [self displayOverviewTable];
         
@@ -1678,6 +1715,7 @@ NSDictionary *stationConverter = @{@"beetroot" : @"Station 1",
 - (void)backFromOverviewTable
 {
     @synchronized(self){
+        [self hidePieChart];
         [self hideOverviewTable];
         [self HideAndRemoveDetailView];
         [self speakAction:[speech_generator back_to_station_menu_message]];
@@ -1714,7 +1752,7 @@ NSDictionary *stationConverter = @{@"beetroot" : @"Station 1",
 - (void)adjustDetailViewToSmartTable
 {
     CGRect newBounds = CGRectMake(self.detailView.frame.origin.x, self.detailView.frame.origin.y,
-                                  self.detailView.frame.size.width, 190);
+                                  self.detailView.frame.size.width, 230);
     [self.detailView setFrame:newBounds];
 }
 
@@ -1746,7 +1784,7 @@ NSDictionary *stationConverter = @{@"beetroot" : @"Station 1",
 - (void)loadSmartTableForDevice:(NSString *)device
 {
     @synchronized(self){
-        
+        [self hidePieChart];
         [self disappearViewWithDuration:0.5 onView:tableViewController.tableView];
         [tableViewController.tableView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.5];
         
@@ -1820,9 +1858,10 @@ NSDictionary *stationConverter = @{@"beetroot" : @"Station 1",
             [UIView animateWithDuration:0.5 animations:^ {
                 NSLog(@"%f",self.detailView.frame.size.height);
                 NSLog(@"%f",self.detailView.frame.size.width);
-                //smartTableViewController.pieChart = [[PNPieChart alloc] initWithFrame:CGRectMake(0,0, self.detailView.frame.size.height, self.detailView.frame.size.height) items:items];
+                
                 smartTableViewController.pieChart = [[PNPieChart alloc] initWithFrame:CGRectMake(SCREEN_WIDTH /2.0 - 230, 105, self.detailView.frame.size.height + 50,self.detailView.frame.size.height + 50) items:items];
                 [self.detailView addSubview:smartTableViewController.pieChart];
+                
             }];
             smartTableViewController.pieChart.showOnlyValues = NO;
             smartTableViewController.pieChart.descriptionTextFont  = [UIFont fontWithName:@"Avenir-Medium" size:15.0];
@@ -1847,6 +1886,34 @@ NSDictionary *stationConverter = @{@"beetroot" : @"Station 1",
         tableViewDisplayed = NO;
         
     }
+}
+
+-(NSArray *)loadPieChartDataForStation
+{
+    [self updateStation];
+    
+    NSMutableArray *items = [[NSMutableArray alloc] init];
+    NSArray *colors = @[PNFreshGreen, PNDeepGreen, PNGreen];
+    NSInteger colorIndex = 0;
+    
+    for (id device in action_flags[station_locked][@"Devices"]) {
+        NSNumber *watts = [NSNumber numberWithFloat:[[action_flags[station_locked][@"Devices"][device] valueForKey:@"Watts"] floatValue]];
+        
+        [items addObject:[PNPieChartDataItem dataItemWithValue:[watts floatValue] color:colors[colorIndex] description:action_flags[station_locked][@"Devices"][device][@"Name"]]];
+        
+        if (colorIndex == [colors count] - 1) {
+            colorIndex = 0;
+        } else {
+            colorIndex++;
+        }
+    }
+    return items;
+}
+
+-(void)hidePieChart
+{
+    [self disappearViewWithDuration:0.1 onView:pieChartController.pieChart];
+    [pieChartController.pieChart performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.1];
 }
 
 
@@ -2077,7 +2144,7 @@ NSDictionary *stationConverter = @{@"beetroot" : @"Station 1",
         
         [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(slideNotificationViewDown) object:nil];
         
-        [self.notificationLabel setText:[NSString stringWithFormat:@"%@ detected! Connect to it?", stationConverter[station]]];
+        [self.notificationLabel setText:[NSString stringWithFormat:@"%@ detected! Connect?", stationConverter[station]]];
         
         // Animate the notification view up to the screen
         [self slideNotificationViewUp];

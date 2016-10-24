@@ -27,6 +27,7 @@
                 <outlet property="notificationLabel" destination="QdD-aN-9Ap" id="upx-I6-GSA"/>
                 <outlet property="notificationRejectButton" destination="AmH-Zl-9I2" id="Rpt-kf-mbp"/>
                 <outlet property="notificationView" destination="Nkf-wM-dW6" id="BvR-wJ-BAV"/>
+                <outlet property="secondDetailView" destination="LCE-RO-wEz" id="EzX-se-AFE"/>
                 <outlet property="skipButton" destination="6C3-As-lDm" id="tOr-Hc-muw"/>
                 <outlet property="switchMoreInfoView" destination="7" id="146"/>
                 <outlet property="view" destination="2" id="147"/>
@@ -41,10 +42,14 @@
                     <frame key="frameInset"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <subviews>
-                        <view contentMode="scaleToFill" id="7" userLabel="DetailView">
-                            <frame key="frameInset" minX="347" minY="303" width="386" height="342"/>
+                        <view contentMode="scaleToFill" misplaced="YES" id="LCE-RO-wEz" userLabel="SecondDetailView">
+                            <frame key="frameInset" minX="347" minY="565" width="386" height="342"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                            <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                        </view>
+                        <view contentMode="scaleToFill" misplaced="YES" id="7" userLabel="DetailView">
+                            <frame key="frameInset" minX="347" minY="220" width="386" height="342"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                         </view>
                     </subviews>
@@ -73,7 +78,7 @@
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Station 1 detected! Connect?" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="QdD-aN-9Ap">
                                     <frame key="frameInset" minX="8" minY="8" width="447" height="50"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <fontDescription key="fontDescription" type="italicSystem" pointSize="29"/>
+                                    <fontDescription key="fontDescription" name="ArialRoundedMTBold" family="Arial Rounded MT Bold" pointSize="30"/>
                                     <nil key="textColor"/>
                                     <nil key="highlightedColor"/>
                                 </label>
@@ -108,23 +113,15 @@
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         </imageView>
                         <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="6C3-As-lDm" userLabel="Skip Button">
-                            <frame key="frameInset" minX="427" minY="113" width="60" height="52"/>
+                            <frame key="frameInset" minX="446" minY="113" width="60" height="52"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <state key="normal" backgroundImage="skip.png"/>
                             <connections>
                                 <action selector="skipButtonClicked:" destination="-2" eventType="touchUpInside" id="94W-nD-Ex7"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="GeL-gf-DXL" userLabel="Exit Button">
-                            <frame key="frameInset" minX="676" minY="113" width="60" height="60"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <state key="normal" backgroundImage="exit.png"/>
-                            <connections>
-                                <action selector="exitButtonClicked:" destination="-2" eventType="touchUpInside" id="gLd-Fo-3bU"/>
-                            </connections>
-                        </button>
                         <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="hnr-Kw-CNB" userLabel="Connect Button">
-                            <frame key="frameInset" minX="518" minY="106" width="90" height="90"/>
+                            <frame key="frameInset" minX="534" minY="106" width="90" height="90"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <state key="normal" image="connect3.png"/>
                             <connections>
@@ -132,7 +129,7 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="eyg-hZ-VWr" userLabel="Back Button">
-                            <frame key="frameInset" minX="319" minY="106" width="80" height="58"/>
+                            <frame key="frameInset" minX="332" minY="106" width="80" height="58"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                             <state key="normal" backgroundImage="back-arrow-blue.png">
@@ -144,6 +141,14 @@
                             </state>
                             <connections>
                                 <action selector="backButtonClicked:" destination="-2" eventType="touchUpInside" id="KMv-Ab-9qH"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="GeL-gf-DXL" userLabel="Exit Button">
+                            <frame key="frameInset" minX="695" minY="110" width="55" height="55"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <state key="normal" backgroundImage="exit.png"/>
+                            <connections>
+                                <action selector="exitButtonClicked:" destination="-2" eventType="touchUpInside" id="gLd-Fo-3bU"/>
                             </connections>
                         </button>
                     </subviews>

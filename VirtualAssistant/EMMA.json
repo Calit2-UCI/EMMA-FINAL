@@ -8,6 +8,8 @@
         "Devices" : {
             "Device 1" : {
                 "Name" : "Lamp",
+                "Brand": "GreatCo",
+                "Model": "Standard",
                 "Type" : "Light",
                 "Total Usage/Week" : 16,
                 "Watts" : 30,
@@ -16,6 +18,8 @@
             
             "Device 2" : {
                 "Name" : "Fan",
+                "Brand": "BetterLife",
+                "Model": "F30 Deluxe",
                 "Type" : "Life",
                 "Total Usage/Week" : 25,
                 "Watts" : 80,
@@ -24,6 +28,8 @@
             
             "Device 3" : {
                 "Name" : "Appliance",
+                "Brand": "Generic",
+                "Model": "Standard",
                 "Type" : "Life",
                 "Total Usage/Week" : 25,
                 "Watts" : 1,
@@ -39,6 +45,8 @@
         "Devices" : {
             "Device 1" : {
                 "Name" : "AppleTV",
+                "Brand": "Apple",
+                "Model": "XS10",
                 "Type" : "Entertainment",
                 "Total Usage/Week" : 16,
                 "Watts" : 20,
@@ -47,6 +55,8 @@
             
             "Device 2" : {
                 "Name" : "TV",
+                "Brand": "Samsung",
+                "Model": "LED 10",
                 "Type" : "Entertainment",
                 "Total Usage/Week" : 25,
                 "Watts" : 150,
@@ -55,6 +65,8 @@
             
             "Device 3" : {
                 "Name" : "BluRay",
+                "Brand": "Sony",
+                "Model": "BluePower 10",
                 "Type" : "Entertainment",
                 "Total Usage/Week" : 25,
                 "Watts" : 30,
@@ -71,6 +83,8 @@
         "Devices" : {
             "Device 1" : {
                 "Name" : "RiceCooker",
+                "Brand": "BetterRice",
+                "Model": "Generic",
                 "Type" : "Life",
                 "Total Usage/Week" : 16,
                 "Watts" : 900,
@@ -79,6 +93,8 @@
             
             "Device 2" : {
                 "Name" : "CoffeeMaker",
+                "Brand": "Hafer",
+                "Model": "CofeeMax 10",
                 "Type" : "Life",
                 "Total Usage/Week" : 25,
                 "Watts" :300,
@@ -87,6 +103,8 @@
             
             "Device 3" : {
                 "Name" : "Toaster",
+                "Brand": "Market Pantry",
+                "Model": "GSX 20",
                 "Type" : "Life",
                 "Total Usage/Week" : 25,
                 "Watts" :500,

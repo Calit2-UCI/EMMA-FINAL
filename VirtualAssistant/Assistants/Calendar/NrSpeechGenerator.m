@@ -45,10 +45,10 @@
 {
     self.welcome_messages = @[@"Hi there!",
                               @"Hello and welcome to Sim-Home!",
-                              @"Hi there! Welcome to Sim-Home.",
+                              @"Hi there. Welcome to Sim-Home.",
                               [NSString stringWithFormat:@"Good %@ and welcome to Sim-Home!", [self time_greeting]],
                               [NSString stringWithFormat:@"Hi there! It is currently %@", [self current_date]],
-                              [NSString stringWithFormat:@"Hello! It is currently %@", [self current_date]],
+                              [NSString stringWithFormat:@"Hello, welcome to Sim-Home. It is currently %@", [self current_date]],
                               [NSString stringWithFormat:@"Good %@! It is currently %@", [self time_greeting], [self current_date]]
                               ];
 }
