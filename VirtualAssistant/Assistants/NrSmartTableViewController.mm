@@ -403,16 +403,6 @@ static dispatch_once_t onceToken;
     [device_switch addTarget:self action:@selector(switch_changed:) forControlEvents:UIControlEventTouchUpInside];
 }
 
-//
-//- (BOOL)switchIsOn:(BOOL) flag
-//{
-//    if(flag){
-//    if ([self.station_data[@"Devices"][self.device][@"Status"]  isEqual: @"Off"])
-//        return NO;
-//    return YES;
-//    }
-//}
-
 
 - (void) switch_changed:(id)sender
 {

@@ -1,7 +1,7 @@
 {
     "Time" : "10:41:21",
     
-    "Station 1": {
+    "Station 3": {
         "Number of Devices" : 3,
         "Total Usage" : 100,
         
@@ -38,19 +38,20 @@
         }
     },
     
-    "Station 2": {
+    "Station 1": {
         "Number of Devices" : 3,
         "Total Usage" : 100,
         
         "Devices" : {
             "Device 1" : {
-                "Name" : "AppleTV",
+                "Name" : "Apple TV",
                 "Brand": "Apple",
                 "Model": "XS10",
                 "Type" : "Entertainment",
                 "Total Usage/Week" : 16,
                 "Watts" : 20,
-                "Status" : "Off"
+                "Status" : "Off",
+                "Daily" : [[1471676341, 0.0007], [1472885940, 0.0001], [1473231546, 0.0016], [1474354740, 0.0048], [1475218740, 0.0103], [1475305140, 0.0051], [1475477940, 0.0055], [1475564340, 0.0006], [1475650740, 0.0001], [1477637940, 0.0095]]
             },
             
             "Device 2" : {
@@ -60,45 +61,49 @@
                 "Type" : "Entertainment",
                 "Total Usage/Week" : 25,
                 "Watts" : 150,
-                "Status" : "On"
+                "Status" : "On",
+                "Daily" : [[1471071541, 0.0014], [1471503540, 0.9144], [1474009140, 0.0613], [1474095540, 0.0645], [1474354740, 0.3375], [1475218740, 0.3087], [1475305140, 0.2157], [1475477940, 1.1247], [1475564340, 0.1357], [1475650740, 0.1629], [1475737140, 0.0014], [1475823540, 0.3894], [1476255540, 0.3611], [1476341940, 0.0041], [1476860341, 0.0063], [1477119540, 0.0875], [1477292340, 0.2849], [1477378740, 2.0783], [1477637940, 0.6834]]
             },
             
             "Device 3" : {
-                "Name" : "BluRay",
+                "Name" : "Blu-Ray",
                 "Brand": "Sony",
                 "Model": "BluePower 10",
                 "Type" : "Entertainment",
                 "Total Usage/Week" : 25,
                 "Watts" : 30,
-                "Status" : "Off"
-            
+                "Status" : "Off",
+                "Daily" : [[1471503540, 0.0286], [1471589941, 0.0]]
+                
             }
         }
     },
     
-    "Station 3": {
+    "Station 2": {
         "Number of Devices" : 3,
         "Total Usage" : 100,
         
         "Devices" : {
             "Device 1" : {
-                "Name" : "RiceCooker",
+                "Name" : "Rice Cooker",
                 "Brand": "BetterRice",
                 "Model": "Generic",
                 "Type" : "Life",
                 "Total Usage/Week" : 16,
                 "Watts" : 900,
-                "Status" : "On"
+                "Status" : "On",
+                "Daily" : [[1471330741, 0.1308]]
             },
             
             "Device 2" : {
-                "Name" : "CoffeeMaker",
+                "Name" : "Coffee Maker",
                 "Brand": "Hafer",
                 "Model": "CofeeMax 10",
                 "Type" : "Life",
                 "Total Usage/Week" : 25,
                 "Watts" :300,
-                "Status" : "On"
+                "Status" : "On",
+                "Daily" : [[1469257141, 0.0601], [1470207541, null], [1470466741, null]]
             },
             
             "Device 3" : {
@@ -108,7 +113,8 @@
                 "Type" : "Life",
                 "Total Usage/Week" : 25,
                 "Watts" :500,
-                "Status" : "Off"
+                "Status" : "Off",
+                "Daily" : []
             }
             
         }

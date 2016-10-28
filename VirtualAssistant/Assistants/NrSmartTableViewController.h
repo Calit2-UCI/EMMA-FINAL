@@ -11,6 +11,7 @@
 
 #import <UIKit/UIKit.h>
 #import "NrTableViewController.h"
+#import "PNBarChart.h"
 
 @interface NrSmartTableViewController : NrTableViewController
 
@@ -18,6 +19,7 @@
 
 @property (nonatomic, strong) NSString* device;
 @property (nonatomic) PNPieChart *pieChart;
+@property (nonatomic) PNBarChart *barChart;
 
 - (id)initWithDevice:(NSString *)device withViewController:(UIViewController *)viewController withData:(NSMutableDictionary *)station;
 

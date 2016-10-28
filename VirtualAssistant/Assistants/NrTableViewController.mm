@@ -241,6 +241,12 @@ UISwitch *overview_switch;
             NSInteger device_number = indexPath.row-1;
             NSString *device_key = [NSString stringWithFormat:@"Device %d", device_number];
             
+            NSString* status = self.station_data[@"Devices"][device_key][@"Status"];
+            
+            DeviceSwitch *deviceSwitch = cell.accessoryView;
+            [deviceSwitch setDevice:self.station_data[@"Devices"][device_key][@"Name"]];
+            [deviceSwitch setOn:[self switchIsOn:status] animated:YES];
+            
             [self change_cell_content:cell for_device:device_key];
             [self set_device_color:device_key for_cell:cell];
         }

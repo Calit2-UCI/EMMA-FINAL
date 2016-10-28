@@ -16,6 +16,9 @@
 #import "NrSmartTableViewController.h"
 #import "NrGridTableViewCell.h"
 
+#import "PNBarChart.h"
+#import "NrBarChartViewController.h"
+
 
 #import "BeaconDetails.h"
 #import "BeaconDetailsCloudFactory.h"
@@ -34,7 +37,6 @@
 
 - (void)removeAudios;
 @property (nonatomic) ProximityContentManager *proximityContentManager;
-//@property (nonatomic) NrViewController *nrViewController;
 @end
 
 @implementation NrCalendarMainViewController
@@ -49,7 +51,6 @@
 @synthesize action_flags;
 @synthesize lampValue;
 @synthesize fanValue;
-//@synthesize TimerButton;
 
 
 // *** App members ***
@@ -97,6 +98,7 @@ NrTableViewController *tableViewController;
 NrTableViewController *secondTableViewController;
 NrSmartTableViewController *pieChartController;
 NrSmartTableViewController *smartTableViewController;
+NrBarChartViewController *barChartController;
 BOOL tableViewDisplayed = NO;
 
 // *** NotificationView members ***
@@ -106,16 +108,13 @@ NSInteger notificationYPositionHide = 106;
 // *** Connect members ***
 BOOL canConnectWithStations = YES;
 
-// *** ChartView Members ***
-
 
 // *** DeviceItemView members ***
 //09/01/2016
-
-NSArray *device_names = @[@"TV",@"Lamp",@"Fridge",@"Refigerator",@"Macbook",@"CoffeeMaker",@"3DPrinter",@"Fan",@"BluRay",@"AppleTV",@"Tablet",@"RiceCooker",@"Toaster",@"Appliance"];
+NSArray *device_names = @[@"TV",@"Lamp",@"Fridge",@"Refigerator",@"Macbook",@"Coffee Maker",@"3DPrinter",@"Fan",@"Blu-Ray",@"Apple TV",@"Tablet",@"Rice Cooker",@"Toaster",@"Appliance"];
 
 // *** StationItemView members ***
-NSMutableArray *station_list = [NSMutableArray arrayWithObjects:@"Station 1",@"Station 2",@"Station 3",nil];
+NSMutableArray *station_list = [NSMutableArray arrayWithObjects:@"Station 1",@"Station 2",nil];
 NSString *current_station = @"Station 2";
 NSString *station_locked = @"Station 1";
 
@@ -123,7 +122,9 @@ NSDictionary *stationConverter = @{@"beetroot" : @"Station 1",
                                    @"candy": @"Station 2",
                                    @"lemon": @"Station 3",
                                    };
-
+NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
+                                   @"Station 2": @"Kitchen",
+                                   };
 
 
 #pragma mark -
@@ -162,23 +163,24 @@ NSDictionary *stationConverter = @{@"beetroot" : @"Station 1",
     self.exitButton.alpha = 0.0f;
     
     self.notificationSwipeGestureRecognizer = [[UISwipeGestureRecognizer alloc]
-                       initWithTarget:self action:@selector(respondToSwipeGesture:)];
+                                               initWithTarget:self action:@selector(respondToSwipeGesture:)];
     [[self.notificationView superview] addGestureRecognizer:self.notificationSwipeGestureRecognizer];
     [self.notificationView addGestureRecognizer:self.notificationSwipeGestureRecognizer];
     [self.notificationLabel addGestureRecognizer:self.notificationSwipeGestureRecognizer];
+    [self.notificationLabel setAdjustsFontSizeToFitWidth:YES];
     
-//    self.proximityContentManager = [[ProximityContentManager alloc]
-//                                    initWithBeaconIDs:@[
-//                                                        [[BeaconID alloc] initWithUUIDString:@"B9407F30-F5F8-466E-AFF9-25556B57FE6D" major:10575 minor:30159],
-//                                                        [[BeaconID alloc] initWithUUIDString:@"B9407F30-F5F8-466E-AFF9-25556B57FE6D" major:12315 minor:42375],
-//                                                        [[BeaconID alloc] initWithUUIDString:@"B9407F30-F5F8-466E-AFF9-25556B57FE6D" major:21412 minor:5512]
-//                                                        ]
-//                                    beaconContentFactory:[[CachingContentFactory alloc] initWithBeaconContentFactory:[BeaconDetailsCloudFactory new]]];
-//    self.proximityContentManager.delegate = self;
+    //    self.proximityContentManager = [[ProximityContentManager alloc]
+    //                                    initWithBeaconIDs:@[
+    //                                                        [[BeaconID alloc] initWithUUIDString:@"B9407F30-F5F8-466E-AFF9-25556B57FE6D" major:10575 minor:30159],
+    //                                                        [[BeaconID alloc] initWithUUIDString:@"B9407F30-F5F8-466E-AFF9-25556B57FE6D" major:12315 minor:42375],
+    //                                                        [[BeaconID alloc] initWithUUIDString:@"B9407F30-F5F8-466E-AFF9-25556B57FE6D" major:21412 minor:5512]
+    //                                                        ]
+    //                                    beaconContentFactory:[[CachingContentFactory alloc] initWithBeaconContentFactory:[BeaconDetailsCloudFactory new]]];
+    //    self.proximityContentManager.delegate = self;
     //[self.proximityContentManager startContentUpdates];
     
-//    NrViewController *beaconValueController = [[NrViewController alloc] init];
-//    beaconValueController.delegate = self;
+    //    NrViewController *beaconValueController = [[NrViewController alloc] init];
+    //    beaconValueController.delegate = self;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -197,8 +199,8 @@ NSDictionary *stationConverter = @{@"beetroot" : @"Station 1",
         
     }
     
-//    self.switchMoreInfoView.hidden = YES;
-//    [self setIAPNotificationListeners];
+    //    self.switchMoreInfoView.hidden = YES;
+    //    [self setIAPNotificationListeners];
     self.detailView.alpha = 0.0f;
     self.detailView.hidden = NO;
     
@@ -207,14 +209,14 @@ NSDictionary *stationConverter = @{@"beetroot" : @"Station 1",
     self.secondDetailView.hidden = NO;
     
     appLocked = NO;
-   
+    
 }
 
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-
+    
     
     self.currentMode = NR_MAIN;
     [self.glController changeSuperview:self.assistantView doStartAnimation:YES];
@@ -226,6 +228,8 @@ NSDictionary *stationConverter = @{@"beetroot" : @"Station 1",
     
     pieChartController = [[NrSmartTableViewController alloc] init];
     [pieChartController setViewController:self];
+    
+    barChartController = [[NrBarChartViewController alloc] init];
     
     smartTableViewController = [[NrSmartTableViewController alloc] init];
     [smartTableViewController setViewController:self];
@@ -239,6 +243,7 @@ NSDictionary *stationConverter = @{@"beetroot" : @"Station 1",
     
     
     [self loadJSONFile];
+    
     //where to start timer
     [self startTimer];
     
@@ -257,7 +262,7 @@ NSDictionary *stationConverter = @{@"beetroot" : @"Station 1",
     
     for (NSString* flag in keys) {
         if ([dict[flag] isKindOfClass:[NSDictionary class]]) {
-//            NSLog(@"dictionary found! -> %@", dict[flag]);
+            //            NSLog(@"dictionary found! -> %@", dict[flag]);
             dict[flag] = [dict[flag] mutableCopy];
             [self mutableJSONDict:dict[flag]];
         }
@@ -288,7 +293,7 @@ NSDictionary *stationConverter = @{@"beetroot" : @"Station 1",
     
     [self do_actions];
     //NSLog(@"String downloaded: %@", JSONData);
-
+    
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -386,7 +391,7 @@ NSDictionary *stationConverter = @{@"beetroot" : @"Station 1",
     [self.assistantView addSubview:self.detailView];
     
     // for second detail view
-//    [self.assistantView addSubview:self.secondDetailView];
+    //    [self.assistantView addSubview:self.secondDetailView];
     
     [self MoveModelOut];
     [UIView animateWithDuration:0.5 animations:^{
@@ -454,7 +459,7 @@ NSDictionary *stationConverter = @{@"beetroot" : @"Station 1",
 #pragma mark Helper View Functions
 
 - (void)appearViewWithDuration:(NSTimeInterval)duration onView:(UIView *)view
-            withCompletionMessage:(NSString *)message
+         withCompletionMessage:(NSString *)message
 {
     [UIView animateWithDuration:duration animations:^{
         view.alpha = 1.0f;
@@ -578,7 +583,7 @@ NSDictionary *stationConverter = @{@"beetroot" : @"Station 1",
     self.scroll = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.daysView.frame.size.width, self.daysView.frame.size.height)];
     //    scroll.pagingEnabled = YES;
     
-    NSInteger numberOfItems = [action_flags[current_station][@"Number of Devices"] integerValue] + 2; // + 1 to account for overview tab and station view
+    NSInteger numberOfItems = [action_flags[current_station][@"Number of Devices"] integerValue] + 1; // + 1 to account for overview tab and station view
     
     
     NrDeviceItemView *sampleLittleView = [[NrDeviceItemView alloc] initWithID:0];
@@ -676,12 +681,12 @@ NSDictionary *stationConverter = @{@"beetroot" : @"Station 1",
             item.imgView.image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"connect6" ofType:@"png"]];
             break;
             //TODO need to implement method for help
-//        case 2:
-//            //item.dayName.text = @"Help";
-//            item.dayName.text = @"";
-//            item.dayName.font = [UIFont fontWithName:@"ArialMT" size:16];
-//            item.imgView.image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"help" ofType:@"png"]];
-//            break;
+            //        case 2:
+            //            //item.dayName.text = @"Help";
+            //            item.dayName.text = @"";
+            //            item.dayName.font = [UIFont fontWithName:@"ArialMT" size:16];
+            //            item.imgView.image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"help" ofType:@"png"]];
+            //            break;
         default:
             item.dayName.text = @"Help";
             item.dayName.font = [UIFont fontWithName:@"ArialMT" size:16];
@@ -698,45 +703,37 @@ NSDictionary *stationConverter = @{@"beetroot" : @"Station 1",
     // Device
     switch (item.itemID) {
         case 0:
-            //using current staions icons.
-            //item.dayName.text = current_station;
-            item.dayName.text = @"";
-            //item.dayName.text = action_flags[current_station][@"Devices"][@"Device 1"][@"Name"];
-            //NSLog(@"%@",item.dayName.text);
-            item.imgView.image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:current_station ofType:@"png"]];
-            break;
-        case 1:
             //item.dayName.text = @"Overview";
             item.dayName.text = @"";
             item.imgView.image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Overview" ofType:@"png"]];
             break;
-        case 2:
+        case 1:
             //item.dayName.text = action_flags[current_station][@"Devices"][@"Device 1"][@"Name"];
             item.dayName.text = @"";
             item.imgView.image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:[self device_picture_path:action_flags[current_station][@"Devices"][@"Device 1"][@"Name"]] ofType:@"png"]];
             break;
-        case 3:
-           // item.dayName.text = action_flags[current_station][@"Devices"][@"Device 2"][@"Name"];
+        case 2:
+            // item.dayName.text = action_flags[current_station][@"Devices"][@"Device 2"][@"Name"];
             item.dayName.text = @"";
             item.imgView.image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:[self device_picture_path:action_flags[current_station][@"Devices"][@"Device 2"][@"Name"]] ofType:@"png"]];
             break;
-        case 4:
+        case 3:
             // item.dayName.text = action_flags[current_station][@"Devices"][@"Device 2"][@"Name"];
             item.dayName.text = @"";
             item.imgView.image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:[self device_picture_path:action_flags[current_station][@"Devices"][@"Device 3"][@"Name"]] ofType:@"png"]];
             break;
-//        case 3:
-//            item.dayName.text = action_flags[current_station][@"Devices"][@"Device 3"][@"Name"];
-//            item.imgView.image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:[self device_picture_path:action_flags[current_station][@"Devices"][@"Device 3"][@"Name"]] ofType:@"png"]];
-//            break;
-//        case 4:
-//            item.dayName.text = action_flags[current_station][@"Devices"][@"Device 4"][@"Name"];
-//            item.imgView.image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:[self device_picture_path:action_flags[current_station][@"Devices"][@"Device 4"][@"Name"]] ofType:@"png"]];
-//            break;
-//        case 5:
-//            item.dayName.text = action_flags[current_station][@"Devices"][@"Device 5"][@"Name"];
-//            item.imgView.image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:[self device_picture_path:action_flags[current_station][@"Devices"][@"Device 5"][@"Name"]] ofType:@"png"]];
-//            break;
+            //        case 3:
+            //            item.dayName.text = action_flags[current_station][@"Devices"][@"Device 3"][@"Name"];
+            //            item.imgView.image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:[self device_picture_path:action_flags[current_station][@"Devices"][@"Device 3"][@"Name"]] ofType:@"png"]];
+            //            break;
+            //        case 4:
+            //            item.dayName.text = action_flags[current_station][@"Devices"][@"Device 4"][@"Name"];
+            //            item.imgView.image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:[self device_picture_path:action_flags[current_station][@"Devices"][@"Device 4"][@"Name"]] ofType:@"png"]];
+            //            break;
+            //        case 5:
+            //            item.dayName.text = action_flags[current_station][@"Devices"][@"Device 5"][@"Name"];
+            //            item.imgView.image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:[self device_picture_path:action_flags[current_station][@"Devices"][@"Device 5"][@"Name"]] ofType:@"png"]];
+            //            break;
         default:
             //item.dayName.text = action_flags[current_station][@"Devices"][[NSString stringWithFormat:@"Device %d", item.itemID]][@"Name"];
             item.dayName.text = @"";
@@ -748,22 +745,23 @@ NSDictionary *stationConverter = @{@"beetroot" : @"Station 1",
 - (void)fillDayItemWithStationData:(NrStationItemView *)item
 {
     // Station
+    NSLog(@"Path = %@", [realStationNames[[station_list objectAtIndex:0]] stringByAppendingString:@"_Icon"]);
     switch (item.itemID) {
         case 0:
             //item.dayName.text = [station_list objectAtIndex:0];
             item.dayName.text = @"";
-            item.imgView.image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:[station_list objectAtIndex:0] ofType:@"png"]];
+            item.imgView.image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:[realStationNames[[station_list objectAtIndex:0]] stringByAppendingString:@"_Icon"] ofType:@"png"]];
             break;
         case 1:
             //item.dayName.text = [station_list objectAtIndex:0];
             item.dayName.text = @"";
-            item.imgView.image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:[station_list objectAtIndex:1] ofType:@"png"]];
+            item.imgView.image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:[realStationNames[[station_list objectAtIndex:1]] stringByAppendingString:@"_Icon"] ofType:@"png"]];
             break;
-        case 2:
-            //item.dayName.text = [station_list objectAtIndex:0];
-            item.dayName.text = @"";
-            item.imgView.image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:[station_list objectAtIndex:2] ofType:@"png"]];
-            break;
+//        case 2:
+//            //item.dayName.text = [station_list objectAtIndex:0];
+//            item.dayName.text = @"";
+//            item.imgView.image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:[station_list objectAtIndex:2] ofType:@"png"]];
+//            break;
         default:
             item.dayName.text = [station_list objectAtIndex:item.itemID];
             item.imgView.image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"station" ofType:@"png"]];
@@ -807,10 +805,10 @@ NSDictionary *stationConverter = @{@"beetroot" : @"Station 1",
             self.activityIndicator.hidden = YES;
             [self uncover];
             
-//            NSError *error;
-//            if (![[GANTracker sharedTracker] trackPageview:@"/app/main" withError:&error]) {
-//                NSLog(@"Error in tracking: %@", [error localizedDescription]);
-//            }
+            //            NSError *error;
+            //            if (![[GANTracker sharedTracker] trackPageview:@"/app/main" withError:&error]) {
+            //                NSLog(@"Error in tracking: %@", [error localizedDescription]);
+            //            }
         }];
     }];
 }
@@ -892,15 +890,15 @@ NSDictionary *stationConverter = @{@"beetroot" : @"Station 1",
                     [self loadvideo];
                     break;
                 case 1:
-//                    if(self.currentMode ==  NR_VIDEO){
-//                        [self StopAndHideVideoViewClicked];
-//                    }
+                    //                    if(self.currentMode ==  NR_VIDEO){
+                    //                        [self StopAndHideVideoViewClicked];
+                    //                    }
                     
                     [self speakAction:[speech_generator connect_to_station_message]];
                     [self changeItemsTo:calItem.itemID];
                     
                     //start scan bluetooth
-                     //[self.proximityContentManager startContentUpdates];
+                    //[self.proximityContentManager startContentUpdates];
                     break;
                 case 2:
                     //TODO
@@ -921,117 +919,112 @@ NSDictionary *stationConverter = @{@"beetroot" : @"Station 1",
 - (IBAction)deviceItemViewClicked:(id)sender
 {
     if(can_speak){
-    @synchronized(self) {
-        [self cover];
-        
-        if (processing) {
-            [self uncover];
-            return;
+        @synchronized(self) {
+            [self cover];
+            
+            if (processing) {
+                [self uncover];
+                return;
+            }
+            processing = YES;
+            
+            NrDeviceItemView *calItem = (NrDeviceItemView *)sender;
+            NSLog(@"Clicked at item %d", calItem.itemID);
+            
+            self.selectedItem = calItem.itemID;
+            
+            [self movePointingBarToItem:calItem];
+            
+            self.activityIndicator.hidden = NO;
+            [self.activityIndicator startAnimating];
+            
+            switch (calItem.itemID) {
+                case 0:                                         // Overview table
+                    [self showOverviewTable];
+                    break;
+                case 1:                                         // Device 1
+                    if (self.currentMode == NR_SMART_TABLE)
+                        [self hideSmartTable];
+                    [self loadSmartTableForDevice:@"Device 1"];
+                    break;
+                case 2:                                         // Device 2
+                    if (self.currentMode == NR_SMART_TABLE)
+                        [self hideSmartTable];
+                    [self loadSmartTableForDevice:@"Device 2"];
+                    break;
+                case 3:                                         // Device 3
+                    if (self.currentMode == NR_SMART_TABLE)
+                        [self hideSmartTable];
+                    [self loadSmartTableForDevice:@"Device 3"];
+                    break;
+                default:                                        // Other devices
+                    if (self.currentMode == NR_SMART_TABLE)
+                        [self hideSmartTable];
+                    NSString *device = [NSString stringWithFormat:@"Device %d", calItem.itemID];
+                    [self loadSmartTableForDevice:device];
+                    break;
+            }
+            
         }
-        processing = YES;
-        
-        NrDeviceItemView *calItem = (NrDeviceItemView *)sender;
-        NSLog(@"Clicked at item %d", calItem.itemID);
-        
-        self.selectedItem = calItem.itemID;
-        
-        [self movePointingBarToItem:calItem];
-        
-        self.activityIndicator.hidden = NO;
-        [self.activityIndicator startAnimating];
-        
-        switch (calItem.itemID) {
-            case 0:
-                if (self.currentMode == NR_SMART_TABLE)
-                    [self hideSmartTable];
-                [self loadSmartTableForDevice:@"pieChart"];
-                break;
-            case 1:                                         // Overview table
-                [self showOverviewTable];
-                break;
-            case 2:                                         // Device 1
-                if (self.currentMode == NR_SMART_TABLE)
-                    [self hideSmartTable];
-                [self loadSmartTableForDevice:@"Device 1"];
-                break;
-            case 3:                                         // Device 2
-                if (self.currentMode == NR_SMART_TABLE)
-                    [self hideSmartTable];
-                [self loadSmartTableForDevice:@"Device 2"];
-                break;
-            case 4:                                         // Device 3
-                if (self.currentMode == NR_SMART_TABLE)
-                    [self hideSmartTable];
-                [self loadSmartTableForDevice:@"Device 3"];
-                break;
-            default:                                        // Other devices
-                if (self.currentMode == NR_SMART_TABLE)
-                    [self hideSmartTable];
-                NSString *device = [NSString stringWithFormat:@"Device %d", calItem.itemID];
-                [self loadSmartTableForDevice:device];
-                break;
-        }
-        
-    }
     }
 }
 
 - (IBAction)stationItemViewClicked:(id)sender
 {
     if(can_speak){
-    @synchronized(self) {
-        [self cover];
-        
-        if (processing) {
-            [self uncover];
-            return;
-        }
-        processing = YES;
-        
-        NrStationItemView *calItem = (NrStationItemView *)sender;
-        NSLog(@"Clicked at item %d", calItem.itemID);
-        
-        self.selectedItem = calItem.itemID;
-        
-        [self movePointingBarToItem:calItem];
-        
-        self.activityIndicator.hidden = NO;
-        [self.activityIndicator startAnimating];
-        
-        switch (calItem.itemID) {
-            case 0:
-                // First station detected
-                //Can have a concurrency problem
-                current_station = [station_list objectAtIndex:calItem.itemID];
-                station_locked = current_station;
-                [self showOverviewTable];
+        @synchronized(self) {
+            [self cover];
+            
+            if (processing) {
+                [self uncover];
+                return;
+            }
+            processing = YES;
+            
+            NrStationItemView *calItem = (NrStationItemView *)sender;
+            NSLog(@"Clicked at item %d", calItem.itemID);
+            
+            self.selectedItem = calItem.itemID;
+            
+            [self movePointingBarToItem:calItem];
+            
+            self.activityIndicator.hidden = NO;
+            [self.activityIndicator startAnimating];
+            
+            switch (calItem.itemID) {
+                case 0:
+                    // First station detected
+                    //Can have a concurrency problem
+                    current_station = [station_list objectAtIndex:calItem.itemID];
+                    station_locked = current_station;
+                    [self showOverviewTable];
                     [self changeItemsTo:2];// Change into DeviceItemView
-                break;
-            case 1:
-                // First station detected
-                //Can have a concurrency problem
-                current_station = [station_list objectAtIndex:calItem.itemID];
-                station_locked = current_station;
-                [self showOverviewTable];
-                [self changeItemsTo:2];// Change into DeviceItemView
-                break;
-            case 2:
-                // First station detected
-                //Can have a concurrency problem
-                current_station = [station_list objectAtIndex:calItem.itemID];
-                station_locked = current_station;
-                [self showOverviewTable];
-                [self changeItemsTo:2];// Change into DeviceItemView
-                break;
-            default:
-                current_station = [station_list objectAtIndex:calItem.itemID];
-                station_locked = current_station;
-                [self showOverviewTable];
-                [self changeItemsTo:2];
-                break;
+                    break;
+                case 1:
+                    // First station detected
+                    //Can have a concurrency problem
+                    current_station = [station_list objectAtIndex:calItem.itemID];
+                    station_locked = current_station;
+                    [self showOverviewTable];
+                    [self changeItemsTo:2];// Change into DeviceItemView
+                    break;
+                case 2:
+                    // First station detected
+                    //Can have a concurrency problem
+                    current_station = [station_list objectAtIndex:calItem.itemID];
+                    station_locked = current_station;
+                    [self showOverviewTable];
+                    [self changeItemsTo:2];// Change into DeviceItemView
+                    break;
+                default:
+                    current_station = [station_list objectAtIndex:calItem.itemID];
+                    station_locked = current_station;
+                    [self showOverviewTable];
+                    [self changeItemsTo:2];
+                    break;
+            }
+            
         }
-        
-    }
     }
 }
 
@@ -1159,6 +1152,9 @@ NSDictionary *stationConverter = @{@"beetroot" : @"Station 1",
         counter ++;
     }
     
+    // Updates the action flags from the SimHome database (eg. current power values)
+    [self updateData];
+    
     if (canConnectWithStations)
         [self updateStation];
     else {
@@ -1189,20 +1185,20 @@ NSDictionary *stationConverter = @{@"beetroot" : @"Station 1",
     //NSLog(@"here is %d",self.stationChosen);
     
     /*
-    switch (self.stationChosen) {
-        case 0:
-             current_station = @"Station 1";
-            break;
-        case 1:
-             current_station = @"Station 2";
-            break;
-        case 2:
-             current_station = @"Station 3";
-            break;
-        default:
-            current_station = @"Station 1";
-            break;
-    }
+     switch (self.stationChosen) {
+     case 0:
+     current_station = @"Station 1";
+     break;
+     case 1:
+     current_station = @"Station 2";
+     break;
+     case 2:
+     current_station = @"Station 3";
+     break;
+     default:
+     current_station = @"Station 1";
+     break;
+     }
      */
     //station_list = [NSMutableArray arrayWithObjects:current_station, nil];
 }
@@ -1211,7 +1207,7 @@ NSDictionary *stationConverter = @{@"beetroot" : @"Station 1",
 {
     NSDictionary *dict;
     
-
+    
     NSError *json_error = nil;
     id json = [NSJSONSerialization JSONObjectWithData:downloaded_data options:0 error:&json_error];
     
@@ -1267,43 +1263,55 @@ NSDictionary *stationConverter = @{@"beetroot" : @"Station 1",
 
 - (void) updateStation{
     [self stationUpdated:self.currentStation];
-    //station_list = [NSMutableArray arrayWithObjects:current_station, nil];
-    
-//    NSData *data = [NSData dataWithContentsOfURL:url1];
-//    NSString *ret = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-//    NSLog(@"ret=%@", ret);
-    
-    NSError *error;
-    NSMutableArray *json;
-    NSData *data = [NSData dataWithContentsOfURL: url1];
-    
-    if ([data length] > 0) {         // check if data is null
-        json = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
-        lampValue = [json valueForKey:@"showpower"];
-    } else {
-        lampValue = @"10";
-    }
-    [action_flags[current_station][@"Devices"][@"Device 1"] setObject:lampValue forKey:@"Watts"];
-    
-    // Here is an example of changing the data inside the dictionary!
-//    [action_flags[current_station][@"Devices"][@"Device 1"] setObject:@"Hello world!" forKey:@"Name"];
-    
-    data = [NSData dataWithContentsOfURL: url2];
-    if ([data length] > 0) {        // check if data is null
-        json = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
-        fanValue = [json valueForKey:@"showpower"];
-    } else {
-        fanValue = @"10";
-    }
-    
-
-    [action_flags[current_station][@"Devices"][@"Device 2"] setObject:lampValue forKey:@"Watts"];
     
     if (self.currentMode == NR_OVERVIEW_TABLE)
         [tableViewController update_table];
     else if (self.currentMode == NR_SMART_TABLE)
         [smartTableViewController update_table];
     
+}
+
+-(void)updateData
+{
+    NSError *error;
+    NSMutableArray *json;
+    NSURL *url;
+    NSData *data;
+    
+    for (id station in realStationNames) {
+        for (id deviceNum in action_flags[station][@"Devices"]) {
+            NSString *deviceAPI = [self getDeviceAPINameForDevice:action_flags[station][@"Devices"][deviceNum][@"Name"]];
+            
+            // Get the current power value for a device
+            url = [NSURL URLWithString:[@"http://128.195.151.158/simhome/db/?type=showpower&&dev=" stringByAppendingString:deviceAPI]];
+            data = [NSData dataWithContentsOfURL: url];
+            
+            if ([data length] > 0) {    // check if data is null
+                json = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+                // Update the power value inside the internal device dictionary
+                [action_flags[station][@"Devices"][deviceNum] setObject:[json valueForKey:@"showpower"] forKey:@"Watts"];
+            }
+            /* DELETE IN FINAL FORM, just want to use this to test out the pie chart */
+            else {
+                //
+                [action_flags[station][@"Devices"][deviceNum] setObject:@"100" forKey:@"Watts"];
+            }
+
+            
+            // Get the daily power data
+            url = [NSURL URLWithString:[NSString stringWithFormat:@"http://128.195.151.158/simhome/db/?type=showtable&table=%@_Daily_2016", deviceAPI]];
+            data = [NSData dataWithContentsOfURL: url];
+            
+            if ([data length] > 0) {
+                json = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+                
+                if ([[json valueForKey:@"showtable"] isKindOfClass:[NSString class]])
+                    continue;
+                
+                [action_flags[station][@"Devices"][deviceNum] setObject:[json valueForKey:@"showtable"] forKey:@"Daily"];
+            }
+        }
+    }
 }
 
 #pragma mark -
@@ -1349,11 +1357,11 @@ NSDictionary *stationConverter = @{@"beetroot" : @"Station 1",
 
 - (void)speakToSpeakSentences
 {
-        NSLog(@"Files to speak: %@", self.filesToSpeak);
-        
-        [self.glController.modelManager playTemporaryAction:[self.filesToSpeak objectAtIndex:0] withPath:[NSFileManager documentsPath] andDelay:0];
-        [self.filesToSpeak removeObjectAtIndex:0];
-
+    NSLog(@"Files to speak: %@", self.filesToSpeak);
+    
+    [self.glController.modelManager playTemporaryAction:[self.filesToSpeak objectAtIndex:0] withPath:[NSFileManager documentsPath] andDelay:0];
+    [self.filesToSpeak removeObjectAtIndex:0];
+    
 }
 
 - (void)addToSpeakFile:(NSString *)filename
@@ -1368,10 +1376,10 @@ NSDictionary *stationConverter = @{@"beetroot" : @"Station 1",
     // Ading new Audio locally through hard drive
     self.filesToSpeak = [NSMutableArray array];
     [self addToSpeakFile:@"welcome-assistant.wav"];
-//  [self addToSpeakFile:@"file1b.wav"];
-//  [self addToSpeakFile:@"file1c.wav"];
+    //  [self addToSpeakFile:@"file1b.wav"];
+    //  [self addToSpeakFile:@"file1c.wav"];
     [self speakToSpeakSentences];
-
+    
 }
 
 - (void)speakSecondOption
@@ -1397,7 +1405,7 @@ NSDictionary *stationConverter = @{@"beetroot" : @"Station 1",
 - (void)speakGBTM
 {
     [self speakAction:[speech_generator back_to_menu_message]];
-
+    
 }
 
 #pragma mark -
@@ -1442,23 +1450,23 @@ NSDictionary *stationConverter = @{@"beetroot" : @"Station 1",
 {
     @synchronized (self) {
         
-    if (!videoViewDisplayed) {
-        videoViewDisplayed = YES;
-        
-        [videoView removeFromSuperview];
-        videoView = [[NrVideoView alloc] initWithMainViewController:self];
-        
-        [self adjustDetailViewToVideoView];
-        [self.detailView addSubview:videoView];
-        
-        if (self.currentMode == NR_MAIN)
-            [self ShowDetailViewWithDelay:1];
-        
-        [self performSelector:@selector(speakVideo) withObject:nil afterDelay:0.25];
-        self.currentMode = NR_VIDEO;
-    }
-    can_speak = YES;
-    canClickBack = YES;
+        if (!videoViewDisplayed) {
+            videoViewDisplayed = YES;
+            
+            [videoView removeFromSuperview];
+            videoView = [[NrVideoView alloc] initWithMainViewController:self];
+            
+            [self adjustDetailViewToVideoView];
+            [self.detailView addSubview:videoView];
+            
+            if (self.currentMode == NR_MAIN)
+                [self ShowDetailViewWithDelay:1];
+            
+            [self performSelector:@selector(speakVideo) withObject:nil afterDelay:0.25];
+            self.currentMode = NR_VIDEO;
+        }
+        can_speak = YES;
+        canClickBack = YES;
     }
     
 }
@@ -1474,41 +1482,41 @@ NSDictionary *stationConverter = @{@"beetroot" : @"Station 1",
             [self uncover];
             return;
         }
-    if(singleFingerTap == nil){
-        
-        self.currentMode = NR_VIDEO;
-        processing = NO;
-        //Creem un NSURL amb el path del video. En el nostre cas és el path a resources,
-        //però podria ser una url http://www....
-         NSURL *videoURL = [[NSBundle mainBundle] URLForResource:@"SimHome Prototype v3" withExtension:@"mp4"];
-
-        //Creem el controlador del vídeo i li passem la URL que haurà de reproduir
-        videoView.moviePlayer =  [[MPMoviePlayerController alloc]
-                                  initWithContentURL:videoURL];
-        
-        //Aquesta crida és opcional. Serveix per definir una funció que cridarà quan el vídeo
-        //hagi finalitzat. Cridarà la funció moviePlayBalkDidFinish:
-        [[NSNotificationCenter defaultCenter] addObserver:videoView.self selector:@selector(moviePlayBackDidFinish:) name:MPMoviePlayerPlaybackDidFinishNotification object:videoView.moviePlayer];
-        
-        //ControlStyle defineix l'estil dels botons (play, pause, volum, etc.)
-        //MPMovieControlStyleNone treu els controls.
-        videoView.moviePlayer.controlStyle = MPMovieControlStyleNone;
-        videoView.moviePlayer.movieSourceType = MPMovieSourceTypeStreaming;
-        videoView.moviePlayer.shouldAutoplay = NO;
-        
-        //Assignem al vídeo una mida (width, height) per a què coincideixi amb el UIView
-        //on volem que es reprodueixi.
-        [[videoView.moviePlayer view] setFrame:[videoView.self.videoCanvas bounds]];
-        
-        //Inserim el video en el videoCanvas
-        [videoView.self.videoCanvas addSubview:videoView.moviePlayer.view];
-        
-        //Posem la propietat fullscreen del video a NO. D'aquesta manera no sortim de la
-        //vista actual.
-        [videoView.moviePlayer setFullscreen:NO animated:NO];
-        [videoView.moviePlayer play];
-        can_speak = YES;
-        [self createGesture:videoView.self.gestureRecognizer];
+        if(singleFingerTap == nil){
+            
+            self.currentMode = NR_VIDEO;
+            processing = NO;
+            //Creem un NSURL amb el path del video. En el nostre cas és el path a resources,
+            //però podria ser una url http://www....
+            NSURL *videoURL = [[NSBundle mainBundle] URLForResource:@"SimHome Prototype v3" withExtension:@"mp4"];
+            
+            //Creem el controlador del vídeo i li passem la URL que haurà de reproduir
+            videoView.moviePlayer =  [[MPMoviePlayerController alloc]
+                                      initWithContentURL:videoURL];
+            
+            //Aquesta crida és opcional. Serveix per definir una funció que cridarà quan el vídeo
+            //hagi finalitzat. Cridarà la funció moviePlayBalkDidFinish:
+            [[NSNotificationCenter defaultCenter] addObserver:videoView.self selector:@selector(moviePlayBackDidFinish:) name:MPMoviePlayerPlaybackDidFinishNotification object:videoView.moviePlayer];
+            
+            //ControlStyle defineix l'estil dels botons (play, pause, volum, etc.)
+            //MPMovieControlStyleNone treu els controls.
+            videoView.moviePlayer.controlStyle = MPMovieControlStyleNone;
+            videoView.moviePlayer.movieSourceType = MPMovieSourceTypeStreaming;
+            videoView.moviePlayer.shouldAutoplay = NO;
+            
+            //Assignem al vídeo una mida (width, height) per a què coincideixi amb el UIView
+            //on volem que es reprodueixi.
+            [[videoView.moviePlayer view] setFrame:[videoView.self.videoCanvas bounds]];
+            
+            //Inserim el video en el videoCanvas
+            [videoView.self.videoCanvas addSubview:videoView.moviePlayer.view];
+            
+            //Posem la propietat fullscreen del video a NO. D'aquesta manera no sortim de la
+            //vista actual.
+            [videoView.moviePlayer setFullscreen:NO animated:NO];
+            [videoView.moviePlayer play];
+            can_speak = YES;
+            [self createGesture:videoView.self.gestureRecognizer];
         }
     }
     can_speak = YES;
@@ -1605,34 +1613,20 @@ NSDictionary *stationConverter = @{@"beetroot" : @"Station 1",
 
 - (void)hideChartView
 {
-
+    
 }
 
-/*
-- (void)loadSmartTableForDevice:(NSString *)device
-{
-    @synchronized(self){
-        [self speakAction:[speech_generator enter_smart_table_view_message_with_device:
-                           action_flags[current_station][@"Devices"][device][@"Name"]]];
-        [self disappearViewWithDuration:0.5 onView:tableViewController.tableView];
-        [tableViewController.tableView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.5];
-        
-        [smartTableViewController update_data:action_flags[current_station]];
-        [smartTableViewController setDevice:device];
-        
-        [smartTableViewController performSelector:@selector(update_table) withObject:nil afterDelay:0.5];
-        
-        smartTableViewController.view.frame = self.detailView.bounds;
-        smartTableViewController.view.backgroundColor = [UIColor clearColor];
-        [self performSelector:@selector(displaySmartTable) withObject:nil afterDelay:0.5];
-        
-        self.currentMode = NR_SMART_TABLE;
-    }
-}
-*/
 - (void)backFromChartView
 {
-   
+    
+}
+
+// Returns the Device API name form for a real device Name
+// eg. "Apple TV" --> "AppleTV", "Blu-Ray" --> "BluRay"
+// this should definitely be somewhere else, like a device class
+-(NSString *)getDeviceAPINameForDevice:(NSString *)device
+{
+    return [[device stringByReplacingOccurrencesOfString:@" " withString:@""] stringByReplacingOccurrencesOfString:@"-" withString:@""];
 }
 
 
@@ -1689,7 +1683,7 @@ NSDictionary *stationConverter = @{@"beetroot" : @"Station 1",
 {
     [self hideSmartTable];
     if (self.currentMode != NR_OVERVIEW_TABLE) {
-        [tableViewController set_station:station_locked];
+        [tableViewController set_station:realStationNames[station_locked]];
         [tableViewController update_data:action_flags[station_locked]];
         
         if (self.currentMode == NR_VIDEO && videoViewDisplayed) {
@@ -1722,7 +1716,7 @@ NSDictionary *stationConverter = @{@"beetroot" : @"Station 1",
         
         self.currentMode = NR_MAIN;
         tableViewDisplayed = NO;
-
+        
         [self uncover];
     }
 }
@@ -1731,15 +1725,15 @@ NSDictionary *stationConverter = @{@"beetroot" : @"Station 1",
 {
     //station_locked = current_station;
     if (self.currentMode == NR_OVERVIEW_TABLE) {
-        [self speakAction:[speech_generator already_in_overview_message_with_station:station_locked]];
+        [self speakAction:[speech_generator already_in_overview_message_with_station:realStationNames[station_locked]]];
     }
     else if (self.currentMode == NR_SMART_TABLE) {
         [self loadOverviewTable];
-        [self speakAction:[speech_generator return_to_overview_message_with_station:station_locked]];
+        [self speakAction:[speech_generator return_to_overview_message_with_station:realStationNames[station_locked]]];
     }
     else if (self.currentMode == NR_STATION) {
         [self loadOverviewTable];
-        [self speakAction:[speech_generator enter_overview_message_with_station:station_locked]];
+        [self speakAction:[speech_generator enter_overview_message_with_station:realStationNames[station_locked] withStationData:action_flags[current_station]]];
     }
     else {
         [self loadOverviewTable];
@@ -1760,26 +1754,34 @@ NSDictionary *stationConverter = @{@"beetroot" : @"Station 1",
 {
     smartTableViewController.tableView.alpha = 0.0f;
     [self adjustDetailViewToSmartTable];
+    
+    BOOL displayedChart = [barChartController displayChart];
+    
     [UIView animateWithDuration:0.5 animations:^ {
+        
         smartTableViewController.tableView.frame = CGRectMake(0,0, self.detailView.frame.size.width, self.detailView.frame.size.height);
+        
         [self.detailView addSubview:smartTableViewController.tableView];
+        
+        if (displayedChart)
+            [self.secondDetailView addSubview:barChartController];
     }];
     [self appearViewWithDuration:0.5 onView:smartTableViewController.tableView];
 }
 
 - (void)hideSmartTable
 {
-    
+    // Hide the smart table
     [self disappearViewWithDuration:0.5 onView:smartTableViewController.tableView];
     [smartTableViewController.tableView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.5];
-    [self disappearViewWithDuration:0.5 onView:smartTableViewController.pieChart];
-    [smartTableViewController.pieChart performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.5];
-
+    
+    // Hide the bar chart
+    [self disappearViewWithDuration:0.5 onView:barChartController];
+    [barChartController performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.5];
 }
 
 
 //TODO
-//so far it is like a shit
 // here maybe need to change currentstation to station locked
 - (void)loadSmartTableForDevice:(NSString *)device
 {
@@ -1788,88 +1790,50 @@ NSDictionary *stationConverter = @{@"beetroot" : @"Station 1",
         [self disappearViewWithDuration:0.5 onView:tableViewController.tableView];
         [tableViewController.tableView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.5];
         
-    if(![device isEqualToString:@"pieChart"]){
-        [self speakAction:[speech_generator enter_smart_table_view_message_with_device:
-                           action_flags[current_station][@"Devices"][device][@"Name"]]];
         
-        [smartTableViewController update_data:action_flags[current_station]];
-        [smartTableViewController setDevice:device];
-    
-        [smartTableViewController performSelector:@selector(update_table) withObject:nil afterDelay:0.5];
-        }
-        else
-        {
-            [self speakAction:[speech_generator enter_piechart_message_with_station:
-                               current_station]];
+        // Load the bar chart along with the smart table
+        barChartController = [[NrBarChartViewController alloc] initWithFrame:CGRectMake(0,0, self.secondDetailView.frame.size.width, self.secondDetailView.frame.size.height)];
+        [barChartController setData:action_flags[current_station][@"Devices"][device] withDevice:device];
+        
+        if(![device isEqualToString:@"pieChart"]){
+            [self speakAction:[speech_generator enter_smart_table_view_message_with_device:
+                               action_flags[current_station][@"Devices"][device][@"Name"]]];
             
             [smartTableViewController update_data:action_flags[current_station]];
             [smartTableViewController setDevice:device];
             
             [smartTableViewController performSelector:@selector(update_table) withObject:nil afterDelay:0.5];
         }
-
+        else
+        {
+            [self speakAction:[speech_generator enter_piechart_message_with_station:
+                               realStationNames[current_station]]];
+            
+            [smartTableViewController update_data:action_flags[current_station]];
+            [smartTableViewController setDevice:device];
+            
+            [smartTableViewController performSelector:@selector(update_table) withObject:nil afterDelay:0.5];
+        }
+        
         
         smartTableViewController.view.frame = self.detailView.bounds;
         smartTableViewController.view.backgroundColor = [UIColor clearColor];
         
         if(![device isEqualToString:@"pieChart"]){
             [self performSelector:@selector(displaySmartTable) withObject:nil afterDelay:0.5];
-             self.currentMode = NR_SMART_TABLE;
+            self.currentMode = NR_SMART_TABLE;
         }
         else{
-//            smartTableViewController.tableView.alpha = 0.0f;
-//            [self adjustDetailViewToSmartTable];
-//            [UIView animateWithDuration:0.5 animations:^ {
-//                smartTableViewController.tableView.frame = CGRectMake(0,0, self.detailView.frame.size.width, self.detailView.frame.size.height);
-//                [self.detailView addSubview:smartTableViewController.tableView];
-//            }];
-//            [self appearViewWithDuration:0.5 onView:smartTableViewController.tableView];
-            
-            
             smartTableViewController.tableView.alpha = 0.0f;
             [self adjustDetailViewToSmartTable];
-            //TODO
-            NSArray *items;
-            if([station_locked  isEqual: @"Station 1"]){
-            items = @[
-                               [PNPieChartDataItem dataItemWithValue:35 color:PNFreshGreen description:@"Lamp"],
-                               [PNPieChartDataItem dataItemWithValue:70 color:PNDeepGreen description:@"Fan"],
-                               [PNPieChartDataItem dataItemWithValue:70 color:PNLightGreen description:@"Appliance"]
-                               ];
-            }
-            else if ([station_locked  isEqual: @"Station 2"]){
-                items = @[
-                          [PNPieChartDataItem dataItemWithValue:20 color:PNFreshGreen description:@"AppleTV"],
-                          [PNPieChartDataItem dataItemWithValue:150 color:PNDeepGreen description:@"TV"],
-                          [PNPieChartDataItem dataItemWithValue:30 color:PNLightGreen description:@"BluRay"]
-                          ];
             
-            }
-            else if ([station_locked  isEqual: @"Station 3"]){
-                items = @[
-                                   [PNPieChartDataItem dataItemWithValue:900 color:PNFreshGreen description:@"RiceCooker"],
-                                   [PNPieChartDataItem dataItemWithValue:300 color:PNDeepGreen description:@"CoffeeMaker"],
-                                   [PNPieChartDataItem dataItemWithValue:500 color:PNLightGreen description:@"Toaster"]
-                                   ];
-            }
-            
-            //smartTableViewController.pieChart = [[PNPieChart alloc] initWithFrame:CGRectMake(SCREEN_WIDTH /2.0 - 100, 135, 200.0, 200.0) items:items];
-           
             [UIView animateWithDuration:0.5 animations:^ {
                 NSLog(@"%f",self.detailView.frame.size.height);
                 NSLog(@"%f",self.detailView.frame.size.width);
                 
-                smartTableViewController.pieChart = [[PNPieChart alloc] initWithFrame:CGRectMake(SCREEN_WIDTH /2.0 - 230, 105, self.detailView.frame.size.height + 50,self.detailView.frame.size.height + 50) items:items];
-                [self.detailView addSubview:smartTableViewController.pieChart];
-                
             }];
-            smartTableViewController.pieChart.showOnlyValues = NO;
-            smartTableViewController.pieChart.descriptionTextFont  = [UIFont fontWithName:@"Avenir-Medium" size:15.0];
-            //smartTableViewController.pieChart.legendStyle = PNLegendItemStyleStacked;
-            //smartTableViewController.pieChart.legendFont = [UIFont boldSystemFontOfSize:12.0f];
             
-            [self appearViewWithDuration:0.5 onView:smartTableViewController.pieChart];
-             self.currentMode = NR_SMART_TABLE;
+            self.currentMode = NR_SMART_TABLE;
         }
         
     }
@@ -1898,6 +1862,9 @@ NSDictionary *stationConverter = @{@"beetroot" : @"Station 1",
     
     for (id device in action_flags[station_locked][@"Devices"]) {
         NSNumber *watts = [NSNumber numberWithFloat:[[action_flags[station_locked][@"Devices"][device] valueForKey:@"Watts"] floatValue]];
+        
+        if ([watts isEqualToNumber:[NSNumber numberWithFloat:0]])
+            continue;
         
         [items addObject:[PNPieChartDataItem dataItemWithValue:[watts floatValue] color:colors[colorIndex] description:action_flags[station_locked][@"Devices"][device][@"Name"]]];
         
@@ -1935,7 +1902,7 @@ NSDictionary *stationConverter = @{@"beetroot" : @"Station 1",
 
 -(void) handleTap:(UIGestureRecognizer *) recognizer
 {
-
+    
     NSLog(@"did tape here Gilbert");
 }
 
@@ -1971,19 +1938,19 @@ NSDictionary *stationConverter = @{@"beetroot" : @"Station 1",
 #pragma mark Beacon Callback
 
 //- (void)proximityContentManager:(ProximityContentManager *)proximityContentManager didUpdateContent:(id)content {
-//    
-//    
+//
+//
 //    BeaconDetails *beaconDetails = content;
 ////    count++;
 ////    NSLog(@"%d",count);
 //    if (beaconDetails) {
 //        //     self.view.backgroundColor = beaconDetails.backgroundColor;
 //        NSLog(@"%@",beaconDetails.beaconName);
-//        
+//
 //    } else {
 //        self.view.backgroundColor = BeaconDetails.neutralColor;
 //        NSLog(@"No beacons");
-//        
+//
 //    }
 //}
 #pragma mark -
@@ -1991,7 +1958,7 @@ NSDictionary *stationConverter = @{@"beetroot" : @"Station 1",
 //- (void) passValue:(NSString *)value{
 //
 //    NSLog(@"here is the delegate value,%@",value);
-//    
+//
 //}
 
 #pragma mark -
@@ -2009,37 +1976,37 @@ NSDictionary *stationConverter = @{@"beetroot" : @"Station 1",
 
 
 -(void) stationUpdated:(NSString *) station {
-        NSLog(@"data updated! the station is %@",station);
-        if ([_currentStation isEqualToString:station] ) {
-            count++;
-            if(count < 4)
-            {
-                NSLog(@"count is %d, less than 4s",count);
-            }
-            else{
-                NSLog(@"enough");
-                count = 0;
-                if (![_preStation isEqualToString:station] ) {
-    //                [self pushAlertButton:station];
-//                    if([station isEqualToString:@"beetroot"]){
-//                         calVC.stationChosen = 0;
-//                    }
-//                    if([station isEqualToString:@"candy"]){
-//                        calVC.stationChosen = 1;
-//                    }
-//                    if([station isEqualToString:@"lemon"]){
-//                        calVC.stationChosen = 2;
-//                    }
-                    self.currentStation = station;
-                    [self pushAlertButton:station];
-                    _preStation = station;
-                }
-            }
-        } else {
-            count = 1;
-            self.currentStation = station;
-            NSLog(@"New Stations");
+    NSLog(@"data updated! the station is %@",station);
+    if ([_currentStation isEqualToString:station] ) {
+        count++;
+        if(count < 4)
+        {
+            NSLog(@"count is %d, less than 4s",count);
         }
+        else{
+            NSLog(@"enough");
+            count = 0;
+            if (![_preStation isEqualToString:station] ) {
+                //                [self pushAlertButton:station];
+                //                    if([station isEqualToString:@"beetroot"]){
+                //                         calVC.stationChosen = 0;
+                //                    }
+                //                    if([station isEqualToString:@"candy"]){
+                //                        calVC.stationChosen = 1;
+                //                    }
+                //                    if([station isEqualToString:@"lemon"]){
+                //                        calVC.stationChosen = 2;
+                //                    }
+                self.currentStation = station;
+                [self pushAlertButton:station];
+                _preStation = station;
+            }
+        }
+    } else {
+        count = 1;
+        self.currentStation = station;
+        NSLog(@"New Stations");
+    }
 }
 
 #pragma mark -
@@ -2112,6 +2079,12 @@ NSDictionary *stationConverter = @{@"beetroot" : @"Station 1",
     }];
 }
 
+-(void)shutUp
+{
+    [super shutUp];
+    can_speak = YES;
+}
+
 #pragma mark Notification Handlers
 
 - (IBAction)notificationRejectClicked:(id)sender {
@@ -2128,6 +2101,9 @@ NSDictionary *stationConverter = @{@"beetroot" : @"Station 1",
         if (self.currentMode == NR_VIDEO)       // remove video view when changing stations
             [videoView removeFromSuperview];
         
+        if (!can_speak)
+            [self shutUp];
+        
         self.currentMode = NR_STATION;
         [self stationItemViewWithAlert:stationConverter[self.currentStation]];
     }
@@ -2135,36 +2111,34 @@ NSDictionary *stationConverter = @{@"beetroot" : @"Station 1",
 
 #pragma mark Notification Methods
 
-- (void)pushAlertButton:(NSString *) station{
+- (void)pushAlertButton:(NSString *)station{
     
     if(self.currentMode != NR_VIDEO && canConnectWithStations){
         
         NSString* stationInNotificationLabel = [[self.notificationLabel text] stringByReplacingOccurrencesOfString:@"detected! Connect to it?" withString:@""];
-        NSLog(@"Notification view string = %@", stationInNotificationLabel);
         
         [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(slideNotificationViewDown) object:nil];
         
-        [self.notificationLabel setText:[NSString stringWithFormat:@"%@ detected! Connect?", stationConverter[station]]];
+        [self.notificationLabel setText:[NSString stringWithFormat:@"%@ detected! Connect?", realStationNames[stationConverter[station]]]];
         
         // Animate the notification view up to the screen
         [self slideNotificationViewUp];
         
-//        [self speakAction:[speech_generator find_station]];
+        //        [self speakAction:[speech_generator find_station]];
         
         NSString *soundFilePath = [[NSBundle mainBundle] pathForResource:@"ding" ofType:@"mp3"];
         NSURL *soundFileURL = [NSURL fileURLWithPath:soundFilePath];
-        NSLog(@"sound file url = %@", soundFileURL);
         
         AVAudioSession *session = [AVAudioSession sharedInstance];
         [session setCategory:AVAudioSessionCategoryPlayback error:nil];
-
+        
         if (!self.audioPlayer)
             self.audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:soundFileURL error:nil];
         
         [self.audioPlayer prepareToPlay];
         [self.audioPlayer play];
         
-
+        
     }
 }
 
