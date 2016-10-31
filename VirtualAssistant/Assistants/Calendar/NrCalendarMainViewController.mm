@@ -894,7 +894,7 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
                     //                        [self StopAndHideVideoViewClicked];
                     //                    }
                     
-                    [self speakAction:[speech_generator connect_to_station_message]];
+                    [self speakAction:[speech_generator connect_to_station_message_with_station_list:[[realStationNames allValues] mutableCopy]]];
                     [self changeItemsTo:calItem.itemID];
                     
                     //start scan bluetooth
@@ -1290,6 +1290,7 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
                 json = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
                 // Update the power value inside the internal device dictionary
                 [action_flags[station][@"Devices"][deviceNum] setObject:[json valueForKey:@"showpower"] forKey:@"Watts"];
+                NSLog(@"Current power value has been updated for %@!", action_flags[station][@"Devices"][deviceNum][@"Name"]);
             }
             /* DELETE IN FINAL FORM, just want to use this to test out the pie chart */
             else {
@@ -1309,6 +1310,7 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
                     continue;
                 
                 [action_flags[station][@"Devices"][deviceNum] setObject:[json valueForKey:@"showtable"] forKey:@"Daily"];
+                NSLog(@"URL = %@, result = %@", [url absoluteString], [json valueForKey:@"showtable"]);
             }
         }
     }
@@ -1333,6 +1335,10 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
 - (void)speakAction:(NSString *)sentence
 {
     NSLog(@"Model can speak: %hhd", can_speak);
+    
+    // Crashes if sentence is empty
+    if ([sentence isEqualToString:@""])
+        return;
     
     if (can_speak) {
         NSString* filename = [NSString stringWithFormat:@"%@%d", @"speakTestAction", ++speech_counter];
@@ -1537,15 +1543,6 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
         [videoView.moviePlayer stop];
         [self HideAndRemoveDetailView];
         [self speakAction:[speech_generator back_to_menu_message]];
-        /*
-         if(_moviePlayer.playbackState == MPMoviePlaybackStatePlaying){
-         NSLog(@"Yes Playing");
-         }
-         else{
-         [self.mainViewController speakGBTM];
-         NSLog(@"Not Playing");
-         }
-         */
         self.currentMode = NR_MAIN;
         videoViewDisplayed = NO;
         [self uncover];
@@ -1729,7 +1726,7 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
     }
     else if (self.currentMode == NR_SMART_TABLE) {
         [self loadOverviewTable];
-        [self speakAction:[speech_generator return_to_overview_message_with_station:realStationNames[station_locked]]];
+        [self speakAction:[speech_generator return_to_overview_message_with_station:realStationNames[station_locked] withStationData:action_flags[current_station]]];
     }
     else if (self.currentMode == NR_STATION) {
         [self loadOverviewTable];
@@ -1763,8 +1760,10 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
         
         [self.detailView addSubview:smartTableViewController.tableView];
         
-        if (displayedChart)
+        if (displayedChart) {
             [self.secondDetailView addSubview:barChartController];
+            [barChartController displayChartLabelsInView:self.secondDetailView];
+        }
     }];
     [self appearViewWithDuration:0.5 onView:smartTableViewController.tableView];
 }
@@ -1777,7 +1776,11 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
     
     // Hide the bar chart
     [self disappearViewWithDuration:0.5 onView:barChartController];
+    [self disappearViewWithDuration:0.5 onView:[barChartController titleLabel]];
+    [self disappearViewWithDuration:0.5 onView:[barChartController xAxisLabel]];
     [barChartController performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.5];
+    [[barChartController titleLabel] performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.5];
+    [[barChartController xAxisLabel] performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.5];
 }
 
 
@@ -1806,9 +1809,6 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
         }
         else
         {
-            [self speakAction:[speech_generator enter_piechart_message_with_station:
-                               realStationNames[current_station]]];
-            
             [smartTableViewController update_data:action_flags[current_station]];
             [smartTableViewController setDevice:device];
             
@@ -2051,6 +2051,7 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
     
     [self.notificationAcceptButton setEnabled:false];
     [self.notificationRejectButton setEnabled:false];
+    [self.notificationRejectButton setAlpha:0.6];
     [UIView animateWithDuration:0.65 delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
         [self.notificationView setFrame:CGRectMake(self.notificationView.frame.origin.x,
                                                    notificationYPositionHide,
@@ -2066,6 +2067,7 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
     
     [self.notificationAcceptButton setEnabled:true];
     [self.notificationRejectButton setEnabled:true];
+    [self.notificationRejectButton setAlpha:1];
     
     [UIView animateWithDuration:0.7 delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
         
@@ -2077,12 +2079,6 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
     } completion:^(BOOL finished) {
         [self performSelector:@selector(slideNotificationViewDown) withObject:nil afterDelay:10];
     }];
-}
-
--(void)shutUp
-{
-    [super shutUp];
-    can_speak = YES;
 }
 
 #pragma mark Notification Handlers
@@ -2116,6 +2112,7 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
     if(self.currentMode != NR_VIDEO && canConnectWithStations){
         
         NSString* stationInNotificationLabel = [[self.notificationLabel text] stringByReplacingOccurrencesOfString:@"detected! Connect to it?" withString:@""];
+        NSLog(@"Notification view string = %@", stationInNotificationLabel);
         
         [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(slideNotificationViewDown) object:nil];
         
@@ -2128,6 +2125,7 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
         
         NSString *soundFilePath = [[NSBundle mainBundle] pathForResource:@"ding" ofType:@"mp3"];
         NSURL *soundFileURL = [NSURL fileURLWithPath:soundFilePath];
+        NSLog(@"sound file url = %@", soundFileURL);
         
         AVAudioSession *session = [AVAudioSession sharedInstance];
         [session setCategory:AVAudioSessionCategoryPlayback error:nil];

@@ -11,6 +11,37 @@
 
 @implementation NrBarChartViewController
 
+-(id)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        
+        NSInteger titleFontSize = 18, xAxisFontSize = 12;
+        
+        // Set the title bar
+        self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, titleFontSize)];
+        [self.titleLabel setText:@"Device Usage Over Past Week"];
+        [self.titleLabel setFont:[UIFont fontWithName:@"Arial Rounded MT Bold" size:titleFontSize]];
+        [self.titleLabel setTextColor:[UIColor whiteColor]];
+        [self.titleLabel setTextAlignment:NSTextAlignmentCenter];
+        [self.titleLabel setBackgroundColor:[UIColor darkGrayColor]];
+        [self.titleLabel setAlpha:0.85];
+        [self.titleLabel setAdjustsFontSizeToFitWidth:YES];
+        
+        self.xAxisLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, frame.size.height-xAxisFontSize, frame.size.width, xAxisFontSize)];
+        [self.xAxisLabel setText:@"Days of Recorded Activity"];
+        [self.xAxisLabel setFont:[UIFont fontWithName:@"Arial Rounded MT Bold" size:xAxisFontSize]];
+        [self.xAxisLabel setTextColor:[UIColor whiteColor]];
+        [self.xAxisLabel setTextAlignment:NSTextAlignmentCenter];
+        [self.xAxisLabel setBackgroundColor:[UIColor darkGrayColor]];
+        [self.xAxisLabel setAlpha:0.85];
+        [self.xAxisLabel setAdjustsFontSizeToFitWidth:YES];
+        
+        [self setFrame:CGRectMake(0, titleFontSize, frame.size.width, frame.size.height - self.titleLabel.frame.size.height - xAxisFontSize)];
+    }
+    return self;
+}
+
 -(BOOL)displayChart
 {
     NSDictionary *data = [self dailyPowerValues];
@@ -37,17 +68,24 @@
     // Set Data
     
     [self setYValues:[weeklyData objectAtIndex:1]]; // Power values
-    [self setXLabels:[weeklyData objectAtIndex:0]]; // Dates
+    [self setXLabels:[self unixToStringArrayFromArray:[weeklyData objectAtIndex:0]]]; // Dates
     
     
     // Draw the chart
     [self strokeChart];
     
     // X-label fix: for some reason, the x-labels will only display if you do this
-    [self setXLabels:[weeklyData objectAtIndex:0]];
+    [self setXLabels:[self unixToStringArrayFromArray:[weeklyData objectAtIndex:0]]];
     
     return YES; // we displayed the chart
 }
+
+-(void)displayChartLabelsInView:(UIView *)view
+{
+    [view addSubview:self.titleLabel];
+    [view addSubview:self.xAxisLabel];
+}
+
 
 -(void)setData:(NSMutableDictionary *)deviceData withDevice:(NSString *)device
 {
@@ -70,9 +108,7 @@
     
     for (NSInteger index = 0; index < [values count]; index++) {
         double timeStampVal = [self.deviceData[@"Daily"][index][0] doubleValue];
-        NSTimeInterval timeStamp = timeStampVal;
-        
-        NSString *date = [self dateForTimeStamp:timeStamp];
+        NSNumber *timeStamp = [NSNumber numberWithDouble:timeStampVal];
         
         // Skip if the value is null
         if ([self.deviceData[@"Daily"][index][1] isKindOfClass:[NSNull class]])
@@ -80,7 +116,7 @@
         
         NSNumber *value = [NSNumber numberWithFloat:[self.deviceData[@"Daily"][index][1] floatValue]];
         
-        [result setObject:value forKey:date];
+        [result setObject:value forKey:timeStamp];
     }
     
     return result;
@@ -98,18 +134,31 @@
     return dateString;
 }
 
+// Returns an array of dates ["7/11", "7/12", ...] from a list of UNIX timestamps
+-(NSArray *)unixToStringArrayFromArray:(NSArray *)array
+{
+    NSMutableArray *result = [[NSMutableArray alloc] init];
+    for (NSInteger i = 0; i < [array count]; i++) {
+        NSTimeInterval timeStamp = [[array objectAtIndex:i] doubleValue];
+        NSString *date = [self dateForTimeStamp:timeStamp];
+        
+        [result addObject:date];
+    }
+    return result;
+}
+
 -(NSArray *)lastSevenDaysOfDeviceUsageWithData:(NSDictionary *)data
 {
-    NSArray *keys = [data allKeys],
-            *values = [data allValues];
+    NSArray *keys = [[data allKeys] sortedArrayUsingSelector:@selector(compare:)];
+    
+    NSMutableArray *values = [[NSMutableArray alloc] init];
+    for (id key in keys)
+        [values addObject:[data objectForKey:key]];
     
     if ([data count] < 7)
         return @[ keys, values ];
         
     return @[ [keys subarrayWithRange:NSMakeRange([keys count]-7, 7)] , [values subarrayWithRange:NSMakeRange([keys count]-7, 7)] ];
-    
-    
-    
 }
 
 @end

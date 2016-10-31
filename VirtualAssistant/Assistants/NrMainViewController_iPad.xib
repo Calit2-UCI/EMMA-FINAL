@@ -93,7 +93,7 @@
                                 <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="AmH-Zl-9I2">
                                     <frame key="frameInset" minX="622" minY="8" width="125" height="42"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <state key="normal" image="cancel_button.png" backgroundImage="cancel_button.png"/>
+                                    <state key="normal" image="cancel_button.png"/>
                                     <connections>
                                         <action selector="notificationRejectClicked:" destination="-1" eventType="touchUpInside" id="ZkQ-fS-ATD"/>
                                     </connections>

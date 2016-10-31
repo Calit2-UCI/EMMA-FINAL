@@ -26,11 +26,13 @@
  }
  */
 @property (nonatomic, strong) NSMutableDictionary* deviceData;
-
-
 @property (nonatomic, strong) NSString* device;
 
+@property (nonatomic, strong) UILabel *titleLabel, *xAxisLabel, *yAxisLabel;
+
+
 -(BOOL)displayChart;
+-(void)displayChartLabelsInView:(UIView *)view;
 - (void)setData:(NSMutableDictionary *)deviceData withDevice:(NSString *)device;
 
 @end
