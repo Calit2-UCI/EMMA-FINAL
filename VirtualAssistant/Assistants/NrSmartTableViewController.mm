@@ -137,8 +137,16 @@ static dispatch_once_t onceToken;
             cell.cell2.text = @"Test";
             
         } else if (indexPath.row == 4) {
-            // Header column for 'max consumption'
-            cell.cell1.text = [NSString stringWithFormat:@"Total usage last week: %@", @"0 W"];
+            cell.cell2.numberOfLines = 2;
+            
+            // Header column for 'Average consumption this past week'
+            cell.cell1.text = @"  Avg. Consumption (Week)";
+            
+            cell.cell2.text = [[[[self lastSevenDaysOfDeviceUsageWithData] objectAtIndex:1] objectAtIndex:0] count] == 0 ? @"0 W" : [NSString stringWithFormat:@"%.2f W", [self sumOfLastSevenDaysUsage]/[[[[self lastSevenDaysOfDeviceUsageWithData] objectAtIndex:1] objectAtIndex:0] count]];
+            
+        } else if (indexPath.row == 5) {
+            // Header column for 'Total usage last week'
+            cell.cell1.text = [NSString stringWithFormat:@"Total usage last week: %.1f W", [self sumOfLastSevenDaysUsage]];
         }
     }
 }
@@ -172,8 +180,13 @@ static dispatch_once_t onceToken;
             cell.cell2.text = @"100 W";
             
         } else if (indexPath.row == 4) {
-            // Header column for 'max consumption'
-            cell.cell1.text = [NSString stringWithFormat:@"Total usage last week: %@", @"0 W"];
+            // Header column for 'Average consumption this past week'
+            NSLog(@"Updating row 4?!");
+            cell.cell2.text = [[[[self lastSevenDaysOfDeviceUsageWithData] objectAtIndex:1] objectAtIndex:0] count] == 0 ? @"0 W" : [NSString stringWithFormat:@"%.2f W", [self sumOfLastSevenDaysUsage]/[[[[self lastSevenDaysOfDeviceUsageWithData] objectAtIndex:1] objectAtIndex:0] count]];
+            
+        } else if (indexPath.row == 5) {
+            // Header column for 'Total usage last week'
+            cell.cell1.text = [NSString stringWithFormat:@"Total usage last week: %.1f W", [self sumOfLastSevenDaysUsage]];
         }
     }
 }
@@ -184,12 +197,12 @@ static dispatch_once_t onceToken;
 {
     NSInteger num_of_devices = [self.station_data[@"Number of Devices"] integerValue];
     
-    for (NSInteger i = 0; i < num_of_devices+1; ++i) {
+    for (NSInteger i = 0; i < num_of_devices+3; ++i) {
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:i inSection:0];
         NrGridTableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
         
+        NSLog(@"Updating table at row %d", i);
         [self update_cell_data:cell atIndexPath:indexPath];
-//        [cell.cell1 setTextColor:[UIColor whiteColor]];
     }
 }
 
@@ -223,7 +236,7 @@ static dispatch_once_t onceToken;
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 5;
+    return 6;
 }
 
 // Customize the appearance of table view cells.
@@ -251,7 +264,7 @@ static dispatch_once_t onceToken;
         cell.cell2.backgroundColor = [UIColor clearColor];
         cell.cell2.frame = CGRectMake(0, 0, 0,0);
         
-    } else if (indexPath.row == 4) {
+    } else if (indexPath.row == 5) {
         cell.topCell = NO;
         
         cell.cell1.font = [UIFont fontWithName:@"Arial-BoldMT" size:24];
@@ -432,6 +445,43 @@ static dispatch_once_t onceToken;
         NSLog(@"ret=%@", ret);
          }
     }
+}
+
+#pragma mark -
+# pragma mark Data Helpers
+
+-(NSArray *)lastSevenDaysOfDeviceUsageWithData
+{
+    NSDictionary *data = self.station_data[@"Devices"][self.device];
+    
+    NSArray *keys = [[data allKeys] sortedArrayUsingSelector:@selector(compare:)];
+    NSMutableArray *values = [[NSMutableArray alloc] init];
+    
+    for (id key in keys)
+        [values addObject:[data objectForKey:key]];
+    
+    if ([data count] < 7)
+        return @[ keys, values ];
+    
+    return @[ [keys subarrayWithRange:NSMakeRange([keys count]-7, 7)] , [values subarrayWithRange:NSMakeRange([keys count]-7, 7)] ];
+}
+
+-(float)sumOfLastSevenDaysUsage
+{
+    float sum = 0;
+    NSArray *values = [self lastSevenDaysOfDeviceUsageWithData];
+    NSLog(@"values = %@", [[values objectAtIndex:1] objectAtIndex:0]);
+    
+    for (int i = 0; i < [[[values objectAtIndex:1] objectAtIndex:0] count]; i++) {
+        
+        NSLog(@"To be added = %@", [[[values objectAtIndex:1] objectAtIndex:0] objectAtIndex:i]);
+        if ([[[[[values objectAtIndex:1] objectAtIndex:0] objectAtIndex:i] objectAtIndex:1] isKindOfClass:[NSNull class]] )
+            continue;
+        
+        sum += [[[[[values objectAtIndex:1] objectAtIndex:0] objectAtIndex:i] objectAtIndex:1] floatValue];
+    }
+    NSLog(@"sum = %.2f", sum);
+    return sum;
 }
 
 #pragma mark -

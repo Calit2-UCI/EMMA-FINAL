@@ -307,6 +307,12 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
     
 }
 
+-(void)shutUp
+{
+    [super shutUp];
+    can_speak = YES;
+}
+
 #pragma mark -
 #pragma mark Button Methods
 
@@ -1154,10 +1160,9 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
     
     // Updates the action flags from the SimHome database (eg. current power values)
     [self updateData];
+    [self updateStation];
     
-    if (canConnectWithStations)
-        [self updateStation];
-    else {
+    if (!canConnectWithStations){
         [self slideNotificationViewDown];
     }
 }
@@ -1264,8 +1269,13 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
 - (void) updateStation{
     [self stationUpdated:self.currentStation];
     
-    if (self.currentMode == NR_OVERVIEW_TABLE)
+    if (self.currentMode == NR_OVERVIEW_TABLE) {
         [tableViewController update_table];
+        
+        [[pieChartController pieChart] updateChartData:[self loadPieChartDataForStation]];
+        [[pieChartController pieChart] setDisplayAnimated:NO];
+        [[pieChartController pieChart] strokeChart];
+    }
     else if (self.currentMode == NR_SMART_TABLE)
         [smartTableViewController update_table];
     
@@ -1659,7 +1669,9 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
         // for second view inside detail view
         [self.secondDetailView setHidden:NO];
         [self.secondDetailView setAlpha:1.0f];
+        [[pieChartController pieChart] setDisplayAnimated:YES];
         pieChartController.pieChart = [[PNPieChart alloc] initWithFrame:CGRectMake(0, 0, self.secondDetailView.frame.size.width, self.secondDetailView.frame.size.height) items:items];
+        [[pieChartController pieChart] performSelector:@selector(setDisplayAnimated:) withObject:@YES afterDelay:1];
         [self.secondDetailView addSubview:pieChartController.pieChart];
         
         pieChartController.pieChart.showOnlyValues = NO;
@@ -1743,7 +1755,7 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
 - (void)adjustDetailViewToSmartTable
 {
     CGRect newBounds = CGRectMake(self.detailView.frame.origin.x, self.detailView.frame.origin.y,
-                                  self.detailView.frame.size.width, 230);
+                                  self.detailView.frame.size.width, 263);
     [self.detailView setFrame:newBounds];
 }
 
@@ -1778,9 +1790,11 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
     [self disappearViewWithDuration:0.5 onView:barChartController];
     [self disappearViewWithDuration:0.5 onView:[barChartController titleLabel]];
     [self disappearViewWithDuration:0.5 onView:[barChartController xAxisLabel]];
+    [self disappearViewWithDuration:0.5 onView:[barChartController yAxisLabel]];
     [barChartController performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.5];
     [[barChartController titleLabel] performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.5];
     [[barChartController xAxisLabel] performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.5];
+    [[barChartController yAxisLabel] performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0.5];
 }
 
 
@@ -1854,7 +1868,7 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
 
 -(NSArray *)loadPieChartDataForStation
 {
-    [self updateStation];
+//    [self updateStation];
     
     NSMutableArray *items = [[NSMutableArray alloc] init];
     NSArray *colors = @[PNFreshGreen, PNDeepGreen, PNGreen];

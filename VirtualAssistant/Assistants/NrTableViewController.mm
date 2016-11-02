@@ -123,6 +123,7 @@ UISwitch *overview_switch;
     [self.station_data setValue:station[@"Number of Devices"] forKey:@"Number of Devices"];
     //[self.station_data setValue:station[@"Total Energy Consumption"] forKey:@"Total Energy Consumption"];
     [self.station_data setValue:station[@"Total Usage"] forKey:@"Total Usage"];
+    [self.station_data setValue:station[@"Devices"] forKey:@"Devices"];
         
     
     NSLog(@"Station data updated: %@", self.station_data);
@@ -196,7 +197,7 @@ UISwitch *overview_switch;
             cell.cell2.text = [NSString stringWithFormat:@"%@ W", self.station_data[@"Devices"][device_key][@"Watts"]];
             [cell.cell2 setAdjustsFontSizeToFitWidth:YES];
             
-            [self set_device_color:device_key for_cell:cell];
+//            [self set_device_color:device_key for_cell:cell];
         }
     }
 }
@@ -248,7 +249,7 @@ UISwitch *overview_switch;
             [deviceSwitch setOn:[self switchIsOn:status] animated:YES];
             
             [self change_cell_content:cell for_device:device_key];
-            [self set_device_color:device_key for_cell:cell];
+//            [self set_device_color:device_key for_cell:cell];
         }
     }
 }

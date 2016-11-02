@@ -8,6 +8,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="NrMainViewController">
             <connections>
+                <outlet property="activityIndicator" destination="iuu-Bg-TzY" id="71f-Us-RKt"/>
                 <outlet property="assistantView" destination="4" id="127"/>
                 <outlet property="backButton" destination="eyg-hZ-VWr" id="QpO-mi-MOP"/>
                 <outlet property="connectButton" destination="hnr-Kw-CNB" id="yis-Qn-Zcq"/>
@@ -108,12 +109,8 @@
                             <frame key="frameInset" minY="81" width="768" height="100"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         </imageView>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="calplug.png" id="PaR-7W-Vbi">
-                            <frame key="frameInset" minX="8" minY="89" width="316" height="75"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        </imageView>
                         <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="6C3-As-lDm" userLabel="Skip Button">
-                            <frame key="frameInset" minX="487" minY="86" width="80" height="80"/>
+                            <frame key="frameInset" minX="386" minY="86" width="80" height="80"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <state key="normal" backgroundImage="Volume-Off.png"/>
                             <connections>
@@ -121,7 +118,7 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="hnr-Kw-CNB" userLabel="Connect Button">
-                            <frame key="frameInset" minX="588" minY="86" width="80" height="80"/>
+                            <frame key="frameInset" minX="491" minY="86" width="80" height="80"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <state key="normal" image="Bluetooth_Icon.png"/>
                             <connections>
@@ -137,7 +134,7 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="eyg-hZ-VWr" userLabel="Back Button">
-                            <frame key="frameInset" minX="368" minY="86" width="80" height="80"/>
+                            <frame key="frameInset" minX="271" minY="86" width="80" height="80"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                             <state key="normal" backgroundImage="Back.png">
@@ -151,6 +148,14 @@
                                 <action selector="backButtonClicked:" destination="-2" eventType="touchUpInside" id="KMv-Ab-9qH"/>
                             </connections>
                         </button>
+                        <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" style="whiteLarge" id="iuu-Bg-TzY" userLabel="Activity Indicator">
+                            <frame key="frameInset" minX="612" minY="108" width="37" height="37"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        </activityIndicatorView>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="calplug.png" id="PaR-7W-Vbi">
+                            <frame key="frameInset" minX="8" minY="94" width="255" height="64"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        </imageView>
                     </subviews>
                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                     <accessibility key="accessibilityConfiguration">

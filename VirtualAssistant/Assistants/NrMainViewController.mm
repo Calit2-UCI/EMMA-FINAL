@@ -193,6 +193,7 @@ int totalTTS = 0;
         if (count == [choppedEvents count]) {
             gTTS.last = YES;
         }
+
         [gTTS requestTTS];
         count ++;
     }

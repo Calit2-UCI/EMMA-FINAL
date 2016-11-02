@@ -16,10 +16,10 @@
     self = [super initWithFrame:frame];
     if (self) {
         
-        NSInteger titleFontSize = 18, xAxisFontSize = 12;
+        NSInteger titleFontSize = 18, axisFontSize = 12;
         
         // Set the title bar
-        self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, titleFontSize)];
+        self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(axisFontSize, 0, frame.size.width-axisFontSize, titleFontSize)];
         [self.titleLabel setText:@"Device Usage Over Past Week"];
         [self.titleLabel setFont:[UIFont fontWithName:@"Arial Rounded MT Bold" size:titleFontSize]];
         [self.titleLabel setTextColor:[UIColor whiteColor]];
@@ -28,16 +28,29 @@
         [self.titleLabel setAlpha:0.85];
         [self.titleLabel setAdjustsFontSizeToFitWidth:YES];
         
-        self.xAxisLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, frame.size.height-xAxisFontSize, frame.size.width, xAxisFontSize)];
+        self.xAxisLabel = [[UILabel alloc] initWithFrame:CGRectMake(axisFontSize, frame.size.height-axisFontSize, frame.size.width-axisFontSize, axisFontSize)];
         [self.xAxisLabel setText:@"Days of Recorded Activity"];
-        [self.xAxisLabel setFont:[UIFont fontWithName:@"Arial Rounded MT Bold" size:xAxisFontSize]];
+        [self.xAxisLabel setFont:[UIFont fontWithName:@"Arial Rounded MT Bold" size:axisFontSize]];
         [self.xAxisLabel setTextColor:[UIColor whiteColor]];
         [self.xAxisLabel setTextAlignment:NSTextAlignmentCenter];
         [self.xAxisLabel setBackgroundColor:[UIColor darkGrayColor]];
         [self.xAxisLabel setAlpha:0.85];
         [self.xAxisLabel setAdjustsFontSizeToFitWidth:YES];
         
-        [self setFrame:CGRectMake(0, titleFontSize, frame.size.width, frame.size.height - self.titleLabel.frame.size.height - xAxisFontSize)];
+        self.yAxisLabel = [[UILabel alloc] initWithFrame:CGRectMake(-frame.size.width/4 - 44, frame.size.height/2-6, frame.size.height, axisFontSize)];
+        
+        // Rotate the yAxisLabel to be vertical
+        self.yAxisLabel.transform = CGAffineTransformMakeRotation( ( 270 * M_PI ) / 180 );
+        
+        [self.yAxisLabel setText:@"Power (Watts)"];
+        [self.yAxisLabel setFont:[UIFont fontWithName:@"Arial Rounded MT Bold" size:axisFontSize]];
+        [self.yAxisLabel setTextColor:[UIColor whiteColor]];
+        [self.yAxisLabel setTextAlignment:NSTextAlignmentCenter];
+        [self.yAxisLabel setBackgroundColor:[UIColor darkGrayColor]];
+        [self.yAxisLabel setAlpha:0.85];
+        [self.yAxisLabel setAdjustsFontSizeToFitWidth:YES];
+        
+        [self setFrame:CGRectMake(axisFontSize, titleFontSize, frame.size.width-axisFontSize, frame.size.height - self.titleLabel.frame.size.height - axisFontSize)];
     }
     return self;
 }
@@ -84,6 +97,7 @@
 {
     [view addSubview:self.titleLabel];
     [view addSubview:self.xAxisLabel];
+    [view addSubview:self.yAxisLabel];
 }
 
 
