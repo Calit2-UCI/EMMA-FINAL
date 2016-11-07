@@ -33,7 +33,7 @@
 
 -(BOOL)displayChart;
 -(void)displayChartLabelsInView:(UIView *)view;
-- (void)setData:(NSMutableDictionary *)deviceData withDevice:(NSString *)device;
+- (void)setData:(NSDictionary *)deviceData withDevice:(NSString *)device;
 
 @end
 

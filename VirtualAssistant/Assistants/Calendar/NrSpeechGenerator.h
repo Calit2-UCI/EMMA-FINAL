@@ -34,6 +34,7 @@
 @property (nonatomic, retain) NSArray *already_in_overview_messages;       // from overview table
 
 @property (nonatomic, retain) NSArray *enter_smart_table_view_messages;
+@property (nonatomic, retain) NSDictionary *smart_device_info_messages;
 
 @property (nonatomic, retain) NSArray *turn_off_station_messages;
 @property (nonatomic, retain) NSArray *turn_on_station_messages;

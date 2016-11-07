@@ -19,6 +19,7 @@
 #import "PNBarChart.h"
 #import "NrBarChartViewController.h"
 
+#import "NrDataHandler.h"
 
 #import "BeaconDetails.h"
 #import "BeaconDetailsCloudFactory.h"
@@ -51,6 +52,7 @@
 @synthesize action_flags;
 @synthesize lampValue;
 @synthesize fanValue;
+@synthesize dataHandler;
 
 
 // *** App members ***
@@ -149,6 +151,7 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
 {
     [super viewDidLoad];
     action_flags = [NSMutableDictionary dictionary];
+    self.dataHandler = [[NrDataHandler alloc] init];
     self.lampValue = @"0.0";
     self.fanValue = @"0.0";
     [self loadScrollMainItem];
@@ -168,19 +171,6 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
     [self.notificationView addGestureRecognizer:self.notificationSwipeGestureRecognizer];
     [self.notificationLabel addGestureRecognizer:self.notificationSwipeGestureRecognizer];
     [self.notificationLabel setAdjustsFontSizeToFitWidth:YES];
-    
-    //    self.proximityContentManager = [[ProximityContentManager alloc]
-    //                                    initWithBeaconIDs:@[
-    //                                                        [[BeaconID alloc] initWithUUIDString:@"B9407F30-F5F8-466E-AFF9-25556B57FE6D" major:10575 minor:30159],
-    //                                                        [[BeaconID alloc] initWithUUIDString:@"B9407F30-F5F8-466E-AFF9-25556B57FE6D" major:12315 minor:42375],
-    //                                                        [[BeaconID alloc] initWithUUIDString:@"B9407F30-F5F8-466E-AFF9-25556B57FE6D" major:21412 minor:5512]
-    //                                                        ]
-    //                                    beaconContentFactory:[[CachingContentFactory alloc] initWithBeaconContentFactory:[BeaconDetailsCloudFactory new]]];
-    //    self.proximityContentManager.delegate = self;
-    //[self.proximityContentManager startContentUpdates];
-    
-    //    NrViewController *beaconValueController = [[NrViewController alloc] init];
-    //    beaconValueController.delegate = self;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -244,6 +234,13 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
     
     [self loadJSONFile];
     
+    [tableViewController update_data:[dataHandler stationDataForStation:current_station]];
+    
+    if (self.currentMode == NR_OVERVIEW_TABLE)
+        [tableViewController update_table];
+    else if (self.currentMode == NR_SMART_TABLE)
+        [smartTableViewController update_table];
+    
     //where to start timer
     [self startTimer];
     
@@ -290,8 +287,7 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
         [tableViewController update_table];
     else if (self.currentMode == NR_SMART_TABLE)
         [smartTableViewController update_table];
-    
-    [self do_actions];
+
     //NSLog(@"String downloaded: %@", JSONData);
     
 }
@@ -590,6 +586,7 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
     //    scroll.pagingEnabled = YES;
     
     NSInteger numberOfItems = [action_flags[current_station][@"Number of Devices"] integerValue] + 1; // + 1 to account for overview tab and station view
+    
     
     
     NrDeviceItemView *sampleLittleView = [[NrDeviceItemView alloc] initWithID:0];
@@ -1160,6 +1157,7 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
     
     // Updates the action flags from the SimHome database (eg. current power values)
     [self updateData];
+    [dataHandler updateData];
     [self updateStation];
     
     if (!canConnectWithStations){
@@ -1251,13 +1249,11 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
             [action_flags setObject:new_flags[flag] forKey:flag];
         }
         
-        [tableViewController update_data:action_flags[current_station]];
+        [tableViewController update_data:[dataHandler stationDataForStation:current_station]];
         if (self.currentMode == NR_OVERVIEW_TABLE)
             [tableViewController update_table];
         else if (self.currentMode == NR_SMART_TABLE)
             [smartTableViewController update_table];
-        
-        [self do_actions];
     }
 }
 
@@ -1288,6 +1284,7 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
     NSURL *url;
     NSData *data;
     
+    /* TODO: Change NSData to NSURLConnection */
     for (id station in realStationNames) {
         for (id deviceNum in action_flags[station][@"Devices"]) {
             NSString *deviceAPI = [self getDeviceAPINameForDevice:action_flags[station][@"Devices"][deviceNum][@"Name"]];
@@ -1358,16 +1355,6 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
     }
 }
 
-- (void)do_actions
-{
-    // add more actions from set of action flags to make model do more stuff
-    if ([action_flags[@"EMMA"][@"Video"][@"Trigger"] isEqual:@1])
-        [self loadvideo];
-    
-    else if ([action_flags[@"EMMA"][@"Speak"][@"Trigger"] isEqual:@1])
-        [self speakAction:action_flags[@"EMMA"][@"Speak"][@"TTS"]];
-}
-
 #pragma mark -
 #pragma mark General Speak Functions
 
@@ -1409,10 +1396,11 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
 
 #pragma mark Speak Video functions
 
+// TODO: CHANGE VIDEO SPEECH!
 - (void)speakVideo
 {
     NSArray *sentences = [NSArray arrayWithObjects:
-                          action_flags[@"EMMA"][@"Video"][@"TTS"],
+                          @"Hello, Christian please remember to change the video sentence. thank you.",
                           nil];
     NSLog(@"%@",sentences);
     [self speakSentences:sentences withMaxLength:400 toFileName:@"Video" inLanguage:NSLocalizedString(@"LANG_TTS", nil)];
@@ -1693,7 +1681,7 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
     [self hideSmartTable];
     if (self.currentMode != NR_OVERVIEW_TABLE) {
         [tableViewController set_station:realStationNames[station_locked]];
-        [tableViewController update_data:action_flags[station_locked]];
+        [tableViewController update_data:[dataHandler stationDataForStation:current_station]];
         
         if (self.currentMode == NR_VIDEO && videoViewDisplayed) {
             [videoView.moviePlayer stop];
@@ -1738,11 +1726,11 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
     }
     else if (self.currentMode == NR_SMART_TABLE) {
         [self loadOverviewTable];
-        [self speakAction:[speech_generator return_to_overview_message_with_station:realStationNames[station_locked] withStationData:action_flags[current_station]]];
+        [self speakAction:[speech_generator return_to_overview_message_with_station:realStationNames[station_locked] withStationData:[dataHandler stationDataForStation:current_station]]];
     }
     else if (self.currentMode == NR_STATION) {
         [self loadOverviewTable];
-        [self speakAction:[speech_generator enter_overview_message_with_station:realStationNames[station_locked] withStationData:action_flags[current_station]]];
+        [self speakAction:[speech_generator enter_overview_message_with_station:realStationNames[station_locked] withStationData:[dataHandler stationDataForStation:current_station]]];
     }
     else {
         [self loadOverviewTable];
@@ -1810,20 +1798,21 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
         
         // Load the bar chart along with the smart table
         barChartController = [[NrBarChartViewController alloc] initWithFrame:CGRectMake(0,0, self.secondDetailView.frame.size.width, self.secondDetailView.frame.size.height)];
-        [barChartController setData:action_flags[current_station][@"Devices"][device] withDevice:device];
+        NSLog(@"Device data = %@", [dataHandler deviceDataForDevice:device atStation:current_station]);
+        [barChartController setData:[dataHandler deviceDataForDevice:device atStation:current_station] withDevice:device];
         
         if(![device isEqualToString:@"pieChart"]){
             [self speakAction:[speech_generator enter_smart_table_view_message_with_device:
-                               action_flags[current_station][@"Devices"][device][@"Name"]]];
+                               [[dataHandler deviceDataForDevice:device atStation:current_station] objectForKey:@"Name"]]];
             
-            [smartTableViewController update_data:action_flags[current_station]];
+            [smartTableViewController update_data:[dataHandler stationDataForStation:current_station]];
             [smartTableViewController setDevice:device];
             
             [smartTableViewController performSelector:@selector(update_table) withObject:nil afterDelay:0.5];
         }
         else
         {
-            [smartTableViewController update_data:action_flags[current_station]];
+            [smartTableViewController update_data:[dataHandler stationDataForStation:current_station]];
             [smartTableViewController setDevice:device];
             
             [smartTableViewController performSelector:@selector(update_table) withObject:nil afterDelay:0.5];
@@ -1977,6 +1966,7 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
 
 #pragma mark -
 #pragma mark data updated
+/* TODO: Change NSData to NSURLConnection */
 -(NSData *) dataUpdated{
     NSURL *url = [NSURL URLWithString:@"http://128.195.151.158/simhome/db/?type=showtable&table=Lamp_Hourly_04192015"];
     NSData *data = [NSData dataWithContentsOfURL:url];

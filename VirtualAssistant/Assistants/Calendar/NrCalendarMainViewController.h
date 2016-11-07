@@ -15,6 +15,8 @@
 #import "NrStationItemView.h"
 #import "NaradaDownloader.h"
 
+#import "NrDataHandler.h"
+
 
 #import <MediaPlayer/MediaPlayer.h>
 #import <AudioToolbox/AudioToolbox.h>
@@ -72,6 +74,8 @@ NaradaDownloaderDelegate
 @property (nonatomic) NSString * lampValue;
 @property (nonatomic) NSString * fanValue;
 @property (strong, nonatomic) AVAudioPlayer *audioPlayer;
+
+@property (nonatomic, strong) NrDataHandler *dataHandler;
 
 - (IBAction)mainItemViewClicked:(id)sender;
 - (IBAction)deviceItemViewClicked:(id)sender;

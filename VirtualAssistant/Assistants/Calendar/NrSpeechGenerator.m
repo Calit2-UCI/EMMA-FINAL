@@ -164,6 +164,20 @@
                                              @"Displaying the view for the %@.",
                                              @"Now displaying the  view for your %@."
                                           ];
+    
+    self.smart_device_info_messages = @{
+                                        @"TV": @[@"I see that your TV has been on throughout most of the night. You can use the auto-sleep feature present in most TV's to have it turn off whenever it is not being used.",
+                                                 @"Your TV could improve its power usage by using the auto-sleep feature every three hours of inactivity.",
+                                                 @"I can see that the TV has been using a lot of power during the night time. If you are sleeping during this time, I suggest you implement the auto-sleep feature to save more power in your home.",
+                                                 @"",
+                                                 @""
+                                                 ],
+                                        @"Apple TV": @[@"The Apple TV has been pretty consistent with its usage in the past week. You have been doing a great job at controlling its power usage.",
+                                                       @"This device is a great compliment to the TV and conserves a good amount of power in stand-by mode.",
+                                                       @"",
+                                                       @""
+                                                ]
+                                        };
 }
 
 - (void)init_turn_off_station_messages
