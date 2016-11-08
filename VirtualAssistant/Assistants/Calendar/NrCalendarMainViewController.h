@@ -61,18 +61,13 @@ NaradaDownloaderDelegate
 
 
 // UI elements
-
 @property (nonatomic, strong) NSString *selectedDayName;
-
 @property (nonatomic, strong) UIScrollView *scroll;
 
 @property (nonatomic, strong) NSMutableArray *itemList;
 @property (nonatomic) NSInteger stationChosen;
 @property (nonatomic) NSString *currentStation;
 @property (nonatomic) NSString * preStation;
-@property (nonatomic) NSMutableDictionary *action_flags;
-@property (nonatomic) NSString * lampValue;
-@property (nonatomic) NSString * fanValue;
 @property (strong, nonatomic) AVAudioPlayer *audioPlayer;
 
 @property (nonatomic, strong) NrDataHandler *dataHandler;

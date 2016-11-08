@@ -36,12 +36,9 @@
 
 -(void)updateData
 {
-    NSError *error;
-    NSMutableArray *json;
     NSURL *url;
-    NSData *data;
+    NSMutableURLRequest *request;
     
-    /* TODO: Change NSData to NSURLConnection */
     for (id station in self.realStationNames) {
         for (id deviceNum in self.data[station][@"Devices"]) {
             
@@ -49,34 +46,68 @@
             
             // Get the current power value for a device
             url = [NSURL URLWithString:[@"http://128.195.151.158/simhome/db/?type=showpower&&dev=" stringByAppendingString:deviceAPI]];
-            data = [NSData dataWithContentsOfURL: url];
+            request = [NSMutableURLRequest requestWithURL:url];
+            [request setTimeoutInterval:5.0];
             
-            if ([self dataIsValidWithData:data]) {    // check if data is null
-                json = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
-                // Update the power value inside the internal device dictionary
-                [self.data[station][@"Devices"][deviceNum] setObject:[json valueForKey:@"showpower"] forKey:@"Watts"];
-                NSLog(@"Current power value has been updated for %@!", self.data[station][@"Devices"][deviceNum][@"Name"]);
-            }
-            /* DELETE IN FINAL FORM, just want to use this to test out the pie chart */
-            else {
-                //
-                [self.data[station][@"Devices"][deviceNum] setObject:@"100" forKey:@"Watts"];
-            }
-            
+            [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue currentQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
+                
+                NSMutableArray *json;
+                
+                if (data != nil && error == nil)    // Connection worked, and is live
+                {
+                    if ([self dataIsValidWithData:data]) {    // check if data is null
+                        json = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
+                        
+                        // Update the power value inside the internal device dictionary
+                        [self.data[station][@"Devices"][deviceNum] setObject:[json valueForKey:@"showpower"] forKey:@"Watts"];
+                        
+                        if ([[json valueForKey:@"showpower"] floatValue] > 1)
+                            [self.data[station][@"Devices"][deviceNum] setObject:@"On" forKey:@"Status"];
+                        else
+                            [self.data[station][@"Devices"][deviceNum] setObject:@"Off" forKey:@"Status"];
+                        
+                    }
+                    /* DELETE IN FINAL FORM, just want to use this to test out the pie chart */
+                    else {
+                        //
+                        [self.data[station][@"Devices"][deviceNum] setObject:@"100" forKey:@"Watts"];
+                        [self.data[station][@"Devices"][deviceNum] setObject:@"On" forKey:@"Status"];
+                    }
+                }
+                else
+                {
+                    NSLog(@"Could not connect to the SimHome server! Closing connection...");
+                }
+            }];
             
             // Get the daily power data
             url = [NSURL URLWithString:[NSString stringWithFormat:@"http://128.195.151.158/simhome/db/?type=showtable&table=%@_Daily_2016", deviceAPI]];
-            data = [NSData dataWithContentsOfURL: url];
+            request = [NSMutableURLRequest requestWithURL:url];
+            [request setTimeoutInterval:5.0];
             
-            if ([self dataIsValidWithData:data]) {
-                json = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+            [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue currentQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
                 
-                if ([[json valueForKey:@"showtable"] isKindOfClass:[NSString class]])
-                    continue;
+                NSMutableArray *json;
                 
-                [self.data[station][@"Devices"][deviceNum] setObject:[json valueForKey:@"showtable"] forKey:@"Daily"];
-                NSLog(@"URL = %@, result = %@", [url absoluteString], [json valueForKey:@"showtable"]);
-            }
+                if (data != nil && error == nil)    // Connection worked, and is live
+                {
+                    if ([self dataIsValidWithData:data]) {
+                        json = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+                        
+                        if ([[json valueForKey:@"showtable"] isKindOfClass:[NSString class]])
+                            return;
+                        
+                        [self.data[station][@"Devices"][deviceNum] setObject:[json valueForKey:@"showtable"] forKey:@"Daily"];
+                        
+                        NSLog(@"URL = %@, result = %@", [url absoluteString], [json valueForKey:@"showtable"]);
+                    }
+                }
+                else
+                {
+                    NSLog(@"Could not connect to the SimHome server! Closing connection...");
+                }
+            }];
+            
         }
     }
 }

@@ -385,16 +385,7 @@ static dispatch_once_t onceToken;
         status = NO;
     else
         status = YES;
-//    if([calendarMainViewController.lampValue integerValue] > 0)
-//        status = true;
-//    else
-//        status = false;
-    if([self.station_data[@"Devices"][self.device][@"Name"] isEqualToString:@"Lamp"]){
-            if([calendarMainViewController.lampValue integerValue] > 5)
-                status = true;
-            else
-                status = false;
-    }
+
     [device_switch setOn:status animated:NO];
     
     [device_switch addTarget:self action:@selector(switch_changed:) forControlEvents:UIControlEventTouchUpInside];
@@ -406,11 +397,6 @@ static dispatch_once_t onceToken;
     cell.accessoryView = device_switch;
     BOOL status;
     status = device_switch.isOn;
-    if([calendarMainViewController.lampValue integerValue] > 5)
-                status = true;
-            else
-                status = false;
-    //status = device_switch.isOn;
     [device_switch setOn:status animated:NO];
     
     [device_switch addTarget:self action:@selector(switch_changed:) forControlEvents:UIControlEventTouchUpInside];
@@ -420,30 +406,41 @@ static dispatch_once_t onceToken;
 - (void) switch_changed:(id)sender
 {
     UISwitch* switch_sender = sender;
+    NSString *deviceName = [[self device_name] isEqualToString:@"Lamp"] ? @"Bulb" : [[[self device_name] stringByReplacingOccurrencesOfString:@" " withString:@""] stringByReplacingOccurrencesOfString:@"-" withString:@""];
+    
     if (switch_sender.on) {
         
-        if([[self device_name] isEqualToString:@"Lamp"]){
-        // turn on the device here
-        NSLog(@"Sentence: %@", [device_speech turn_on_device_message:[self device_name]]);
-        [calendarMainViewController speakAction:[device_speech turn_on_device_message:[self device_name]]];
-        NSURL *url = [NSURL URLWithString:@"http://128.195.151.158/simhome/control/on/?device=Bulb&level=100"];
+        NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://128.195.151.158/simhome/control/on/?device=%@&level=100", deviceName]];
+        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+        [request setTimeoutInterval:5.0];
         
-        NSURL *url1 = [NSURL URLWithString:@"http://128.195.151.158/simhome/db/?type=showpower&&dev=lamp"];
-        NSData *data = [NSData dataWithContentsOfURL:url];
-        NSString *ret = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-        NSLog(@"ret=%@", ret);
-        //TODOTODO
-        }
-        
+        [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue currentQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
+            
+            if (data != nil && error == nil)
+            {
+                [calendarMainViewController speakAction:[device_speech turn_on_device_message:[self device_name]]];
+            }
+            else
+            {
+                [calendarMainViewController speakAction:@"I was unable to turn off the device."];
+            }
+        }];
     } else {
-        // turn off the device here
-         if([[self device_name] isEqualToString:@"Lamp"]){
-        [calendarMainViewController speakAction:[device_speech turn_off_device_message:[self device_name]]];
-        NSURL *url = [NSURL URLWithString:@"http://128.195.151.158/simhome/control/on/?device=Bulb&level=0"];
-        NSData *data = [NSData dataWithContentsOfURL:url];
-        NSString *ret = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-        NSLog(@"ret=%@", ret);
-         }
+        NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://128.195.151.158/simhome/control/on/?device=%@&level=0", deviceName]];
+        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+        [request setTimeoutInterval:5.0];
+        
+        [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue currentQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
+            
+            if (data != nil && error == nil)
+            {
+                [calendarMainViewController speakAction:[device_speech turn_off_device_message:[self device_name]]];
+            }
+            else
+            {
+                [calendarMainViewController speakAction:@"I was unable to turn on the device."];
+            }
+        }];
     }
 }
 

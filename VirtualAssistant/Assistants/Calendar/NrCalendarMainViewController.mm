@@ -6,8 +6,6 @@
 //  Copyright (c) 2012 Narada Robotics S.L. All rights reserved.
 //
 
-#import "NaradaDownloader.h"
-#import "NaradaDownloaderDelegate.h"
 #import "NrCalendarMainViewController.h"
 #import "NrAppDelegate.h"
 
@@ -49,20 +47,11 @@
 @synthesize backButton;
 @synthesize skipButton;
 @synthesize exitButton;
-@synthesize action_flags;
-@synthesize lampValue;
-@synthesize fanValue;
 @synthesize dataHandler;
 
 
 // *** App members ***
 BOOL appLocked = YES;
-UIAlertView *cityAlertView, *buyAlertView, *facebookAlert, *voteOptionAlert, *pendingNotificatonAlert;
-
-BOOL postImmediately = NO;
-BOOL fromLoadProfile = NO;
-BOOL moreShown = NO;
-BOOL pendingNotification = NO;
 BOOL started;
 BOOL timerStarted = false;
 BOOL canClickBack = YES;
@@ -73,14 +62,6 @@ UITapGestureRecognizer *singleFingerTap;
 UISwipeGestureRecognizer *swipeRecognizer;
 
 //  *** Action members ***
-//TODO
-//use local file instead google drive
-NSString* json_link = @"https://drive.google.com/a/uci.edu/uc?export&confirm=no_antivirus&id=0B2OE3bpKOXc6SnNkZHNDNHMyX2s";
-NSMutableDictionary* new_flags;
-NSURL *url2 = [NSURL URLWithString:@"http://128.195.151.158/simhome/db/?type=showpower&&dev=Fan"];
-NSURL *url1 = [NSURL URLWithString:@"http://128.195.151.158/simhome/db/?type=showpower&&dev=Lamp"];
-
-//NSString* json_link = @"https://drive.google.com/file/d/0B1gAXFnVaLD8eUVSZ2tTbUluSHc/view?usp=sharing";
 
 BOOL can_speak = YES;// Bool for if model can speak
 NSInteger speech_counter = 0;                                         // For creating unique FBA files
@@ -150,10 +131,8 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    action_flags = [NSMutableDictionary dictionary];
     self.dataHandler = [[NrDataHandler alloc] init];
-    self.lampValue = @"0.0";
-    self.fanValue = @"0.0";
+    
     [self loadScrollMainItem];
     [self loadMainPointingBar];
     
@@ -231,9 +210,6 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
         NSLog(@"Assistant view shown");
     }];
     
-    
-    [self loadJSONFile];
-    
     [tableViewController update_data:[dataHandler stationDataForStation:current_station]];
     
     if (self.currentMode == NR_OVERVIEW_TABLE)
@@ -245,8 +221,6 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
     [self startTimer];
     
     [self speakAction:[speech_generator welcome_message]];
-    //NSLog(@"here is delegate, %d",self.stationChosen);
-    //delegate doesn't work.
 }
 
 /*
@@ -266,32 +240,6 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
     }
 }
 
--(void)loadJSONFile{
-    //[self downloadJSON];
-    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"EMMA" ofType:@"json"];
-    NSError *error = nil;
-    NSData *JSONData = [NSData dataWithContentsOfFile:filePath options:NSDataReadingMappedIfSafe error:&error];
-    new_flags = [[self parseJSON:JSONData] mutableCopy];
-    [self mutableJSONDict:new_flags];
-    
-    // If the file changed, replace old contents of action flags w/new content
-    
-    // Replace contents of current action flags w/new ones
-    for (NSString* flag in new_flags) {
-        [action_flags setObject:new_flags[flag] forKey:flag];
-    }
-    
-    [tableViewController update_data:action_flags[current_station]];
-    //[pieChartController update_data:action_flags[current_station]];
-    if (self.currentMode == NR_OVERVIEW_TABLE)
-        [tableViewController update_table];
-    else if (self.currentMode == NR_SMART_TABLE)
-        [smartTableViewController update_table];
-
-    //NSLog(@"String downloaded: %@", JSONData);
-    
-}
-
 - (void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
@@ -303,11 +251,6 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
     
 }
 
--(void)shutUp
-{
-    [super shutUp];
-    can_speak = YES;
-}
 
 #pragma mark -
 #pragma mark Button Methods
@@ -585,7 +528,7 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
     self.scroll = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, self.daysView.frame.size.width, self.daysView.frame.size.height)];
     //    scroll.pagingEnabled = YES;
     
-    NSInteger numberOfItems = [action_flags[current_station][@"Number of Devices"] integerValue] + 1; // + 1 to account for overview tab and station view
+    NSInteger numberOfItems = [[dataHandler stationDataForStation:current_station][@"Number of Devices"] integerValue] + 1; // + 1 to account for overview tab and station view
     
     
     
@@ -711,36 +654,21 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
             item.imgView.image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"Overview" ofType:@"png"]];
             break;
         case 1:
-            //item.dayName.text = action_flags[current_station][@"Devices"][@"Device 1"][@"Name"];
             item.dayName.text = @"";
-            item.imgView.image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:[self device_picture_path:action_flags[current_station][@"Devices"][@"Device 1"][@"Name"]] ofType:@"png"]];
+            item.imgView.image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:[self device_picture_path:[dataHandler stationDataForStation:current_station][@"Devices"][@"Device 1"][@"Name"]] ofType:@"png"]];
+            
             break;
         case 2:
-            // item.dayName.text = action_flags[current_station][@"Devices"][@"Device 2"][@"Name"];
             item.dayName.text = @"";
-            item.imgView.image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:[self device_picture_path:action_flags[current_station][@"Devices"][@"Device 2"][@"Name"]] ofType:@"png"]];
+            item.imgView.image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:[self device_picture_path:[dataHandler stationDataForStation:current_station][@"Devices"][@"Device 2"][@"Name"]] ofType:@"png"]];
             break;
         case 3:
-            // item.dayName.text = action_flags[current_station][@"Devices"][@"Device 2"][@"Name"];
             item.dayName.text = @"";
-            item.imgView.image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:[self device_picture_path:action_flags[current_station][@"Devices"][@"Device 3"][@"Name"]] ofType:@"png"]];
+            item.imgView.image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:[self device_picture_path:[dataHandler stationDataForStation:current_station][@"Devices"][@"Device 3"][@"Name"]] ofType:@"png"]];
             break;
-            //        case 3:
-            //            item.dayName.text = action_flags[current_station][@"Devices"][@"Device 3"][@"Name"];
-            //            item.imgView.image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:[self device_picture_path:action_flags[current_station][@"Devices"][@"Device 3"][@"Name"]] ofType:@"png"]];
-            //            break;
-            //        case 4:
-            //            item.dayName.text = action_flags[current_station][@"Devices"][@"Device 4"][@"Name"];
-            //            item.imgView.image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:[self device_picture_path:action_flags[current_station][@"Devices"][@"Device 4"][@"Name"]] ofType:@"png"]];
-            //            break;
-            //        case 5:
-            //            item.dayName.text = action_flags[current_station][@"Devices"][@"Device 5"][@"Name"];
-            //            item.imgView.image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:[self device_picture_path:action_flags[current_station][@"Devices"][@"Device 5"][@"Name"]] ofType:@"png"]];
-            //            break;
         default:
-            //item.dayName.text = action_flags[current_station][@"Devices"][[NSString stringWithFormat:@"Device %d", item.itemID]][@"Name"];
             item.dayName.text = @"";
-            item.imgView.image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:[self device_picture_path:action_flags[current_station][@"Devices"][[NSString stringWithFormat:@"Device %d", item.itemID]][@"Name"]] ofType:@"png"]];
+            item.imgView.image = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:[self device_picture_path:[dataHandler stationDataForStation:current_station][@"Devices"][[NSString stringWithFormat:@"Device %d", item.itemID]][@"Name"]] ofType:@"png"]];
             break;
     }
 }
@@ -1063,11 +991,14 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
 }
 
 #pragma mark -
-#pragma mark Move Model Functions
+#pragma mark Model Functions
 
+-(void)shutUp
+{
+    [super shutUp];
+    can_speak = YES;
+}
 
-//09/01/2016
-//TODO: use some degree to check the status
 -(void) MoveModelOut
 {
     @synchronized (self) {
@@ -1144,7 +1075,6 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
         timer = nil;
         counter = 0;
     }
-    //    self.timerCounterLabel.text = @"0";
     
 }
 
@@ -1156,170 +1086,10 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
     }
     
     // Updates the action flags from the SimHome database (eg. current power values)
-    [self updateData];
     [dataHandler updateData];
-    [self updateStation];
     
     if (!canConnectWithStations){
         [self slideNotificationViewDown];
-    }
-}
-
-#pragma mark -
-#pragma mark Downloader Functions
-
-// Edited by Christian Morte - CalPlug - SimHome - 4/17/16
-
-- (void)downloadJSON
-{
-    // Downloads test file from public server
-    NSLog(@"Downloading JSON file from %@", json_link);
-    //[self stationUpdated:self.currentStation];
-    //[self pushAlertButton:self.currentStation];
-    // Initialize downloader with URL of file
-    
-    NaradaDownloader *json_downloader = [[NaradaDownloader alloc] initWithURLString:json_link andDelegate:self];
-    
-    // Requests download, displays if connection failed or succeeded
-    //[downloader requestDownload];
-    
-    [json_downloader requestDownload];
-    
-    //NSLog(@"here is %d",self.stationChosen);
-    
-    /*
-     switch (self.stationChosen) {
-     case 0:
-     current_station = @"Station 1";
-     break;
-     case 1:
-     current_station = @"Station 2";
-     break;
-     case 2:
-     current_station = @"Station 3";
-     break;
-     default:
-     current_station = @"Station 1";
-     break;
-     }
-     */
-    //station_list = [NSMutableArray arrayWithObjects:current_station, nil];
-}
-
-- (NSDictionary*)parseJSON: (NSData *) downloaded_data
-{
-    NSDictionary *dict;
-    
-    
-    NSError *json_error = nil;
-    id json = [NSJSONSerialization JSONObjectWithData:downloaded_data options:0 error:&json_error];
-    
-    if (json_error) {                   // JSON file was malformed
-        NSLog(@"Unable to parse JSON file! Please check format of file!");
-    }
-    
-    if ([json isKindOfClass:[NSDictionary class]]) {    // JSON file can be translated to dict
-        dict = json;
-    } else {
-        NSLog(@"JSON file unable to be converted to NSMutableDictionary");
-    }
-    
-    //NSLog(@"Dictionary created: %@", dict);
-    
-    return dict;
-}
-
-
-
-- (void)naradaDownlaoderDidFinishDownloading:(NaradaDownloader *)downloader
-{
-    NSLog(@"Did download successfully!!");
-    NSLog(@"String downloaded: %@", downloader.receivedString);
-    
-    // create new set of action flags
-    NSMutableDictionary* new_flags = [[self parseJSON:downloader.receivedData] mutableCopy];
-    [self mutableJSONDict:new_flags];
-    
-    // If the file changed, replace old contents of action flags w/new content
-    if ( [self timeHasChanged: new_flags] ) {
-        NSLog(@"THE TIME CHANGED!");
-        
-        // Replace contents of current action flags w/new ones
-        for (NSString* flag in new_flags) {
-            [action_flags setObject:new_flags[flag] forKey:flag];
-        }
-        
-        [tableViewController update_data:[dataHandler stationDataForStation:current_station]];
-        if (self.currentMode == NR_OVERVIEW_TABLE)
-            [tableViewController update_table];
-        else if (self.currentMode == NR_SMART_TABLE)
-            [smartTableViewController update_table];
-    }
-}
-
-- (void)naradaDownloader:(NaradaDownloader *)downloader didFailWithError:(NSError *)error
-{
-    NSLog(@"Downloader failed with error: %@", error.description);
-}
-
-- (void) updateStation{
-    [self stationUpdated:self.currentStation];
-    
-    if (self.currentMode == NR_OVERVIEW_TABLE) {
-        [tableViewController update_table];
-        
-        [[pieChartController pieChart] updateChartData:[self loadPieChartDataForStation]];
-        [[pieChartController pieChart] setDisplayAnimated:NO];
-        [[pieChartController pieChart] strokeChart];
-    }
-    else if (self.currentMode == NR_SMART_TABLE)
-        [smartTableViewController update_table];
-    
-}
-
--(void)updateData
-{
-    NSError *error;
-    NSMutableArray *json;
-    NSURL *url;
-    NSData *data;
-    
-    /* TODO: Change NSData to NSURLConnection */
-    for (id station in realStationNames) {
-        for (id deviceNum in action_flags[station][@"Devices"]) {
-            NSString *deviceAPI = [self getDeviceAPINameForDevice:action_flags[station][@"Devices"][deviceNum][@"Name"]];
-            
-            // Get the current power value for a device
-            url = [NSURL URLWithString:[@"http://128.195.151.158/simhome/db/?type=showpower&&dev=" stringByAppendingString:deviceAPI]];
-            data = [NSData dataWithContentsOfURL: url];
-            
-            if ([data length] > 0) {    // check if data is null
-                json = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
-                // Update the power value inside the internal device dictionary
-                [action_flags[station][@"Devices"][deviceNum] setObject:[json valueForKey:@"showpower"] forKey:@"Watts"];
-                NSLog(@"Current power value has been updated for %@!", action_flags[station][@"Devices"][deviceNum][@"Name"]);
-            }
-            /* DELETE IN FINAL FORM, just want to use this to test out the pie chart */
-            else {
-                //
-                [action_flags[station][@"Devices"][deviceNum] setObject:@"100" forKey:@"Watts"];
-            }
-
-            
-            // Get the daily power data
-            url = [NSURL URLWithString:[NSString stringWithFormat:@"http://128.195.151.158/simhome/db/?type=showtable&table=%@_Daily_2016", deviceAPI]];
-            data = [NSData dataWithContentsOfURL: url];
-            
-            if ([data length] > 0) {
-                json = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
-                
-                if ([[json valueForKey:@"showtable"] isKindOfClass:[NSString class]])
-                    continue;
-                
-                [action_flags[station][@"Devices"][deviceNum] setObject:[json valueForKey:@"showtable"] forKey:@"Daily"];
-                NSLog(@"URL = %@, result = %@", [url absoluteString], [json valueForKey:@"showtable"]);
-            }
-        }
     }
 }
 
@@ -1584,14 +1354,6 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
 
 #pragma mark -
 #pragma mark Table View handler
-
-- (void) speakInfo
-{
-    NSArray *sentences = [NSArray arrayWithObjects:
-                          action_flags[@"EMMA"][@"Info"][@"TTS"],
-                          nil];
-    [self speakSentences:sentences withMaxLength:400 toFileName:@"speakInfo" inLanguage:NSLocalizedString(@"LANG_TTS", nil)];
-}
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -1863,13 +1625,15 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
     NSArray *colors = @[PNFreshGreen, PNDeepGreen, PNGreen];
     NSInteger colorIndex = 0;
     
-    for (id device in action_flags[station_locked][@"Devices"]) {
-        NSNumber *watts = [NSNumber numberWithFloat:[[action_flags[station_locked][@"Devices"][device] valueForKey:@"Watts"] floatValue]];
+    NSDictionary *data = [[dataHandler stationDataForStation:station_locked] objectForKey:@"Devices"];
+    
+    for (id device in data) {
+        NSNumber *watts = [NSNumber numberWithFloat:[data[device][@"Watts"] floatValue]];
         
         if ([watts isEqualToNumber:[NSNumber numberWithFloat:0]])
             continue;
-        
-        [items addObject:[PNPieChartDataItem dataItemWithValue:[watts floatValue] color:colors[colorIndex] description:action_flags[station_locked][@"Devices"][device][@"Name"]]];
+
+        [items addObject:[PNPieChartDataItem dataItemWithValue:[watts floatValue] color:colors[colorIndex] description:data[device][@"Name"]]];
         
         if (colorIndex == [colors count] - 1) {
             colorIndex = 0;
@@ -1937,46 +1701,9 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
 }
 
 
-#pragma mark -
-#pragma mark Beacon Callback
-
-//- (void)proximityContentManager:(ProximityContentManager *)proximityContentManager didUpdateContent:(id)content {
-//
-//
-//    BeaconDetails *beaconDetails = content;
-////    count++;
-////    NSLog(@"%d",count);
-//    if (beaconDetails) {
-//        //     self.view.backgroundColor = beaconDetails.backgroundColor;
-//        NSLog(@"%@",beaconDetails.beaconName);
-//
-//    } else {
-//        self.view.backgroundColor = BeaconDetails.neutralColor;
-//        NSLog(@"No beacons");
-//
-//    }
-//}
-#pragma mark -
-#pragma mark Beacon Delegate
-//- (void) passValue:(NSString *)value{
-//
-//    NSLog(@"here is the delegate value,%@",value);
-//
-//}
 
 #pragma mark -
-#pragma mark data updated
-/* TODO: Change NSData to NSURLConnection */
--(NSData *) dataUpdated{
-    NSURL *url = [NSURL URLWithString:@"http://128.195.151.158/simhome/db/?type=showtable&table=Lamp_Hourly_04192015"];
-    NSData *data = [NSData dataWithContentsOfURL:url];
-    NSLog(@"ret=%@", data);
-    return data;
-}
-
-
-#pragma alert
-#pragma mark -
+#pragma mark Alert Methods
 
 
 -(void) stationUpdated:(NSString *) station {
@@ -1991,16 +1718,6 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
             NSLog(@"enough");
             count = 0;
             if (![_preStation isEqualToString:station] ) {
-                //                [self pushAlertButton:station];
-                //                    if([station isEqualToString:@"beetroot"]){
-                //                         calVC.stationChosen = 0;
-                //                    }
-                //                    if([station isEqualToString:@"candy"]){
-                //                        calVC.stationChosen = 1;
-                //                    }
-                //                    if([station isEqualToString:@"lemon"]){
-                //                        calVC.stationChosen = 2;
-                //                    }
                 self.currentStation = station;
                 [self pushAlertButton:station];
                 _preStation = station;

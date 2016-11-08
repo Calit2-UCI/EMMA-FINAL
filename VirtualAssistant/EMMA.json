@@ -1,6 +1,4 @@
 {
-    "Time" : "10:41:21",
-    
     "Station 3": {
         "Number of Devices" : 3,
         "Total Usage" : 100,
@@ -117,30 +115,6 @@
                 "Daily" : []
             }
             
-        }
-    },
-    
-    
-    "EMMA" : {
-        "Speak" : {
-            "Trigger" : 0,
-            "TTS" : "Hello Sergio, this is a longer sentence to prove to you that it is a longer thing."
-        },
-        
-        "Animation" : {
-            "Trigger" : 0,
-            "Facial" : "NA"
-        },
-        
-        "Info" : {
-            "Trigger" : 1,
-            "TTS" : "Welcome to station 1."
-        },
-        
-        "Video" : {
-            "Trigger" : 0,
-            "TTS" : "Welcome to SIMHome! My name is EMMA, and I will be showing you how to use the application and guide you through a tour of your home. Let's get started with an introduction video!",
-            "File" : "SimHome Prototype v3.mp4"
         }
     }
 }

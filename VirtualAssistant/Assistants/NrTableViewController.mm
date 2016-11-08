@@ -259,13 +259,6 @@ UISwitch *overview_switch;
     NSString *new_cell_1_text = self.station_data[@"Devices"][device_key][@"Name"];
     NSString *new_cell_2_text = [NSString stringWithFormat:@"%@ W", self.station_data[@"Devices"][device_key][@"Watts"]];
     
-    if([new_cell_1_text isEqualToString:@"Lamp"]){
-        new_cell_2_text = [NSString stringWithFormat:@"%@ W", mainViewController.lampValue];
-    }
-    if([new_cell_1_text isEqualToString:@"Fan"]){
-        new_cell_2_text = [NSString stringWithFormat:@"%@ W", mainViewController.fanValue];
-    }
-    
     
     if (cell.cell1.text != new_cell_1_text)
         cell.cell1.text = new_cell_1_text;
@@ -290,14 +283,6 @@ UISwitch *overview_switch;
         else {
             cell.cell1.textColor = unknown_color;
             cell.cell2.textColor = unknown_color;
-        }
-        if([self.station_data[@"Devices"][device_key][@"Name"] isEqualToString:@"Lamp"]){
-            if([mainViewController.lampValue integerValue] > 5){
-                cell.cell1.textColor = on_color;
-            }
-            else{
-                cell.cell1.textColor = off_color;
-            }
         }
     }
 }
