@@ -94,7 +94,7 @@ BOOL canConnectWithStations = YES;
 
 // *** DeviceItemView members ***
 //09/01/2016
-NSArray *device_names = @[@"TV",@"Lamp",@"Fridge",@"Refigerator",@"Macbook",@"Coffee Maker",@"3DPrinter",@"Fan",@"Blu-Ray",@"Apple TV",@"Tablet",@"Rice Cooker",@"Toaster",@"Appliance"];
+NSArray *device_names = @[@"TV",@"Lamp",@"Fridge",@"Refigerator",@"Macbook",@"Coffee Maker",@"3DPrinter",@"Fan",@"Blu-Ray",@"Apple TV",@"Tablet",@"Rice Cooker",@"Toaster",@"Appliance",@"Microwave"];
 
 // *** StationItemView members ***
 NSMutableArray *station_list = [NSMutableArray arrayWithObjects:@"Station 1",@"Station 2",nil];
@@ -1084,8 +1084,9 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
     if (started) {
         counter ++;
     }
+    [self stationUpdated:self.currentStation];
     
-    // Updates the action flags from the SimHome database (eg. current power values)
+    // Updates the data from the SimHome database (eg. current power values)
     [dataHandler updateData];
     
     if (!canConnectWithStations){
@@ -1444,6 +1445,7 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
     if (self.currentMode != NR_OVERVIEW_TABLE) {
         [tableViewController set_station:realStationNames[station_locked]];
         [tableViewController update_data:[dataHandler stationDataForStation:current_station]];
+        [tableViewController update_table];
         
         if (self.currentMode == NR_VIDEO && videoViewDisplayed) {
             [videoView.moviePlayer stop];

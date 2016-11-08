@@ -44,7 +44,7 @@
             "Device 1" : {
                 "Name" : "Apple TV",
                 "Brand": "Apple",
-                "Model": "XS10",
+                "Model": "32GB-USA",
                 "Type" : "Entertainment",
                 "Total Usage/Week" : 16,
                 "Watts" : 20,
@@ -55,7 +55,7 @@
             "Device 2" : {
                 "Name" : "TV",
                 "Brand": "Samsung",
-                "Model": "LED 10",
+                "Model": "UN50JU6500F",
                 "Type" : "Entertainment",
                 "Total Usage/Week" : 25,
                 "Watts" : 150,
@@ -65,11 +65,11 @@
             
             "Device 3" : {
                 "Name" : "Blu-Ray",
-                "Brand": "Sony",
-                "Model": "BluePower 10",
+                "Brand": "Samsung",
+                "Model": "BD-J5900",
                 "Type" : "Entertainment",
                 "Total Usage/Week" : 25,
-                "Watts" : 30,
+                "Watts" : 10.8,
                 "Status" : "Off",
                 "Daily" : [[1471503540, 0.0286], [1471589941, 0.0]]
                 
@@ -84,8 +84,8 @@
         "Devices" : {
             "Device 1" : {
                 "Name" : "Rice Cooker",
-                "Brand": "BetterRice",
-                "Model": "Generic",
+                "Brand": "Aroma",
+                "Model": "ARC-914SBD",
                 "Type" : "Life",
                 "Total Usage/Week" : 16,
                 "Watts" : 900,
@@ -95,9 +95,9 @@
             
             "Device 2" : {
                 "Name" : "Coffee Maker",
-                "Brand": "Hafer",
-                "Model": "CofeeMax 10",
-                "Type" : "Life",
+                "Brand": "Keurig",
+                "Model": "K475",
+                "Type" : "Kitchen",
                 "Total Usage/Week" : 25,
                 "Watts" :300,
                 "Status" : "On",
@@ -105,10 +105,10 @@
             },
             
             "Device 3" : {
-                "Name" : "Toaster",
-                "Brand": "Market Pantry",
-                "Model": "GSX 20",
-                "Type" : "Life",
+                "Name" : "Microwave",
+                "Brand": "Sharp",
+                "Model": "Carousel",
+                "Type" : "Kitchen",
                 "Total Usage/Week" : 25,
                 "Watts" :500,
                 "Status" : "Off",

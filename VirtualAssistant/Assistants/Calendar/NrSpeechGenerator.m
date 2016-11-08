@@ -166,6 +166,7 @@
                                           ];
     
     self.smart_device_info_messages = @{
+                                        // Living Room Devices
                                         @"TV": @[@"I see that your TV has been on throughout most of the night. You can use the auto-sleep feature present in most TV's to have it turn off whenever it is not being used.",
                                                  @"Your TV could improve its power usage by using the auto-sleep feature every three hours of inactivity.",
                                                  @"I can see that the TV has been using a lot of power during the night time. If you are sleeping during this time, I suggest you implement the auto-sleep feature to save more power in your home.",
@@ -176,7 +177,26 @@
                                                        @"This device is a great compliment to the TV and conserves a good amount of power in stand-by mode.",
                                                        @"",
                                                        @""
-                                                ]
+                                                ],
+                                        @"Blu-Ray": @[@"I see that your Blu-Ray player is used mostly during the evenings. To save more power for this device, I suggest unplugging it whenever it is not being used. This can help conserve more power in the living room.",
+                                                      @"The Blu-Ray is one of the least consuming devices in the area overall, seeing that you only use it from time to time. As long as it is left unplugged instead of being left on stand by, you can save more energy.",
+                                                      @"Your Blu-Ray is the optimal choice in the market in terms of saving energy. Compared to other media players in the market, your Blu-Ray device saves more than 30 percent than the market average.",
+                                                      @"",
+                                                      @""
+                                                ],
+                                        
+                                        // Kitchen devices
+                                        @"Coffee Maker": @[@"Your coffee maker is mostly active in the mornings between 6 to 9 AM. I suggest before someon leaves the house, they turn off the device to reduce the plug load usage in the kitchen.",
+                                                           @"The coffee maker is mostly used during the mornings. To further improve its power usage, we can turn off or unplug the device after using it.",
+                                                           @"I see that the coffee maker has been on or plugged in during the nights, which is unusual for its purpose. I suggest checking the status of the device if not being used to save more power in the kitchen.",
+                                                           @"",
+                                                           @""
+                                                ],
+                                        @"Microwave": @[@"Your microwave's usage is very sporadic throughout the day. Despite this, it is a very energy-safe device and saves more than 40% in energy than the average microwave in the market",
+                                                        @"The microwave is one of the higher usage devices inside the kitchen area. However, compared to the average market brand, it is one of the least consuming brands in the market.",
+                                                        @"",
+                                                        @""],
+                                        @"Rice Cooker": @[@"The rice cooker "]
                                         };
 }
 
