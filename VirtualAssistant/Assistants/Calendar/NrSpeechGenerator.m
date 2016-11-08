@@ -109,25 +109,6 @@
                                       @"I can see that your %@ are connected right now. ",
                                       @"Here you have your %@ connected in the area. "];
     
-    self.device_on_messages_for_count = @{
-                                          @0: @[@"None of your devices are turned on. ", @"", @"No devices are currently powered on. "],
-                                          @1: @[@"Only the %@ is powered on. ", @"The %@ is currently on. ", @"The %@ is the only device powered on right now.", @"Your %@ is currently on.", @"The %@ is the only device powered on."],
-                                          @2: @[@"Your %@ are currently powered on right now. ",
-                                                @"I can see that the %@ are the only two devices currently on. ",
-                                                @"I see that the %@ are powered on. ",
-                                                @"The %@ are currently powered on. "],
-                                          @3: @[@"The %@ are all powered on. ",
-                                                @"I see that your %@ are powered on. ",
-                                                @"As you can see in the table, the %@ are currently on. ",
-                                                @"From the table on the right, you can see that the %@ are currently powered on. "],
-                                          @"All": @[@"All the devices for your %@ are currently turned on. ", @"The devices in your %@ are all powered on. ", @"I can see that all the devices in the %@ are powered on. ", @"As you can see, the devices in your %@ are all powered on. "]
-                                          };
-    self.device_off_messages_for_count = @{
-                                          @0: @[@" "],
-                                          @1: @[@"Only the %@ is powered off. ", @"I also see that only the %@ is currently off. ", @"I can see that the only device powered off is the %@. ", @"The %@ is currently off. ", @""],
-                                          @2: @[@"The only two devices currently powered off are your %@. ", @"The %@ are both currently off. ", @"We can also see that the %@ are the only two devices off right now. ", @"Both the %@ are turned off. ", @"", @""],
-                                          @3: @[@"I can also see that the %@ are all powered off. ", @"In addition, the %@ are currently powered off. ", @"Also, we can see that the %@ are all off. ", @"From the table, we can see that the %@ are all currently off. ", @"The %@ are all off. ", @"", @""]};
-    
     // Arg1: station, Arg2: device, Arg3: Power
     self.device_with_most_usage_messages = @[@"The %2$@ has been using the most power for your %1$@ at about %3$d watts. ",
                                              @"Your %2$@ is using up the most power at %3$d watts for your %1$@ . ",
@@ -159,10 +140,10 @@
 - (void)init_enter_smart_table_view_messages
 {
     // Format with Device Name
-    self.enter_smart_table_view_messages = @[@"Showing the view for the %@.",
-                                             @"Here is the view for your %@.",
-                                             @"Displaying the view for the %@.",
-                                             @"Now displaying the  view for your %@."
+    self.enter_smart_table_view_messages = @[@"Here is some information for your %@. ",
+                                             @"Now displaying the data for the %@. ",
+                                             @"Okay, this is Sim-Home's %@. ",
+                                             @"Here is your %@. "
                                           ];
     
     self.smart_device_info_messages = @{
@@ -196,7 +177,10 @@
                                                         @"The microwave is one of the higher usage devices inside the kitchen area. However, compared to the average market brand, it is one of the least consuming brands in the market.",
                                                         @"",
                                                         @""],
-                                        @"Rice Cooker": @[@"The rice cooker "]
+                                        @"Rice Cooker": @[@"I can see that the rice cooker is sporadically on throughout the day, particularly in the mornings and evenings. Assuming this is used before meals, I suggest turning off the device from here after its usage.",
+                                                          @"Your rice cooker has been consuming a fair amount of power, mostly in the mornings and evenings. From what I can see in the chart, shutting this device off during the afternoons can allow up to 30 dollars a month in savings.",
+                                                          @"",
+                                                          @""]
                                         };
 }
 
@@ -319,7 +303,7 @@
     
     NSString *device_with_max_power = [self maxDeviceStringForStation:station withData:stationData];
     
-    return [[[[NSString stringWithFormat:sentence_without_station, station] stringByAppendingString:[NSString stringWithFormat:overview_device_sentence, devices_for_overview]] stringByAppendingString:[self device_status_sentence_with_data:stationData withStation:station]] stringByAppendingString:device_with_max_power];
+    return [[[NSString stringWithFormat:sentence_without_station, station] stringByAppendingString:[NSString stringWithFormat:overview_device_sentence, devices_for_overview]] stringByAppendingString:device_with_max_power];
 }
 
 
@@ -352,7 +336,10 @@
     NSUInteger random_index = [self random_index_for_array:self.enter_smart_table_view_messages];
     NSString *sentence_without_device = [self.enter_smart_table_view_messages objectAtIndex:random_index];
     
-    return [NSString stringWithFormat:sentence_without_device, device];
+    random_index = [self random_index_for_array:self.smart_device_info_messages[device]];
+    NSString *smart_sentence_for_device = [self.smart_device_info_messages[device] objectAtIndex:random_index];
+    
+    return [[NSString stringWithFormat:sentence_without_device, device] stringByAppendingString:smart_sentence_for_device];
 }
 
 - (NSString *)turn_off_station_message:(NSString *)station
@@ -417,64 +404,6 @@
     return result;
 }
 
-- (NSString *)device_status_sentence_with_data:(NSDictionary *)stationData withStation:(NSString *)station
-{
-    NSMutableArray *off_devices = [[NSMutableArray alloc] init];
-    NSMutableArray *on_devices = [[NSMutableArray alloc] init];
-    NSString *result = @"";
-    
-    NSUInteger random_index;
-    
-    for (id device in [stationData objectForKey:@"Devices"]) {
-        if ([stationData[@"Devices"][device][@"Status"] isEqualToString:@"On"])
-            [on_devices addObject:stationData[@"Devices"][device][@"Name"]];
-        else if ([stationData[@"Devices"][device][@"Status"] isEqualToString:@"Off"])
-            [off_devices addObject:stationData[@"Devices"][device][@"Name"]];
-    }
-    
-    switch ([on_devices count]) {
-        case 0:
-            random_index = [self random_index_for_array:self.device_on_messages_for_count[@0]];
-            result = [result stringByAppendingString:[NSString stringWithFormat:[self.device_on_messages_for_count[@0] objectAtIndex:random_index], [self array_to_sentence_for_array:[self randomize_array:on_devices]]]];
-            break;
-        case 1:
-            random_index = [self random_index_for_array:self.device_on_messages_for_count[@1]];
-            result = [result stringByAppendingString:[NSString stringWithFormat:[self.device_on_messages_for_count[@1] objectAtIndex:random_index], [self array_to_sentence_for_array:[self randomize_array:on_devices]]]];
-            break;
-        case 2:
-            random_index = [self random_index_for_array:self.device_on_messages_for_count[@2]];
-            result = [result stringByAppendingString:[NSString stringWithFormat:[self.device_on_messages_for_count[@2] objectAtIndex:random_index], [self array_to_sentence_for_array:[self randomize_array:on_devices]]]];
-            break;
-        default:
-            if ([off_devices count] == 0) {
-                random_index = [self random_index_for_array:self.device_on_messages_for_count[@"All"]];
-                result = [result stringByAppendingString:[NSString stringWithFormat:[self.device_on_messages_for_count[@"All"] objectAtIndex:random_index], station]];
-                
-            } else {
-                random_index = [self random_index_for_array:self.device_on_messages_for_count[@3]];
-                result = [result stringByAppendingString:[NSString stringWithFormat:[self.device_on_messages_for_count[@3] objectAtIndex:random_index], [self array_to_sentence_for_array:[self randomize_array:on_devices]]]];
-            }
-    }
-    
-    switch ([off_devices count]) {
-        case 0:
-            random_index = [self random_index_for_array:self.device_off_messages_for_count[@0]];
-            result = [result stringByAppendingString:[NSString stringWithFormat:[self.device_off_messages_for_count[@0] objectAtIndex:random_index], [self array_to_sentence_for_array:[self randomize_array:off_devices]]]];
-            break;
-        case 1:
-            random_index = [self random_index_for_array:self.device_off_messages_for_count[@1]];
-            result = [result stringByAppendingString:[NSString stringWithFormat:[self.device_off_messages_for_count[@1] objectAtIndex:random_index], [self array_to_sentence_for_array:[self randomize_array:off_devices]]]];
-            break;
-        case 2:
-            random_index = [self random_index_for_array:self.device_off_messages_for_count[@2]];
-            result = [result stringByAppendingString:[NSString stringWithFormat:[self.device_off_messages_for_count[@2] objectAtIndex:random_index], [self array_to_sentence_for_array:[self randomize_array:off_devices]]]];
-            break;
-        default:
-            random_index = [self random_index_for_array:self.device_off_messages_for_count[@3]];
-            result = [result stringByAppendingString:[NSString stringWithFormat:[self.device_off_messages_for_count[@3] objectAtIndex:random_index], [self array_to_sentence_for_array:[self randomize_array:off_devices]]]];
-    }
-    return result;
-}
 
 -(NSString *)maxDeviceStringForStation:(NSString *)station withData:(NSDictionary *)stationData
 {
@@ -494,10 +423,61 @@
     
     // Arg1: station, Arg2: device, Arg3: Power
     NSUInteger random_index = [self random_index_for_array:self.device_with_most_usage_messages];
+    
+    if (max_usage == 0)
+        return @"";
+    
+    if ([max_devices count] > 1)
+        max_devices = [NSMutableArray arrayWithObject:[max_devices objectAtIndex:0]];
+        
     NSString *device_with_max_power = [NSString stringWithFormat:[self.device_with_most_usage_messages objectAtIndex:random_index], station, [self array_to_sentence_for_array:max_devices], max_usage];
     
     return device_with_max_power;
 }
+
+/*
+ "Device 2" : {
+ "Name" : "TV",
+ "Brand": "Samsung",
+ "Model": "UN50JU6500F",
+ "Type" : "Entertainment",
+ "Total Usage/Week" : 25,
+ "Watts" : 150,
+ "Status" : "On",
+ "Daily" : [[1471071541, 0.0014], [1471503540, 0.9144], [1474009140, 0.0613], [1474095540, 0.0645], [1474354740, 0.3375], [1475218740, 0.3087], [1475305140, 0.2157], [1475477940, 1.1247], [1475564340, 0.1357], [1475650740, 0.1629], [1475737140, 0.0014], [1475823540, 0.3894], [1476255540, 0.3611], [1476341940, 0.0041], [1476860341, 0.0063], [1477119540, 0.0875], [1477292340, 0.2849], [1477378740, 2.0783], [1477637940, 0.6834]]
+ }
+ */
+-(NSString *)dayWithMostUsageForDeviceData:(NSDictionary *)deviceData
+{
+    NSMutableArray *max_devices = [[NSMutableArray alloc] init];
+    NSInteger max_usage = 0;
+    
+    for (id device in [stationData objectForKey:@"Devices"]) {
+        NSInteger watts = [stationData[@"Devices"][device][@"Watts"] integerValue];
+        if (watts > max_usage) {
+            [max_devices setArray:@[]];
+            [max_devices addObject:stationData[@"Devices"][device][@"Name"]];
+            max_usage = [stationData[@"Devices"][device][@"Watts"] integerValue];
+            
+        } else if (watts == max_usage)
+            [max_devices addObject:stationData[@"Devices"][device][@"Name"]];
+    }
+    
+    // Arg1: station, Arg2: device, Arg3: Power
+    NSUInteger random_index = [self random_index_for_array:self.device_with_most_usage_messages];
+    
+    if (max_usage == 0)
+        return @"";
+    
+    if ([max_devices count] > 1)
+        max_devices = [NSMutableArray arrayWithObject:[max_devices objectAtIndex:0]];
+    
+    NSString *device_with_max_power = [NSString stringWithFormat:[self.device_with_most_usage_messages objectAtIndex:random_index], station, [self array_to_sentence_for_array:max_devices], max_usage];
+    
+    return device_with_max_power;
+}
+
+
 
 #pragma mark -
 #pragma mark Randomizer Helpers

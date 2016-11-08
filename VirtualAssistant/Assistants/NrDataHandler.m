@@ -98,8 +98,6 @@
                             return;
                         
                         [self.data[station][@"Devices"][deviceNum] setObject:[json valueForKey:@"showtable"] forKey:@"Daily"];
-                        
-                        NSLog(@"URL = %@, result = %@", [url absoluteString], [json valueForKey:@"showtable"]);
                     }
                 }
                 else

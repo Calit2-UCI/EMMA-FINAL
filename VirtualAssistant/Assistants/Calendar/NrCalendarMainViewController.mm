@@ -57,6 +57,7 @@ BOOL timerStarted = false;
 BOOL canClickBack = YES;
 int counter;
 int count = 0;
+int secsToFire = 3;
 NrSpeechGenerator *speech_generator;
 UITapGestureRecognizer *singleFingerTap;
 UISwipeGestureRecognizer *swipeRecognizer;
@@ -257,6 +258,10 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
 
 - (IBAction)backButtonClicked:(id)sender
 {
+    if (!can_speak){
+        [self shutUp];
+        can_speak = YES;
+    }
     if (canClickBack) {
         canClickBack = NO;
         if (self.currentMode != NR_MAIN) {
@@ -267,9 +272,9 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
                 [self speakAction:[speech_generator back_to_menu_message]];
             }
             else {
-                [self cover];
+                //[self cover];
                 [self hideDetailSubview];
-                [self shutUp];
+                //[self shutUp];
             }
         }
     }
@@ -602,7 +607,7 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
     [self.daysView addSubview:scroll];
     can_speak = YES;
     canClickBack = YES;
-    [self uncover];
+    //[self uncover];
 }
 
 # pragma mark Fill Item Methods
@@ -734,7 +739,7 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
             [self loadMainPointingBar];
             [self.contentsView addSubview:self.pointingBar];
             self.activityIndicator.hidden = YES;
-            [self uncover];
+            //[self uncover];
             
             //            NSError *error;
             //            if (![[GANTracker sharedTracker] trackPageview:@"/app/main" withError:&error]) {
@@ -763,7 +768,7 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
             [self loadDevicePointingBar];
             [self.contentsView addSubview:self.pointingBar];
             self.activityIndicator.hidden = YES;
-            [self uncover];
+           // [self uncover];
         }];
     }];
 }
@@ -786,7 +791,7 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
             [self loadStationPointingBar];
             [self.contentsView addSubview:self.pointingBar];
             self.activityIndicator.hidden = YES;
-            [self uncover];
+           // [self uncover];
         }];
     }];
 }
@@ -796,16 +801,19 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
 
 - (IBAction)mainItemViewClicked:(id)sender
 {
-    if (can_speak && self.currentMode != NR_VIDEO) {
+    if (self.currentMode != NR_VIDEO) {
         @synchronized(self) {
-            [self cover];
+            //[self cover];
             
             if (processing) {
-                [self uncover];
+                //[self uncover];
                 return;
             }
             processing = YES;
-            
+            if (!can_speak){
+                can_speak = YES;
+                [self shutUp];
+            }
             NrMainItemView *calItem = (NrMainItemView *)sender;
             NSLog(@"Clicked at item %d", calItem.itemID);
             
@@ -849,16 +857,19 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
 
 - (IBAction)deviceItemViewClicked:(id)sender
 {
-    if(can_speak){
+    
         @synchronized(self) {
-            [self cover];
+            //[self cover];
             
             if (processing) {
-                [self uncover];
+                //[self uncover];
                 return;
             }
             processing = YES;
-            
+            if (!can_speak){
+                [self shutUp];
+                can_speak = YES;
+            }
             NrDeviceItemView *calItem = (NrDeviceItemView *)sender;
             NSLog(@"Clicked at item %d", calItem.itemID);
             
@@ -897,21 +908,24 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
             }
             
         }
-    }
+
 }
 
 - (IBAction)stationItemViewClicked:(id)sender
 {
-    if(can_speak){
+    
         @synchronized(self) {
-            [self cover];
+            //[self cover];
             
             if (processing) {
-                [self uncover];
+                //[self uncover];
                 return;
             }
             processing = YES;
-            
+            if (!can_speak){
+                [self shutUp];
+                can_speak = YES;
+            }
             NrStationItemView *calItem = (NrStationItemView *)sender;
             NSLog(@"Clicked at item %d", calItem.itemID);
             
@@ -955,7 +969,7 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
                     break;
             }
             
-        }
+        
     }
 }
 
@@ -964,10 +978,10 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
 - (void)stationItemViewWithAlert:(NSString *) station
 {
     @synchronized(self) {
-        [self cover];
+        //[self cover];
         
         if (processing) {
-            [self uncover];
+            //[self uncover];
             return;
         }
         
@@ -1004,7 +1018,7 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
     @synchronized (self) {
         if(self.currentDegree != CR_IN){
             canClickBack = NO;
-            [self cover];
+            //[self cover];
             float duration = 1.2;
             float translation = 250;
             if ([[UIScreen mainScreen] respondsToSelector:@selector(scale)] == YES && [[UIScreen mainScreen] scale] == 2.00) {
@@ -1252,9 +1266,9 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
 {
     @synchronized(self){
         
-        [self cover];
+        //[self cover];
         if (processing) {
-            [self uncover];
+           // [self uncover];
             return;
         }
         if(singleFingerTap == nil){
@@ -1295,16 +1309,16 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
         }
     }
     can_speak = YES;
-    [self uncover];
+    //[self uncover];
 }
 
 - (void)StopAndHideVideoViewClicked
 {
     @synchronized(self){
         
-        [self cover];
+        //[self cover];
         if (processing) {
-            [self uncover];
+            //[self uncover];
             return;
         }
         processing = NO;
@@ -1314,7 +1328,7 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
         [self speakAction:[speech_generator back_to_menu_message]];
         self.currentMode = NR_MAIN;
         videoViewDisplayed = NO;
-        [self uncover];
+        //[self uncover];
         can_speak = YES;
         singleFingerTap = nil;
     }
@@ -1323,14 +1337,22 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
 }
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    if(can_speak && self.currentMode == NR_VIDEO){
+    if(self.currentMode == NR_VIDEO){
+        if (!can_speak){
+            [self shutUp];
+            can_speak = YES;
+        }
         videoView.flag = YES;
         [self playMovieClicked];
     }
 }
 
 -(void) changeToStation{
-    if(can_speak && self.currentMode == NR_VIDEO){
+    if(self.currentMode == NR_VIDEO){
+        if (!can_speak){
+            [self shutUp];
+            can_speak = YES;
+        }
         videoView.flag = YES;
         [self playMovieClicked];
     }
@@ -1343,7 +1365,7 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
                 //[self speakAction:[speech_generator back_to_menu_message]];
             }
             else {
-                [self cover];
+                //[self cover];
                 [self hideDetailSubview];
                 [self shutUp];
             }
@@ -1478,7 +1500,7 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
         self.currentMode = NR_MAIN;
         tableViewDisplayed = NO;
         
-        [self uncover];
+        //[self uncover];
     }
 }
 
@@ -1695,7 +1717,7 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
 {
     processing = NO;
     self.activityIndicator.hidden = YES;
-    [self uncover];
+    //[self uncover];
     NSLog(@"I just spoke");
     can_speak = YES;
     canClickBack = YES;
@@ -1712,9 +1734,9 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
     NSLog(@"data updated! the station is %@",station);
     if ([_currentStation isEqualToString:station] ) {
         count++;
-        if(count < 4)
+        if(count < secsToFire)
         {
-            NSLog(@"count is %d, less than 4s",count);
+            NSLog(@"count is %d, less than 3s",count);
         }
         else{
             NSLog(@"enough");
