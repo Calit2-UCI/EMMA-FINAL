@@ -146,6 +146,12 @@
                                              @"Here is your %@. "
                                           ];
     
+    // Arg1 = Device, Arg2 = Power Usage
+    self.max_device_day_messages = @[@"The %@ has consumed the most power on %@. ",
+                                     @"Your %@ was the most active on %@. ",
+                                     @"The day your %@ consumed the most energy was on %@. "
+                                     ];
+    
     self.smart_device_info_messages = @{
                                         // Living Room Devices
                                         @"TV": @[@"I see that your TV has been on throughout most of the night. You can use the auto-sleep feature present in most TV's to have it turn off whenever it is not being used.",
@@ -180,7 +186,13 @@
                                         @"Rice Cooker": @[@"I can see that the rice cooker is sporadically on throughout the day, particularly in the mornings and evenings. Assuming this is used before meals, I suggest turning off the device from here after its usage.",
                                                           @"Your rice cooker has been consuming a fair amount of power, mostly in the mornings and evenings. From what I can see in the chart, shutting this device off during the afternoons can allow up to 30 dollars a month in savings.",
                                                           @"",
-                                                          @""]
+                                                          @""],
+                                        
+                                        @"Lamp": @[@"I see that your lamp has been on a lot during the sunny days. I suggest you open your blinds to save energy from using your lamp.",
+                                                   @"Your lamp has been on primarily during the evening times, but I also noticed that it has been on when it was fairly bright outside. Maybe you can open the blinds to let light in instead of using your lamp.",
+                                                   @"",
+                                                   @""
+                                                ]
                                         };
 }
 
@@ -331,15 +343,19 @@
 }
 
 
-- (NSString *)enter_smart_table_view_message_with_device:(NSString *)device
+- (NSString *)enter_smart_table_view_message_with_device:(NSString *)device withData:(NSDictionary *)stationData
 {
     NSUInteger random_index = [self random_index_for_array:self.enter_smart_table_view_messages];
     NSString *sentence_without_device = [self.enter_smart_table_view_messages objectAtIndex:random_index];
     
+    random_index = [self random_index_for_array:self.max_device_day_messages];
+    NSString *smart_sentence_for_day_of_max_usage = [self.max_device_day_messages objectAtIndex:random_index];
+    
     random_index = [self random_index_for_array:self.smart_device_info_messages[device]];
     NSString *smart_sentence_for_device = [self.smart_device_info_messages[device] objectAtIndex:random_index];
     
-    return [[NSString stringWithFormat:sentence_without_device, device] stringByAppendingString:smart_sentence_for_device];
+    
+    return [[[NSString stringWithFormat:sentence_without_device, device] stringByAppendingString:[NSString stringWithFormat:smart_sentence_for_day_of_max_usage, device, [self dayWithMostUsageForDevice:device withData:stationData]]] stringByAppendingString:smart_sentence_for_device];
 }
 
 - (NSString *)turn_off_station_message:(NSString *)station
@@ -435,46 +451,49 @@
     return device_with_max_power;
 }
 
-/*
- "Device 2" : {
- "Name" : "TV",
- "Brand": "Samsung",
- "Model": "UN50JU6500F",
- "Type" : "Entertainment",
- "Total Usage/Week" : 25,
- "Watts" : 150,
- "Status" : "On",
- "Daily" : [[1471071541, 0.0014], [1471503540, 0.9144], [1474009140, 0.0613], [1474095540, 0.0645], [1474354740, 0.3375], [1475218740, 0.3087], [1475305140, 0.2157], [1475477940, 1.1247], [1475564340, 0.1357], [1475650740, 0.1629], [1475737140, 0.0014], [1475823540, 0.3894], [1476255540, 0.3611], [1476341940, 0.0041], [1476860341, 0.0063], [1477119540, 0.0875], [1477292340, 0.2849], [1477378740, 2.0783], [1477637940, 0.6834]]
- }
- */
--(NSString *)dayWithMostUsageForDeviceData:(NSDictionary *)deviceData
+-(NSString *)dayWithMostUsageForDevice:(NSString *)deviceName withData:(NSDictionary *)stationData
 {
-    NSMutableArray *max_devices = [[NSMutableArray alloc] init];
-    NSInteger max_usage = 0;
-    
     for (id device in [stationData objectForKey:@"Devices"]) {
-        NSInteger watts = [stationData[@"Devices"][device][@"Watts"] integerValue];
-        if (watts > max_usage) {
-            [max_devices setArray:@[]];
-            [max_devices addObject:stationData[@"Devices"][device][@"Name"]];
-            max_usage = [stationData[@"Devices"][device][@"Watts"] integerValue];
+        if ([stationData[@"Devices"][device][@"Name"] isEqualToString:deviceName]) {
             
-        } else if (watts == max_usage)
-            [max_devices addObject:stationData[@"Devices"][device][@"Name"]];
+            NSNumber *maxUsage = 0;
+            NSArray *result;
+            NSArray *data;
+            
+            if ([stationData[@"Devices"][device][@"Daily"] count] > 7) {
+                data = [stationData[@"Devices"][device][@"Daily"] subarrayWithRange:NSMakeRange([stationData[@"Devices"][device][@"Daily"] count]-7, 7)];
+            } else {
+                data = stationData[@"Devices"][device][@"Daily"];
+            }
+            
+            // Go through the daily data
+            for (NSInteger i = 0; i < [data count]; i++) {
+                if ([data[i][1] isKindOfClass:[NSNull class]])
+                    continue;
+                
+                if ([[[data objectAtIndex:i] objectAtIndex:1] floatValue] > [maxUsage floatValue] ) {
+                    maxUsage = [NSNumber numberWithFloat:[[[data objectAtIndex:i] objectAtIndex:1] floatValue]];
+                    result = [NSArray arrayWithArray:[data objectAtIndex:i]];
+                }
+                
+            }
+            
+            if (maxUsage > 0) {
+                double timeStamp = [[result objectAtIndex:0] doubleValue];
+                NSTimeInterval timeInterval=timeStamp;
+                
+                NSDate *date = [NSDate dateWithTimeIntervalSince1970:timeInterval];
+                NSDateFormatter *dateformatter=[[NSDateFormatter alloc]init];
+                
+                [dateformatter setLocale:[NSLocale currentLocale]];
+                [dateformatter setDateFormat:@"EEEE, MMM d"];
+                
+                return [dateformatter stringFromDate:date];
+            }
+        }
     }
     
-    // Arg1: station, Arg2: device, Arg3: Power
-    NSUInteger random_index = [self random_index_for_array:self.device_with_most_usage_messages];
-    
-    if (max_usage == 0)
-        return @"";
-    
-    if ([max_devices count] > 1)
-        max_devices = [NSMutableArray arrayWithObject:[max_devices objectAtIndex:0]];
-    
-    NSString *device_with_max_power = [NSString stringWithFormat:[self.device_with_most_usage_messages objectAtIndex:random_index], station, [self array_to_sentence_for_array:max_devices], max_usage];
-    
-    return device_with_max_power;
+    return @" ";
 }
 
 

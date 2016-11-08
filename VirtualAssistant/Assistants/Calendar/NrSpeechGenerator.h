@@ -34,6 +34,7 @@
 @property (nonatomic, retain) NSArray *already_in_overview_messages;       // from overview table
 
 @property (nonatomic, retain) NSArray *enter_smart_table_view_messages;
+@property (nonatomic, retain) NSArray *max_device_day_messages;
 @property (nonatomic, retain) NSDictionary *smart_device_info_messages;
 
 @property (nonatomic, retain) NSArray *turn_off_station_messages;
@@ -57,7 +58,7 @@
 - (NSString *)return_to_overview_message_with_station:(NSString *)station withStationData:(NSDictionary *)stationData;
 - (NSString *)already_in_overview_message_with_station:(NSString *)station;
 
-- (NSString *)enter_smart_table_view_message_with_device:(NSString *)device;
+- (NSString *)enter_smart_table_view_message_with_device:(NSString *)device withData:(NSDictionary *)stationData;
 
 - (NSString *)turn_off_station_message:(NSString *)station;
 - (NSString *)turn_on_station_message:(NSString *)station;

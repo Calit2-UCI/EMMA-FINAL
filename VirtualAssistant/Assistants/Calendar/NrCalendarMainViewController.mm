@@ -69,6 +69,8 @@ NSInteger speech_counter = 0;                                         // For cre
 NSTimer *timer;                                                 // Timer instance
 NSInteger update_inteveral = 2;                             // Intervals for when to update action flags
 
+BOOL lock = true;
+
 NSString* old_time = @"";
 BOOL toUpdate = true;//a flag to check if we need to update the value for table.
 
@@ -1185,7 +1187,7 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
 - (void)speakVideo
 {
     NSArray *sentences = [NSArray arrayWithObjects:
-                          @"Hello, Christian please remember to change the video sentence. thank you.",
+                          @"Welcome to Sim-Home. My Name is EMMA, short for your personal Energy Monitoring Managing Assistant. I am here to help you monitor your plug load usage in your home, as well as provide some feedback for your usage. You can click on the introduction video to see a small tour of your home, or get started right away by connecting to the stations on the top bar.",
                           nil];
     NSLog(@"%@",sentences);
     [self speakSentences:sentences withMaxLength:400 toFileName:@"Video" inLanguage:NSLocalizedString(@"LANG_TTS", nil)];
@@ -1306,6 +1308,13 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
             [videoView.moviePlayer play];
             can_speak = YES;
             [self createGesture:videoView.self.gestureRecognizer];
+            
+            [self shutUp];
+            
+            NSArray *sentences = [NSArray arrayWithObjects:
+                                  @"This is Sim-Home, a smart energy-efficient home that allows you to monitor plug load device usage within different areas of your home. ", @" Inside Sim-Home, I am able to automatically detect the areas you are located in and interact with the devices present. ", @"Specifically, you can turn on and off devices, view their current usage, and look at past historical data for each gadget.", @"With more future improvements, I will be able to automatically schedule the powering of devices based on user behavior, provide even smarter feedback from data, and much more.",
+                                  nil];
+            [self speakSentences:sentences withMaxLength:400 toFileName:@"playMovieClicked" inLanguage:NSLocalizedString(@"LANG_TTS", nil)];
         }
     }
     can_speak = YES;
@@ -1589,7 +1598,7 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
         
         if(![device isEqualToString:@"pieChart"]){
             [self speakAction:[speech_generator enter_smart_table_view_message_with_device:
-                               [[dataHandler deviceDataForDevice:device atStation:current_station] objectForKey:@"Name"]]];
+                               [[dataHandler deviceDataForDevice:device atStation:current_station] objectForKey:@"Name"] withData:[dataHandler stationDataForStation:current_station]]];
             
             [smartTableViewController update_data:[dataHandler stationDataForStation:current_station]];
             [smartTableViewController setDevice:device];
@@ -1744,7 +1753,10 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
             if (![_preStation isEqualToString:station] ) {
                 self.currentStation = station;
                 [self pushAlertButton:station];
-                _preStation = station;
+                if(lock){
+                    _preStation = station;
+                    lock = false;
+                }
             }
         }
     } else {
@@ -1763,7 +1775,7 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
     
     if (canConnectWithStations) {
         [self.connectButton setAlpha:1.0];
-        [self pushAlertButton:self.currentStation];
+        [self pushAlertButton:_preStation];
     }
     else
         [self.connectButton setAlpha:0.5];
@@ -1880,7 +1892,7 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
         
         [self.audioPlayer prepareToPlay];
         [self.audioPlayer play];
-        
+        lock = true;
         
     }
 }
