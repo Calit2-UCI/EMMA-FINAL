@@ -1683,7 +1683,7 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
 //    [self updateStation];
     
     NSMutableArray *items = [[NSMutableArray alloc] init];
-    NSArray *colors = @[PNFreshGreen, PNDeepGreen, PNGreen];
+    NSArray *colors = @[PNFreshGreen, PNDeepGreen, PNGreen, PNLightGreen];
     NSInteger colorIndex = 0;
     
     NSDictionary *data = [[dataHandler stationDataForStation:station_locked] objectForKey:@"Devices"];
