@@ -204,6 +204,11 @@ static dispatch_once_t onceToken;
         NSLog(@"Updating table at row %d", i);
         [self update_cell_data:cell atIndexPath:indexPath];
     }
+    if ([self.station_data[@"Devices"][self.device][@"Status"]  isEqual: @"Off"])
+        [device_switch setOn:NO animated:NO];
+    else
+        [device_switch setOn:YES animated:NO];
+
 }
 
 - (void) update_cell_data:(NrGridTableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
@@ -428,7 +433,7 @@ static dispatch_once_t onceToken;
             }
         }];
     } else {
-        NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://128.195.151.158/simhome/control/on/?device=%@&level=0", [self controlDeviceName:deviceName]]];
+        NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://128.195.151.158/simhome/control/off/?device=%@", [self controlDeviceName:deviceName]]];
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
         [request setTimeoutInterval:5.0];
         
@@ -505,8 +510,9 @@ static dispatch_once_t onceToken;
 -(NSString *)controlDeviceName:(NSString *)device
 {
     NSDictionary *controlDevices = @{@"Lamp" : @"Bulb",
-                                     @"CoffeeMaker" : @"Keurig",
-                                     @"PixarLamp" : @"PixarLamp"
+                                     @"Coffee Maker" : @"Keurig",
+                                     @"PixarLamp" : @"PixarLamp",
+                                     @"Bulb" : @"Bulb"
                                      };
     
     if (![[controlDevices objectForKey:device] isKindOfClass:[NSNull class]])
