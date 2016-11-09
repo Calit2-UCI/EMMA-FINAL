@@ -393,11 +393,60 @@ UISwitch *overview_switch;
     NSString *device = [switch_sender device];
     if (switch_sender.on) {
         // turn on all devices in station here
-        [mainViewController speakAction:[table_view_speech turn_on_device_message:device]];
+        NSURL *url = nil;
+        if ([device isEqualToString:@"Coffee Maker"] || [device isEqualToString:@"PixarLamp"]){
+            url = [NSURL URLWithString:[NSString stringWithFormat:@"http://128.195.151.158/simhome/control/switch/on/?device=%@&level=100", [self controlDeviceName:device]]];
+            NSLog(@"%@",url);
+        } else {
+            url = [NSURL URLWithString:[NSString stringWithFormat:@"http://128.195.151.158/simhome/control/on/?device=%@&level=100", [self controlDeviceName:device]]];
+            NSLog(@"%@",url);
+            
+        }
+        
+        
+        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+        [request setTimeoutInterval:5.0];
+        
+        [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue currentQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
+            
+            if (data != nil && error == nil)
+            {
+                [mainViewController speakAction:[table_view_speech turn_on_device_message:device]];
+            }
+            else
+            {
+                [mainViewController speakAction:@"I was unable to turn on the device."];
+            }
+        }];
     } else {
         // turn off all devices in station here
-        [mainViewController speakAction:[table_view_speech turn_off_device_message:device]];
+        NSURL *url = nil;
+        if ([device isEqualToString:@"Coffee Maker"] || [device isEqualToString:@"PixarLamp"]){
+            url = [NSURL URLWithString:[NSString stringWithFormat:@"http://128.195.151.158/simhome/control/switch/off/?device=%@", [self controlDeviceName:device]]];
+            NSLog(@"%@",url);
+        } else {
+            url = [NSURL URLWithString:[NSString stringWithFormat:@"http://128.195.151.158/simhome/control/off/?device=%@", [self controlDeviceName:device]]];
+            NSLog(@"%@",url);
+
+        }
+                NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+        [request setTimeoutInterval:5.0];
+        
+        [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue currentQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
+            
+            if (data != nil && error == nil)
+            {
+                [mainViewController speakAction:[table_view_speech turn_off_device_message:device]];
+            }
+            else
+            {
+                [mainViewController speakAction:@"I was unable to turn off the device."];
+            }
+        }];
+
+        
     }
+
 }
 
 #pragma mark -
@@ -443,5 +492,18 @@ UISwitch *overview_switch;
 -(void)removePieChart{
     [self.pieChart removeFromSuperview];
 }
+
+-(NSString *)controlDeviceName:(NSString *)device
+{
+    NSDictionary *controlDevices = @{@"Lamp" : @"Bulb",
+                                     @"Coffee Maker" : @"Keurig",
+                                     @"PixarLamp" : @"PixarLamp"
+                                     };
+    
+    if (![[controlDevices objectForKey:device] isKindOfClass:[NSNull class]])
+        return controlDevices[device];
+    return device;
+}
+
 
 @end
