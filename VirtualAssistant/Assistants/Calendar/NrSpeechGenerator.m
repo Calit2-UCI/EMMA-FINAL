@@ -160,7 +160,7 @@
                                                  @"",
                                                  @""
                                                  ],
-                                        @"Apple TV": @[@"The Apple TV has been pretty consistent with its usage in the past week. You have been doing a great job at controlling its power usage.",
+                                        @"AppleTV": @[@"The Apple TV has been pretty consistent with its usage in the past week. You have been doing a great job at controlling its power usage.",
                                                        @"This device is a great compliment to the TV and conserves a good amount of power in stand-by mode.",
                                                        @"",
                                                        @""
@@ -190,31 +190,32 @@
                                         @"Lamp": @[@"I see that your lamp has been on a lot during the sunny days. I suggest you open your blinds to save energy from using your lamp.",
                                                    @"Your lamp has been on primarily during the evening times, but I also noticed that it has been on when it was fairly bright outside. Maybe you can open the blinds to let light in instead of using your lamp.",
                                                    @""
-                                                ]
+                                                ],
+                                        @"3DPrinter":@[@"I can see that your 3D Printer is on for a long time. It seems that you have a quantity of printing jobs.", @"Your 3D Printer has been comsuming a fair amount of power, mostly in the evenings. "]
                                         };
 }
 
 - (void)init_turn_off_station_messages
 {
     // Format with Station Name
-    self.turn_off_station_messages =   @[@"Turning off all devices for %@.",
-                                         @"Now turning off the power in %@.",
-                                         @"OK, let's shut off all the power in this station.",
-                                         @"Turning off all the power in this station.",
-                                         @"Now shutting off the power in %@.",
-                                         @"Going to shut on all the power in this station."
+    self.turn_off_station_messages =   @[@"Turning off all devices for %@.Please wait for the update.",
+                                         @"Now turning off the power in %@.Please wait for the update.",
+                                         @"OK, let's shut off all the power in this station.Please wait for the update.",
+                                         @"Turning off all the power in this station.Please wait for the update.",
+                                         @"Now shutting off the power in %@.Please wait for the update.",
+                                         @"Going to shut on all the power in this station.Please wait for the update."
                                          ];
 }
 
 - (void)init_turn_on_station_messages
 {
     // Format with Station Name
-    self.turn_on_station_messages = @[@"Turning on all devices for %@.",
-                                       @"Now turning on the power in %@.",
-                                       @"OK, let's power on all the devices in this station.",
-                                       @"Powering on all the devices in this station.",
-                                       @"Now powering the %@.",
-                                       @"Going to power on all the devices in this station."
+    self.turn_on_station_messages = @[@"Turning on all devices for %@. Please wait for several seconds for update.",
+                                       @"Now turning on the power in %@. Please wait for several seconds for update.",
+                                       @"OK, let's power on all the devices in this station. Please wait for several seconds for update.",
+                                       @"Powering on all the devices in this station. Please wait for several seconds for update.",
+                                       @"Now powering the %@. Please wait for several seconds for update.",
+                                       @"Going to power on all the devices in this station. Please wait for several seconds for update."
                                        ];
 }
 
@@ -233,12 +234,12 @@
 - (void)init_turn_on_device_messages
 {
     // Format with device Name
-    self.turn_on_device_messages = @[@"Now turning on the %@.",
-                                       @"Powering the %@ on.",
-                                       @"OK, let's turn on the %@.",
-                                       @"Now about to power this device.",
-                                       @"Going to power on the %@.",
-                                       @"Powering the %@ on."
+    self.turn_on_device_messages = @[@"Now turning on the %@. Please wait for the update.",
+                                       @"Powering the %@ on. Please wait for the update.",
+                                       @"OK, let's turn on the %@. Please wait for the update.",
+                                       @"Now about to power this device. Please wait for the update.",
+                                       @"Going to power on the %@. Please wait for the update.",
+                                       @"Powering the %@ on. Please wait for the update."
                                        ];
 }
 
@@ -508,7 +509,7 @@
 #pragma mark Math Helpers
 - (NSUInteger)percentageForValue:(NSInteger)value withTotal:(NSInteger)sum
 {
-    float percentage = value / sum;
+    float percentage = (float)value / (float)sum;
     return percentage * 100;
 }
 
