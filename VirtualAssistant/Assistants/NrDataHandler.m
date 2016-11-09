@@ -81,30 +81,30 @@
             }];
             
             // Get the daily power data
-            url = [NSURL URLWithString:[NSString stringWithFormat:@"http://128.195.151.158/simhome/db/?type=showtable&table=%@_Daily_2016", deviceAPI]];
-            request = [NSMutableURLRequest requestWithURL:url];
-            [request setTimeoutInterval:5.0];
-            
-            [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue currentQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
-                
-                NSMutableArray *json;
-                
-                if (data != nil && error == nil)    // Connection worked, and is live
-                {
-                    if ([self dataIsValidWithData:data]) {
-                        json = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
-                        
-                        if ([[json valueForKey:@"showtable"] isKindOfClass:[NSString class]])
-                            return;
-                        
-                        [self.data[station][@"Devices"][deviceNum] setObject:[json valueForKey:@"showtable"] forKey:@"Daily"];
-                    }
-                }
-                else
-                {
-                    NSLog(@"Could not connect to the SimHome server! Closing connection...");
-                }
-            }];
+//            url = [NSURL URLWithString:[NSString stringWithFormat:@"http://128.195.151.158/simhome/db/?type=showtable&table=%@_Daily_2016", deviceAPI]];
+//            request = [NSMutableURLRequest requestWithURL:url];
+//            [request setTimeoutInterval:5.0];
+//            
+//            [NSURLConnection sendAsynchronousRequest:request queue:[NSOperationQueue currentQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
+//                
+//                NSMutableArray *json;
+//                
+//                if (data != nil && error == nil)    // Connection worked, and is live
+//                {
+//                    if ([self dataIsValidWithData:data]) {
+//                        json = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+//                        
+//                        if ([[json valueForKey:@"showtable"] isKindOfClass:[NSString class]])
+//                            return;
+//                        
+//                        [self.data[station][@"Devices"][deviceNum] setObject:[json valueForKey:@"showtable"] forKey:@"Daily"];
+//                    }
+//                }
+//                else
+//                {
+//                    NSLog(@"Could not connect to the SimHome server! Closing connection...");
+//                }
+//            }];
             
         }
     }
