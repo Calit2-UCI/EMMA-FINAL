@@ -64,14 +64,14 @@
             },
             
             "Device 3" : {
-                "Name" : "Blu-Ray",
+                "Name" : "SoundBar",
                 "Brand": "Samsung",
-                "Model": "BD-J5900",
+                "Model": "HW-JM35",
                 "Type" : "Entertainment",
                 "Total Usage/Week" : 25,
                 "Watts" : 10.8,
                 "Status" : "Off",
-                "Daily" : [[1471503540, 0.0286], [1471589941, 0.0]]
+                "Daily" : [[1474354740, 0.0193], [1477637940, 0.039], [1477810740, 0.0398], [1477983540, 0.0359], [1478069940, 0.0887], [1478156340, 0.0475]]
                 
             }
         }
@@ -105,9 +105,9 @@
             },
             
             "Device 3" : {
-                "Name" : "Toaster",
-                "Brand": "Sharp",
-                "Model": "Carousel",
+                "Name" : "Lamp",
+                "Brand": "Room Essentials",
+                "Model": "Stick Lamp",
                 "Type" : "Kitchen",
                 "Total Usage/Week" : 25,
                 "Watts" :500,

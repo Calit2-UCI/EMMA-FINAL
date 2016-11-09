@@ -97,7 +97,7 @@ BOOL canConnectWithStations = YES;
 
 // *** DeviceItemView members ***
 //09/01/2016
-NSArray *device_names = @[@"TV",@"Lamp",@"Fridge",@"Refigerator",@"Macbook",@"Coffee Maker",@"3DPrinter",@"Fan",@"Blu-Ray",@"Apple TV",@"Tablet",@"Rice Cooker",@"Toaster",@"Appliance",@"Microwave"];
+NSArray *device_names = @[@"TV",@"Lamp",@"Fridge",@"Refigerator",@"Macbook",@"Coffee Maker",@"3DPrinter",@"Fan",@"Blu-Ray",@"Apple TV",@"Tablet",@"Rice Cooker",@"Toaster",@"Appliance",@"Microwave",@"SoundBar"];
 
 // *** StationItemView members ***
 NSMutableArray *station_list = [NSMutableArray arrayWithObjects:@"Station 1",@"Station 2",nil];
@@ -260,9 +260,13 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
 
 - (IBAction)backButtonClicked:(id)sender
 {
+    if (![self.backButton isEnabled])
+        return;
+    
     if (!can_speak){
         [self shutUp];
         can_speak = YES;
+        processing = NO;
     }
     if (canClickBack) {
         canClickBack = NO;
@@ -285,16 +289,13 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
 - (IBAction)skipButtonClicked:(id)sender
 {
     @synchronized(self) {
+        if (![self.skipButton isEnabled])
+            return;
+        
         if (!can_speak) {
-            if(self.currentMode == NR_VIDEO){
-                [self StopAndHideVideoViewClicked];
-                
-            }
-            else {
-                [self shutUp];
-            }
-            
+            [self shutUp];
             can_speak = YES;
+            processing = NO;
         }
     }
 }
@@ -1105,6 +1106,20 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
     // Updates the data from the SimHome database (eg. current power values)
     [dataHandler updateData];
     
+    if (self.currentMode == NR_OVERVIEW_TABLE) {
+        [tableViewController update_data:[dataHandler stationDataForStation:current_station]];
+        [tableViewController update_table];
+        
+        [[pieChartController pieChart] updateChartData:[self loadPieChartDataForStation]];
+        [[pieChartController pieChart] setDisplayAnimated:NO];
+        [[pieChartController pieChart] strokeChart];
+    }
+    else if (self.currentMode == NR_SMART_TABLE) {
+        [smartTableViewController update_data:[dataHandler stationDataForStation:current_station]];
+        [smartTableViewController update_table];
+    }
+
+    
     if (!canConnectWithStations){
         [self slideNotificationViewDown];
     }
@@ -1273,6 +1288,13 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
            // [self uncover];
             return;
         }
+        
+        [self.skipButton setEnabled:NO];
+        [self.skipButton setAlpha:0.5];
+        
+        [self.backButton setEnabled:NO];
+        [self.backButton setAlpha:0.5];
+        
         if(singleFingerTap == nil){
             
             self.currentMode = NR_VIDEO;
@@ -1332,9 +1354,15 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
         }
         processing = NO;
         
+        [self.skipButton setEnabled:YES];
+        [self.skipButton setAlpha:1.0];
+        
+        [self.backButton setEnabled:YES];
+        [self.backButton setAlpha:1.0];
+        
         [videoView.moviePlayer stop];
         [self HideAndRemoveDetailView];
-        [self speakAction:[speech_generator back_to_menu_message]];
+        [self speakAction:@"Okay, let's start monitoring your devices. You can click on the connect button to get started."];
         self.currentMode = NR_MAIN;
         videoViewDisplayed = NO;
         //[self uncover];
@@ -1451,9 +1479,9 @@ NSDictionary *realStationNames = @{@"Station 1": @"Entertainment Room",
         // for second view inside detail view
         [self.secondDetailView setHidden:NO];
         [self.secondDetailView setAlpha:1.0f];
-        [[pieChartController pieChart] setDisplayAnimated:YES];
+        [[pieChartController pieChart] setDisplayAnimated:NO];
         pieChartController.pieChart = [[PNPieChart alloc] initWithFrame:CGRectMake(0, 0, self.secondDetailView.frame.size.width, self.secondDetailView.frame.size.height) items:items];
-        [[pieChartController pieChart] performSelector:@selector(setDisplayAnimated:) withObject:@YES afterDelay:1];
+        [[pieChartController pieChart] performSelector:@selector(setDisplayAnimated:) withObject:@NO afterDelay:1];
         [self.secondDetailView addSubview:pieChartController.pieChart];
         
         pieChartController.pieChart.showOnlyValues = NO;

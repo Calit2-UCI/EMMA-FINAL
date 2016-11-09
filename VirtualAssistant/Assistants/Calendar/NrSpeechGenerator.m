@@ -110,10 +110,10 @@
                                       @"Here you have your %@ connected in the area. "];
     
     // Arg1: station, Arg2: device, Arg3: Power
-    self.device_with_most_usage_messages = @[@"The %2$@ has been using the most power for your %1$@ at about %3$d watts. ",
-                                             @"Your %2$@ is using up the most power at %3$d watts for your %1$@ . ",
-                                             @"I see that the %2$@ has been consuming the most power in your %1$@, and has been using up to %3$d watts. ",
-                                             @"The %1$@'s most consuming device has been the %2$@ at %3$d watts. "];
+    self.device_with_most_usage_messages = @[@"The %2$@ has been using the most power for your %1$@ at about %3$d watts, which accounts for about %4$u percent of the area.",
+                                             @"Your %2$@ is using up the most power at %3$d watts for your %1$@. This is about %4$u percent for the %1$@. ",
+                                             @"I see that the %2$@ has been consuming the most power in your %1$@, and has been using up to %3$d watts. The %2$@ acccounts for %4$u percent of the area's total consumption. ",
+                                             @"The %1$@'s most consuming device has been the %2$@ at %3$d watts, and uses up %4$u percent of the total area's energy. "];
 }
 
 
@@ -165,9 +165,9 @@
                                                        @"",
                                                        @""
                                                 ],
-                                        @"Blu-Ray": @[@"I see that your Blu-Ray player is used mostly during the evenings. To save more power for this device, I suggest unplugging it whenever it is not being used. This can help conserve more power in the living room.",
-                                                      @"The Blu-Ray is one of the least consuming devices in the area overall, seeing that you only use it from time to time. As long as it is left unplugged instead of being left on stand by, you can save more energy.",
-                                                      @"Your Blu-Ray is the optimal choice in the market in terms of saving energy. Compared to other media players in the market, your Blu-Ray device saves more than 30 percent than the market average.",
+                                        @"SoundBar": @[@"I see that your speaker is used mostly during the evenings. To save more power for this device, I suggest unplugging it whenever it is not being used. This can help conserve more power in the living room.",
+                                                      @"The Samsung speaker is one of the least consuming devices in the area overall, seeing that you only use it from time to time. As long as it is left unplugged instead of being left on stand by, you can save more energy.",
+                                                      @"Your Samsung speaker is the optimal choice in the market in terms of saving energy. Compared to other speakers in the market, your speaker saves more than 30 percent than the market average.",
                                                       @"",
                                                       @""
                                                 ],
@@ -176,7 +176,6 @@
                                         @"Coffee Maker": @[@"Your coffee maker is mostly active in the mornings between 6 to 9 AM. I suggest before someon leaves the house, they turn off the device to reduce the plug load usage in the kitchen.",
                                                            @"The coffee maker is mostly used during the mornings. To further improve its power usage, we can turn off or unplug the device after using it.",
                                                            @"I see that the coffee maker has been on or plugged in during the nights, which is unusual for its purpose. I suggest checking the status of the device if not being used to save more power in the kitchen.",
-                                                           @"",
                                                            @""
                                                 ],
                                         @"Microwave": @[@"Your microwave's usage is very sporadic throughout the day. Despite this, it is a very energy-safe device and saves more than 40% in energy than the average microwave in the market",
@@ -190,7 +189,6 @@
                                         
                                         @"Lamp": @[@"I see that your lamp has been on a lot during the sunny days. I suggest you open your blinds to save energy from using your lamp.",
                                                    @"Your lamp has been on primarily during the evening times, but I also noticed that it has been on when it was fairly bright outside. Maybe you can open the blinds to let light in instead of using your lamp.",
-                                                   @"",
                                                    @""
                                                 ]
                                         };
@@ -354,6 +352,12 @@
     random_index = [self random_index_for_array:self.smart_device_info_messages[device]];
     NSString *smart_sentence_for_device = [self.smart_device_info_messages[device] objectAtIndex:random_index];
     
+    if (smart_sentence_for_day_of_max_usage == nil)
+        smart_sentence_for_day_of_max_usage = @"";
+    if (smart_sentence_for_device == nil)
+        smart_sentence_for_device = @"";
+    
+    
     
     return [[[NSString stringWithFormat:sentence_without_device, device] stringByAppendingString:[NSString stringWithFormat:smart_sentence_for_day_of_max_usage, device, [self dayWithMostUsageForDevice:device withData:stationData]]] stringByAppendingString:smart_sentence_for_device];
 }
@@ -424,7 +428,8 @@
 -(NSString *)maxDeviceStringForStation:(NSString *)station withData:(NSDictionary *)stationData
 {
     NSMutableArray *max_devices = [[NSMutableArray alloc] init];
-    NSInteger max_usage = 0;
+    NSInteger max_usage = 0, sum_usage = 0;
+    
     
     for (id device in [stationData objectForKey:@"Devices"]) {
         NSInteger watts = [stationData[@"Devices"][device][@"Watts"] integerValue];
@@ -435,6 +440,7 @@
             
         } else if (watts == max_usage)
             [max_devices addObject:stationData[@"Devices"][device][@"Name"]];
+        sum_usage += watts;
     }
     
     // Arg1: station, Arg2: device, Arg3: Power
@@ -445,8 +451,10 @@
     
     if ([max_devices count] > 1)
         max_devices = [NSMutableArray arrayWithObject:[max_devices objectAtIndex:0]];
+    
+    NSLog(@"max usage = %ld, sum usage = %ld", (long)max_usage, (long)sum_usage);
         
-    NSString *device_with_max_power = [NSString stringWithFormat:[self.device_with_most_usage_messages objectAtIndex:random_index], station, [self array_to_sentence_for_array:max_devices], max_usage];
+    NSString *device_with_max_power = [NSString stringWithFormat:(max_usage == 1 ? [[self.device_with_most_usage_messages objectAtIndex:random_index] stringByReplacingOccurrencesOfString:@"watts" withString:@"watt"] : [self.device_with_most_usage_messages objectAtIndex:random_index]), station, [self array_to_sentence_for_array:max_devices], max_usage, [self percentageForValue:max_usage withTotal:sum_usage]];
     
     return device_with_max_power;
 }
@@ -496,7 +504,13 @@
     return @" ";
 }
 
-
+#pragma mark -
+#pragma mark Math Helpers
+- (NSUInteger)percentageForValue:(NSInteger)value withTotal:(NSInteger)sum
+{
+    float percentage = value / sum;
+    return percentage * 100;
+}
 
 #pragma mark -
 #pragma mark Randomizer Helpers

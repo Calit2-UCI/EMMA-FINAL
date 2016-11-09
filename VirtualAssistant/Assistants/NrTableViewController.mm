@@ -257,13 +257,16 @@ UISwitch *overview_switch;
 - (void) change_cell_content:(NrGridTableViewCell *)cell for_device:(NSString *)device_key
 {
     NSString *new_cell_1_text = self.station_data[@"Devices"][device_key][@"Name"];
-    NSString *new_cell_2_text = [NSString stringWithFormat:@"%@ W", self.station_data[@"Devices"][device_key][@"Watts"]];
+    
+    NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+    formatter.roundingIncrement = [NSNumber numberWithDouble:0.1];
+    formatter.numberStyle = NSNumberFormatterDecimalStyle;
+    
+    NSString *new_cell_2_text = [NSString stringWithFormat:@"%@ W", [formatter stringFromNumber:[NSNumber numberWithFloat:[self.station_data[@"Devices"][device_key][@"Watts"] floatValue]]] ];
     
     
     if (cell.cell1.text != new_cell_1_text)
         cell.cell1.text = new_cell_1_text;
-    
-//    cell.cell3.text = @"Testing";
     
     if (cell.cell2.text != new_cell_2_text)
         cell.cell2.text = new_cell_2_text;
@@ -271,8 +274,6 @@ UISwitch *overview_switch;
 
 - (void)set_device_color:(NSString *)device_key for_cell:(NrGridTableViewCell *)cell
 {
-    //TODO rewrite
-    //just for demo
     if (self.station_data != nil && self.station_data[@"Devices"] != nil) {
         if ([self.station_data[@"Devices"][device_key][@"Status"]  isEqual: @"Off"]) {
             cell.cell1.textColor = off_color;

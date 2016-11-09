@@ -134,7 +134,7 @@ static dispatch_once_t onceToken;
             cell.cell1.text = @"  Max consumption"; // added the space in the beginning as padding inside table
             
             // Value for 'max consumption' key
-            cell.cell2.text = @"Test";
+            cell.cell2.text = [NSString stringWithFormat:@"%.1f W", [self maxOfLastSevenDaysUsage]];
             
         } else if (indexPath.row == 4) {
             cell.cell2.numberOfLines = 2;
@@ -177,7 +177,7 @@ static dispatch_once_t onceToken;
             
         } else if (indexPath.row == 3) {
             // Value for 'max consumption' key
-            cell.cell2.text = @"100 W";
+            cell.cell2.text = [NSString stringWithFormat:@"%.1f W", [self maxOfLastSevenDaysUsage]];
             
         } else if (indexPath.row == 4) {
             // Header column for 'Average consumption this past week'
@@ -410,7 +410,9 @@ static dispatch_once_t onceToken;
     
     if (switch_sender.on) {
         
-        NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://128.195.151.158/simhome/control/on/?device=%@&level=100", deviceName]];
+        NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://128.195.151.158/simhome/control/on/?device=%@&level=100", [self controlDeviceName:deviceName]]];
+        
+        
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
         [request setTimeoutInterval:5.0];
         
@@ -426,7 +428,7 @@ static dispatch_once_t onceToken;
             }
         }];
     } else {
-        NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://128.195.151.158/simhome/control/on/?device=%@&level=0", deviceName]];
+        NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://128.195.151.158/simhome/control/on/?device=%@&level=0", [self controlDeviceName:deviceName]]];
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
         [request setTimeoutInterval:5.0];
         
@@ -463,6 +465,25 @@ static dispatch_once_t onceToken;
     return @[ [keys subarrayWithRange:NSMakeRange([keys count]-7, 7)] , [values subarrayWithRange:NSMakeRange([keys count]-7, 7)] ];
 }
 
+-(float)maxOfLastSevenDaysUsage
+{
+    float max = 0;
+    float current = 0;
+    NSArray *values = [self lastSevenDaysOfDeviceUsageWithData];
+    
+    for (int i = 0; i < [[[values objectAtIndex:1] objectAtIndex:0] count]; i++) {
+        if ([[[[[values objectAtIndex:1] objectAtIndex:0] objectAtIndex:i] objectAtIndex:1] isKindOfClass:[NSNull class]] )
+            continue;
+        
+        current = [[[[[values objectAtIndex:1] objectAtIndex:0] objectAtIndex:i] objectAtIndex:1] floatValue];
+        
+        if (current > max)
+            max = current;
+    }
+    
+    return max;
+}
+
 -(float)sumOfLastSevenDaysUsage
 {
     float sum = 0;
@@ -479,6 +500,18 @@ static dispatch_once_t onceToken;
     }
     NSLog(@"sum = %.2f", sum);
     return sum;
+}
+
+-(NSString *)controlDeviceName:(NSString *)device
+{
+    NSDictionary *controlDevices = @{@"Lamp" : @"Bulb",
+                                     @"CoffeeMaker" : @"Keurig",
+                                     @"PixarLamp" : @"PixarLamp"
+                                     };
+    
+    if (![[controlDevices objectForKey:device] isKindOfClass:[NSNull class]])
+        return controlDevices[device];
+    return device;
 }
 
 #pragma mark -
