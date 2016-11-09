@@ -50,7 +50,7 @@
     _showLabel           = YES;
     _barBackgroundColor  = PNLightGrey;
     _labelTextColor      = [UIColor grayColor];
-    _labelFont           = [UIFont systemFontOfSize:11.0f];
+    _labelFont           = [UIFont systemFontOfSize:10.0f];
     _xChartLabels        = [NSMutableArray array];
     _yChartLabels        = [NSMutableArray array];
     _bars                = [NSMutableArray array];
