@@ -51,6 +51,7 @@
         [self.yAxisLabel setAdjustsFontSizeToFitWidth:YES];
         
         [self setFrame:CGRectMake(axisFontSize, titleFontSize, frame.size.width-axisFontSize, frame.size.height - self.titleLabel.frame.size.height - axisFontSize)];
+        self.isShowNumbers = NO;
     }
     return self;
 }
@@ -74,6 +75,7 @@
     
     // Set colors
     [self setLabelTextColor:[UIColor whiteColor]];
+
     [self setBarBackgroundColor:[UIColor clearColor]];
     [self setBackgroundColor:[UIColor darkGrayColor]];
     [self setAlpha:0.85];
@@ -89,7 +91,6 @@
     
     // X-label fix: for some reason, the x-labels will only display if you do this
     [self setXLabels:[self unixToStringArrayFromArray:[weeklyData objectAtIndex:0]]];
-    
     return YES; // we displayed the chart
 }
 
